@@ -1,10 +1,10 @@
 
-
-
-
 # ChemInformant
 
+<img src="/images/logo.png" alt="ChemInformant Logo" style="margin-left: 10%; width: 220px;">
 ChemInformant is a Python-based project aimed at facilitating the retrieval and integration of chemical compound information from the PubChem database. It provides a set of tools for fetching compound identifiers, chemical properties, and integrating this data with additional sources, making it invaluable for researchers, educators, and anyone interested in chemical informatics.
+
+
 
 ## Features
 
