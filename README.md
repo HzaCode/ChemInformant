@@ -50,6 +50,29 @@ To see the project in action, refer to the example script provided in the `examp
 python examples/example_usage.py
 ```
 
+#### Sample Output
+
+```text
+Added module path: 
+Successfully imported from api_helpers
+Running api_helpers test...
+
+=== Testing compound: Aspirin ===
+CID: 2244
+CAS: 50-78-2
+UNII: R16CO5Y76E
+Description: Aspirin can cause developmental toxicity and female reproductive toxicity according to an independent committee of scientific and health experts.
+Synonyms: aspirin, ACETYLSALICYLIC ACID, 50-78-2, 2-Acetoxybenzoic acid, 2-(Acetyloxy)benzoic acid
+IUPAC Name: 2-acetyloxybenzoic acid
+Molecular Formula: C9H8O4
+Molecular Weight: 180.16
+Canonical SMILES: CC(=O)OC1=CC=CC=C1C(=O)O
+Test complete!
+```
+
+> **Note:** The modules are located inside the `src/` directory. The test script modifies `sys.path` at runtime to allow importing these modules.
+
+
 ## Contributing
 
 Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
