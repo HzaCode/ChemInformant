@@ -1,80 +1,94 @@
+# src/api_helpers.py
 import requests
-from urllib.parse import quote
-import xml.etree.ElementTree as ET
 
-def get_cid_by_name(name):
-    """Retrieve the first CID for a given compound name."""
-    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/{quote(name)}/cids/JSON"
+def get_cid_by_name(compound_name):
+    """Get the PubChem Compound ID (CID) for a chemical compound."""
+    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/{compound_name}/cids/JSON"
     try:
-        response = requests.get(url, timeout=10)
-        response.raise_for_status()
-        cids = response.json().get('IdentifierList', {}).get('CID', [])
-        return cids[0] if cids else None
-    except (requests.RequestException, ValueError) as e:
-        print(f"Error fetching CID for {name}: {e}")
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            return data['IdentifierList']['CID'][0]
+        return None
+    except Exception as e:
+        print(f"Error retrieving CID for {compound_name}: {e}")
         return None
 
 def get_cas_unii(cid):
-    """Retrieve CAS and UNII identifiers for a given CID."""
-    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/{cid}/JSON"
+    """Get the CAS Registry Number and UNII code for a compound."""
+    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/synonyms/JSON"
+    cas = "Not found"
+    unii = "Not found"
+    
     try:
-        response = requests.get(url, timeout=10)
-        response.raise_for_status()
-        data = response.json()
-        cas = unii = "Not found"
-        if 'Record' in data and 'Reference' in data['Record']:
-            for ref in data['Record']['Reference']:
-                if ref['SourceName'] == 'CAS Common Chemistry':
-                    cas = ref['SourceID']
-                if ref['SourceName'] == 'FDA Global Substance Registration System (GSRS)':
-                    unii = ref['SourceID']
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            synonyms = data['InformationList']['Information'][0]['Synonym']
+            
+            # Find CAS number (format: ###-##-#)
+            for synonym in synonyms:
+                if '-' in synonym:
+                    parts = synonym.split('-')
+                    if len(parts) == 3 and all(p.isdigit() for p in parts):
+                        cas = synonym
+                        break
+            
+            # Find UNII (10 characters, alphanumeric, starts with a letter)
+            for synonym in synonyms:
+                if len(synonym) == 10 and synonym.isalnum() and synonym[0].isalpha():
+                    unii = synonym
+                    break
+            
         return cas, unii
-    except (requests.RequestException, ValueError) as e:
-        print(f"Error fetching CAS/UNII for CID {cid}: {e}")
-        return None, None
+    except Exception as e:
+        print(f"Error retrieving CAS/UNII for CID {cid}: {e}")
+        return "Not found", "Not found"
 
 def get_compound_description(cid):
-    """Retrieve the description for a given CID."""
-    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/description/XML"
+    """Get the description of a chemical compound."""
+    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/description/JSON"
     try:
-        response = requests.get(url, timeout=10)
-        response.raise_for_status()
-        root = ET.fromstring(response.content)
-        for info in root.findall('{http://pubchem.ncbi.nlm.nih.gov/pug_rest}Information'):
-            description = info.find('{http://pubchem.ncbi.nlm.nih.gov/pug_rest}Description')
-            if description is not None:
-                return description.text
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            if 'InformationList' in data and 'Information' in data['InformationList']:
+                info = data['InformationList']['Information']
+                if info and 'Description' in info[0]:
+                    return info[0]['Description']
         return "No description available"
-    except (requests.RequestException, ET.ParseError) as e:
-        print(f"Error fetching description for CID {cid}: {e}")
+    except Exception as e:
+        print(f"Error retrieving description for CID {cid}: {e}")
         return "No description available"
 
 def get_all_synonyms(cid):
-    """Retrieve all synonyms for a given CID as a list."""
+    """Get all synonyms for a chemical compound."""
     url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/synonyms/JSON"
     try:
-        response = requests.get(url, timeout=10)
-        response.raise_for_status()
-        synonyms_data = response.json()
-        synonyms = synonyms_data.get('InformationList', {}).get('Information', [{}])[0].get('Synonym', [])
-        return synonyms
-    except (requests.RequestException, ValueError) as e:
-        print(f"Error fetching synonyms for CID {cid}: {e}")
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            if 'InformationList' in data and 'Information' in data['InformationList']:
+                info = data['InformationList']['Information']
+                if info and 'Synonym' in info[0]:
+                    return info[0]['Synonym']
+        return []
+    except Exception as e:
+        print(f"Error retrieving synonyms for CID {cid}: {e}")
         return []
 
 def get_additional_details(cid):
-    """Retrieve additional properties for a given CID."""
-    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/property/IUPACName,MolecularFormula,MolecularWeight,CanonicalSMILES/JSON"
+    """Get additional chemical properties for a compound."""
+    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/property/MolecularFormula,MolecularWeight,CanonicalSMILES,IUPACName/JSON"
     try:
-        response = requests.get(url, timeout=10)
-        response.raise_for_status()
-        data = response.json().get('PropertyTable', {}).get('Properties', [{}])[0]
-        return {
-            'IUPACName': data.get('IUPACName', 'N/A'),
-            'MolecularFormula': data.get('MolecularFormula', 'N/A'),
-            'MolecularWeight': data.get('MolecularWeight', 'N/A'),
-            'CanonicalSMILES': data.get('CanonicalSMILES', 'N/A')
-        }
-    except (requests.RequestException, ValueError) as e:
-        print(f"Error fetching additional details for CID {cid}: {e}")
-        return {'IUPACName': 'N/A', 'MolecularFormula': 'N/A', 'MolecularWeight': 'N/A', 'CanonicalSMILES': 'N/A'}
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            if 'PropertyTable' in data and 'Properties' in data['PropertyTable']:
+                properties = data['PropertyTable']['Properties']
+                if properties:
+                    return properties[0]
+        return {}
+    except Exception as e:
+        print(f"Error retrieving properties for CID {cid}: {e}")
+        return {}
