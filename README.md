@@ -135,6 +135,42 @@ ChemInformant works by:
 3. Parsing JSON responses to extract relevant chemical data.
 4. Returning results in a user-friendly format, including graceful error handling.
 
+
+
+## Test Results
+
+ChemInformant includes a comprehensive test suite that verifies all functionality is working correctly. Run the test script to see it in action:
+
+```bash
+python examples/test_cheminfo.py
+```
+
+
+The test suite thoroughly validates all ChemInformant features:
+
+| Test Category | Description | Status |
+| --- | --- | --- |
+| 🏷️ Basic IDs | Tests compound identifier retrieval (CID, CAS, UNII) | ✅ 3/3 |
+| ⚗️ Properties | Tests chemical property methods (formula, weight, etc.) | ✅ 4/4 |
+| 📚 Info | Tests description and synonym retrieval | ✅ 2/2 |
+| 🔢 Direct CID | Tests using CID directly instead of compound names | ✅ 4/4 |
+| 🔄 Legacy | Tests backward compatibility with legacy method names | ✅ 6/6 |
+| ⚠️ Errors | Tests graceful handling of invalid compounds | ✅ 5/5 |
+| 🧪 Common | Tests with common chemical compounds | ✅ 3/3 |
+| 💊 Pharma | Tests with pharmaceutical compounds | ✅ 3/3 |
+
+If everything is working correctly, you will see the following results at the bottom:
+
+```
+----------------------------
+✨ **ALL TESTS PASSED!** ✨
+
+🧪 Tests: 30 | 📊 Categories: 8 | ⭐ Rate: 100%
+
+🚀 **ChemInformant is ready to use!** 🚀
+----------------------------
+```
+
 ## Contributing
 
 We welcome contributions! To contribute:
