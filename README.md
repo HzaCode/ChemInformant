@@ -2,93 +2,154 @@
 # ChemInformant
 
 <img src="/images/logo.png" alt="ChemInformant Logo" style="margin-left: 10%; width: 220px;">
-ChemInformant is a Python-based project aimed at facilitating the retrieval and integration of chemical compound information from the PubChem database. It provides a set of tools for fetching compound identifiers, chemical properties, and integrating this data with additional sources, making it invaluable for researchers, educators, and anyone interested in chemical informatics.
 
+
+
+
+
+
+
+
+**ChemInformant** is a Python-based tool that simplifies the process of retrieving and integrating chemical compound data from the PubChem database. With a simple API, you can easily fetch compound identifiers, chemical properties, and integrate this data with other external sources. Whether you're a researcher, educator, or someone with an interest in chemical informatics, ChemInformant streamlines your workflow.
 
 
 ## Features
 
-- **Compound Identification**: Retrieve unique identifiers (CIDs) for chemical compounds based on their names.
-- **Chemical Properties**: Fetch various chemical properties including CAS numbers, molecular formulas, and more.
-- **Synonyms and Descriptions**: Access detailed descriptions and synonyms for a wide range of compounds.
-- **Data Integration**: Combine chemical compound data from PubChem with external data sources seamlessly.
-- **Data Saving**: Functionality to save the integrated data back to a server for further use.
+- **All-in-One Data Retrieval**: Retrieve multiple chemical properties (e.g., molecular formula, weight, synonyms) using a single method call.
+- **Simple API**: Access chemical data with short, easy-to-use function names like `ChemInfo.cid("Aspirin")`.
+- **Legacy Support**: Still supports the original longer function names for backward compatibility.
+- **Error Handling**: Built-in error handling ensures graceful fallback in case of missing data or API errors.
+
 
 ## Getting Started
 
 ### Prerequisites
 
 - Python 3.6 or higher
-- pip for installing dependencies
+- `pip` for installing dependencies
+
 
 ### Installation
 
 1. Clone the repository to your local machine:
-   ```
-   git clone https://github.com/HzaCode/ChemInformant.git
-   ```
+
+    ```bash
+    git clone https://github.com/HzaCode/ChemInformant.git
+    ```
+
 2. Navigate to the project directory:
-   ```
-   cd ChemInformant
-   ```
+
+    ```bash
+    cd ChemInformant
+    ```
+
 3. Install the required dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+---
 
 ## Usage
 
-The project is structured into modules, each serving a specific functionality within the data retrieval and integration process:
+ChemInformant provides a concise, intuitive API that simplifies access to chemical data. Below are examples of how you can retrieve various types of information:
 
-- `src/api_helpers.py`: Functions for direct interaction with the PubChem API.
-- `src/compound_details.py`: Aggregates detailed information about compounds from various sources.
-- `src/drug_data_integration.py`: Demonstrates fetching drug names from a server, retrieving their details, and saving the data.
+| Short Method | Legacy Method | Description | Example |
+| --- | --- | --- | --- |
+| `cid()` | `CID()` | Get PubChem Compound ID | `ChemInfo.cid("Aspirin")` |
+| `cas()` | `CAS()` | Get CAS Registry Number | `ChemInfo.cas("Ibuprofen")` |
+| `uni()` | `UNII()` | Get UNII identifier | `ChemInfo.uni("Paracetamol")` |
+| `form()` | `formula()` | Get molecular formula | `ChemInfo.form("Caffeine")` |
+| `wgt()` | `weight()` | Get molecular weight | `ChemInfo.wgt("Glucose")` |
+| `smi()` | `smiles()` | Get SMILES notation | `ChemInfo.smi("Vitamin C")` |
+| `iup()` | `iupac_name()` | Get IUPAC name | `ChemInfo.iup("Naproxen")` |
+| `dsc()` | `description()` | Get compound description | `ChemInfo.dsc("Penicillin")` |
+| `syn()` | `synonyms()` | Get list of synonyms | `ChemInfo.syn("Acetaminophen")` |
+| `all()` | `all()` | Get all available information | `ChemInfo.all("Aspirin")` |
 
-To see the project in action, refer to the example script provided in the `examples` directory:
+### Example Usage
 
+You can use the methods with either compound names or PubChem CIDs:
+
+```python
+# Using compound name
+cid = ChemInfo.cid("Aspirin")
+form = ChemInfo.form("Aspirin")
+wgt = ChemInfo.wgt("Aspirin")
+
+# Using CID directly
+cid_value = 2244  # CID for Aspirin
+form = ChemInfo.form(cid_value)
+wgt = ChemInfo.wgt(cid_value)
 ```
-python examples/example_usage.py
+
+### Sample Return Values
+
+The `ChemInfo.all("Aspirin")` method will return a dictionary like this:
+
+```python
+{
+    "Common Name": "Aspirin",
+    "CID": 2244,
+    "CAS": "50-78-2",
+    "UNII": "R16CO5Y76E",
+    "MolecularFormula": "C9H8O4",
+    "MolecularWeight": 180.16,
+    "CanonicalSMILES": "CC(=O)OC1=CC=CC=C1C(=O)O",
+    "IUPACName": "2-acetyloxybenzoic acid",
+    "Description": "Aspirin, also known as acetylsalicylic acid (ASA), is a medication used to reduce pain, fever, or inflammation...",
+    "Synonyms": ["aspirin", "Acetylsalicylic acid", "2-Acetoxybenzoic acid", "ASA"]
+}
 ```
 
-#### Sample Output
+### Error Handling
 
-```text
-Added module path: 
-Successfully imported from api_helpers
-Running api_helpers test...
+If a compound is not found or an API error occurs:
 
-=== Testing compound: Aspirin ===
-CID: 2244
-CAS: 50-78-2
-UNII: R16CO5Y76E
-Description: Aspirin can cause developmental toxicity and female reproductive toxicity according to an independent committee of scientific and health experts.
-Synonyms: aspirin, ACETYLSALICYLIC ACID, 50-78-2, 2-Acetoxybenzoic acid, 2-(Acetyloxy)benzoic acid
-IUPAC Name: 2-acetyloxybenzoic acid
-Molecular Formula: C9H8O4
-Molecular Weight: 180.16
-Canonical SMILES: CC(=O)OC1=CC=CC=C1C(=O)O
-Test complete!
+- For missing identifiers or properties, "Not found" or "N/A" is returned.
+- For missing descriptions, "No description available" is returned.
+- For missing synonyms, an empty list is returned.
+- For the `all()` method, a dictionary with an error message is returned.
+
+---
+
+### Legacy Method Support
+
+To maintain backward compatibility with older code, the original longer method names are still supported:
+
+```python
+# Legacy methods still work
+formula = ChemInfo.formula("Caffeine")
+weight = ChemInfo.weight("Glucose")
+smiles = ChemInfo.smiles("Vitamin C")
+iupac_name = ChemInfo.iupac_name("Naproxen")
 ```
 
-> **Note:** The modules are located inside the `src/` directory. The test script modifies `sys.path` at runtime to allow importing these modules.
+## How It Works
 
+ChemInformant works by:
+
+1. Converting compound names to PubChem CIDs when needed.
+2. Making HTTP requests to the PubChem REST API.
+3. Parsing JSON responses to extract relevant chemical data.
+4. Returning results in a user-friendly format, including graceful error handling.
 
 ## Contributing
 
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+We welcome contributions! To contribute:
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. Fork the project
+2. Create a feature branch (`git checkout -b feature/YourFeature`)
+3. Commit your changes (`git commit -m 'Add some feature'`)
+4. Push to the branch (`git push origin feature/YourFeature`)
+5. Open a pull request
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License. See the `LICENSE` file for more information.
 
 ## Contact
 
-Project Link: [https://github.com/HzaCode/ChemInformant](https://github.com/HzaCode/ChemInformant)
-
+- Project Link: https://github.com/HzaCode/ChemInformant
 
