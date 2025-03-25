@@ -1,2 +1,7 @@
-requests
-pandas
+# Required dependencies
+requests>=2.25.0
+
+# Optional dependencies for enhanced visualization in test script
+colorama>=0.4.4
+tabulate>=0.8.9
+tqdm>=4.62.0
