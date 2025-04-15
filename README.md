@@ -8,7 +8,7 @@
  [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 ![CI](https://github.com/HzaCode/ChemInformant/actions/workflows/python-ci.yml/badge.svg)
 [![PyPI - License](https://img.shields.io/pypi/l/ChemInformant.svg)](https://github.com/HzaCode/ChemInformant/blob/main/LICENSE)  
-
+[![codecov](https://codecov.io/gh/HzaCode/ChemInformant/branch/main/graph/badge.svg)](https://codecov.io/gh/HzaCode/ChemInformant)
 
 
 
