@@ -1,4 +1,5 @@
 name: build
+
 on:
   push:
     branches: [ main ]
@@ -23,10 +24,15 @@ jobs:
         python -m pip install --upgrade pip
         pip install ".[dev]" pytest-cov
 
-    - name: Run tests and generate coverage report
+    - name: Run tests and print coverage report content
       run: |
         set -e
         pytest --cov=src/ChemInformant --cov-report=xml -v tests/
+        echo "--- Attempting to print contents of coverage.xml ---"
+        cat coverage.xml || echo ">>> coverage.xml file not found! <<<"
+        echo "--- End of coverage.xml content ---"
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
+      with:
+        verbose: true
