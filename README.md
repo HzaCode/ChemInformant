@@ -1,14 +1,19 @@
 
-# ChemInformant
+
+ ChemInformant <img src="https://github.com/HzaCode/ChemInformant/blob/main/doc/image/logo.jpg?raw=true" align="right" />
+=======================================================
+[![Project Status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![PyPI version](https://img.shields.io/pypi/v/ChemInformant.svg)](https://pypi.org/project/ChemInformant/) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/ChemInformant.svg)](https://pypi.org/project/ChemInformant/)
 [![Downloads](https://static.pepy.tech/badge/ChemInformant)](https://pepy.tech/project/ChemInformant)
  [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![codecov](https://codecov.io/gh/HzaCode/ChemInformant/branch/main/graph/badge.svg)](https://codecov.io/gh/HzaCode/ChemInformant)
+
 [![PyPI - License](https://img.shields.io/pypi/l/ChemInformant.svg)](https://github.com/HzaCode/ChemInformant/blob/main/LICENSE)  
 
 
 
 
-![ChemInformant Logo](https://github.com/HzaCode/ChemInformant/blob/main/doc/image/logo.jpg?raw=true)
+
 
 
 **ChemInformant** is a Python library designed for streamlined access to chemical data from the [PubChem](https://pubchem.ncbi.nlm.nih.gov/) database. It simplifies retrieving compound information by providing:
