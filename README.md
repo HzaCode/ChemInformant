@@ -1,9 +1,10 @@
 
 # ChemInformant
 [![PyPI version](https://img.shields.io/pypi/v/ChemInformant.svg)](https://pypi.org/project/ChemInformant/) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/ChemInformant.svg)](https://pypi.org/project/ChemInformant/)
- [![PyPI Downloads](https://img.shields.io/pypi/dm/ChemInformant.svg)](https://pypi.org/project/ChemInformant/)
+[![Downloads](https://static.pepy.tech/badge/ChemInformant)](https://pepy.tech/project/ChemInformant)
  [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![PyPI - License](https://img.shields.io/pypi/l/ChemInformant.svg)](https://github.com/HzaCode/ChemInformant/blob/main/LICENSE)  
+
 
 
 
