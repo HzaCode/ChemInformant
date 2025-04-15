@@ -9,7 +9,7 @@ coverage:
         target: 85%
 
 fixes:
-  - "ChemInformant/::src/ChemInformant/"
+  - "^([^/]+)\\.py$::src/ChemInformant/\\1.py"
 
 comment:
   layout: "reach,diff,flags,files,footer"
