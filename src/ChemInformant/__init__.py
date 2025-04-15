@@ -18,6 +18,7 @@ from .cheminfo_api import (
     syn,
     get_multiple_compounds,
 )
+
 # Import specific exceptions and the data model from models module
 from .models import CompoundData, NotFoundError, AmbiguousIdentifierError
 
@@ -25,21 +26,32 @@ from .models import CompoundData, NotFoundError, AmbiguousIdentifierError
 # This makes setup_cache available at the package level (ChemInformant.setup_cache)
 from .api_helpers import setup_cache
 
-__version__ = "1.1.4" # Keep consistent with pyproject.toml
+__version__ = "1.1.4"  # Keep consistent with pyproject.toml
 
 # Define what gets imported with 'from ChemInformant import *'
 # Include setup_cache here
 __all__ = [
     # Single item functions
-    'info', 'cid', 'cas', 'unii', 'form', 'wgt', 'smi', 'iup', 'dsc', 'syn',
+    "info",
+    "cid",
+    "cas",
+    "unii",
+    "form",
+    "wgt",
+    "smi",
+    "iup",
+    "dsc",
+    "syn",
     # Batch function
-    'get_multiple_compounds',
+    "get_multiple_compounds",
     # Models and Errors
-    'CompoundData', 'NotFoundError', 'AmbiguousIdentifierError',
+    "CompoundData",
+    "NotFoundError",
+    "AmbiguousIdentifierError",
     # Cache utility (now imported from api_helpers)
-    'setup_cache',
+    "setup_cache",
     # Version is useful too
-    '__version__',
+    "__version__",
 ]
 
 # Note: get_session is now an internal implementation detail within api_helpers
