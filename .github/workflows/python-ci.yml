@@ -27,6 +27,8 @@ jobs:
     - name: Run tests and print coverage report content
       run: |
         set -e
+        export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+        echo "PYTHONPATH is now: $PYTHONPATH"
         pytest --cov=src/ChemInformant --cov-report=xml -v tests/
         echo "--- Attempting to print contents of coverage.xml ---"
         cat coverage.xml || echo ">>> coverage.xml file not found! <<<"
