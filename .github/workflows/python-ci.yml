@@ -1,5 +1,4 @@
-name: Python CI & Code Coverage
-
+name: CI 
 on:
   push:
     branches: [ main ]
