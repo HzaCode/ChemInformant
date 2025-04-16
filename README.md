@@ -1,6 +1,6 @@
 
 
- ChemInformant <img src="https://github.com/HzaCode/ChemInformant/blob/main/doc/image/logo.jpg?raw=true" align="right" />
+ ChemInformant <img src="https://github.com/HzaCode/ChemInformant/blob/main/images/logo.jpg?raw=true" align="right" />
 =======================================================
 [![Project Status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![PyPI version](https://img.shields.io/pypi/v/ChemInformant.svg)](https://pypi.org/project/ChemInformant/) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/ChemInformant.svg)](https://pypi.org/project/ChemInformant/)
