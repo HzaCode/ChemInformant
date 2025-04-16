@@ -110,3 +110,4 @@ celerybeat.pid
 # Cache file specific to ChemInformant
 pubchem_cache.sqlite
 *.sqlite-journal # SQLite temporary files
+Makefile
