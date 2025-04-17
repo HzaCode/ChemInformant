@@ -1,0 +1,236 @@
+.. _usage:
+.. :orphan:
+
+###########
+Usage Guide
+###########
+
+This guide demonstrates how to use the ``ChemInformant`` library to retrieve chemical information from PubChem easily and robustly.
+
+Importing the Library
+=====================
+
+The recommended way to import ``ChemInformant`` is using the alias ``ci``:
+
+.. code-block:: python
+
+   import ChemInformant as ci
+
+Retrieving Compound Information
+===============================
+
+The primary function for retrieving comprehensive data is ``ci.info()``. You can provide either a compound name (string) or a PubChem CID (integer).
+
+**By Name:**
+
+.. code-block:: python
+
+   try:
+       # Retrieve data for Aspirin by its common name
+       aspirin = ci.info("Aspirin")
+       print(f"Successfully retrieved data for CID: {aspirin.cid}")
+       # Expected output: Successfully retrieved data for CID: 2244
+   except ci.NotFoundError:
+       print("Aspirin not found.")
+   except ci.AmbiguousIdentifierError as e:
+       # This block would run if "Aspirin" mapped to multiple CIDs
+       print(f"Aspirin is ambiguous: {e.cids}")
+
+**By CID:**
+
+.. code-block:: python
+
+   try:
+       # Retrieve data for Ethanol using its PubChem CID
+       ethanol = ci.info(702)
+       print(f"Successfully retrieved data for compound with formula: {ethanol.molecular_formula}")
+       # Expected output: Successfully retrieved data for compound with formula: C2H6O
+   except ci.NotFoundError:
+       print("CID 702 not found.")
+   # AmbiguousIdentifierError is not expected for CID lookups,
+   # but other errors (network, etc.) could potentially occur.
+   except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+
+Accessing Retrieved Data
+========================
+
+The ``ci.info()`` function returns a ``CompoundData`` object, which is a Pydantic model. This means the data is structured, validated, and easily accessible via attributes.
+
+If a specific piece of information couldn't be fetched or doesn't exist for a compound, the corresponding attribute will usually be ``None`` (or an empty list ``[]`` for ``synonyms``).
+
+.. code-block:: python
+
+   # Assuming 'aspirin' is the CompoundData object from the previous example
+   if aspirin:
+       print(f"CID: {aspirin.cid}")
+       print(f"Input Identifier Used: {aspirin.input_identifier}") # Shows what you passed to info()
+       print(f"Common Name: {aspirin.common_name}") # Often the input name or first synonym
+       print(f"CAS: {aspirin.cas}")
+       print(f"UNII: {aspirin.unii}")
+       print(f"Molecular Formula: {aspirin.molecular_formula}")
+       # Molecular weight is automatically converted to float or None
+       print(f"Molecular Weight: {aspirin.molecular_weight}")
+       print(f"Canonical SMILES: {aspirin.canonical_smiles}")
+       print(f"IUPAC Name: {aspirin.iupac_name}")
+       print(f"Description: {aspirin.description}")
+       print(f"Synonyms (first 5): {aspirin.synonyms[:5]}")
+
+       # Access the computed PubChem URL
+       print(f"PubChem URL: {aspirin.pubchem_url}")
+
+Handling Potential Errors
+=========================
+
+``ChemInformant`` raises specific exceptions for common scenarios, allowing you to handle them gracefully:
+
+*   ``NotFoundError``: Raised when the provided identifier (name or CID) cannot be found in PubChem.
+*   ``AmbiguousIdentifierError``: Raised only when a provided *name* maps to multiple PubChem CIDs. The error object has an attribute ``cids`` containing the list of potential matches.
+
+It's good practice to wrap calls, especially those using names, in ``try...except`` blocks:
+
+.. code-block:: python
+
+   identifier = "glucose" # This name is often ambiguous
+
+   try:
+       compound_data = ci.info(identifier)
+       print(f"Found {compound_data.common_name} (CID: {compound_data.cid})")
+
+   except ci.NotFoundError:
+       print(f"Identifier '{identifier}' was not found.")
+
+   except ci.AmbiguousIdentifierError as e:
+       print(f"Identifier '{identifier}' is ambiguous. Potential CIDs: {e.cids}")
+       # Example: Decide how to proceed, e.g., query the first potential CID
+       try:
+           first_cid_info = ci.info(e.cids[0])
+           print(f"Info for first ambiguous CID ({e.cids[0]}): {first_cid_info.iupac_name}")
+       except ci.NotFoundError:
+           print(f"Could not retrieve info for CID {e.cids[0]}")
+
+   except Exception as e:
+       # Catch other potential issues like network errors, validation errors
+       print(f"An unexpected error occurred: {e}")
+
+
+Using Convenience Functions
+===========================
+
+For quickly retrieving just a single piece of information, ``ChemInformant`` provides several convenience functions (like ``ci.cas()``, ``ci.wgt()``, ``ci.syn()``, etc.).
+
+These functions are essentially wrappers around ``ci.info()`` but simplify error handling:
+*   They return the requested value upon success.
+*   They return ``None`` if the compound is not found, the name is ambiguous, or the specific property is missing/couldn't be fetched.
+*   ``ci.syn()`` returns an empty list ``[]`` in case of failure.
+
+.. code-block:: python
+
+   # Get CAS for Aspirin by name
+   aspirin_cas = ci.cas("Aspirin")
+   print(f"Aspirin CAS: {aspirin_cas}")
+   # Expected output: Aspirin CAS: 50-78-2
+
+   # Get weight for Ethanol by CID
+   ethanol_weight = ci.wgt(702)
+   print(f"Ethanol Weight: {ethanol_weight}")
+   # Expected output: Ethanol Weight: 46.07
+
+   # Get synonyms for water by name
+   water_synonyms = ci.syn("Water")
+   print(f"Water Synonyms (first 3): {water_synonyms[:3]}")
+   # Expected output: Water Synonyms (first 3): ['Water', 'H2O', ...]
+
+   # Example of failure (NotFound) - returns None
+   notfound_cas = ci.cas("NonExistentCompound")
+   print(f"CAS for NonExistentCompound: {notfound_cas}")
+   # Expected output: CAS for NonExistentCompound: None
+
+   # Example of failure (Ambiguous) - returns None
+   ambiguous_weight = ci.wgt("glucose")
+   print(f"Weight for glucose: {ambiguous_weight}")
+   # Expected output: Weight for glucose: None
+
+
+Batch Data Retrieval
+====================
+
+To efficiently retrieve data for multiple compounds, use ``ci.get_multiple_compounds()``. This function optimizes lookups by using PubChem's batch API capabilities where possible and integrating with the cache.
+
+It accepts a list containing a mix of compound names (str) and CIDs (int). It returns a dictionary where:
+*   **Keys:** Are the original identifiers you provided in the input list.
+*   **Values:** Are either:
+    *   A ``CompoundData`` object if the lookup for that identifier was successful.
+    *   An ``Exception`` object (e.g., ``NotFoundError``, ``AmbiguousIdentifierError``, ``ValueError`` for invalid input, or potentially network errors) if the lookup failed for that specific identifier.
+
+.. code-block:: python
+
+   identifiers_list = ["Water", 2244, "NonExistent", "glucose", -5, 702] # Mix of names, CIDs, invalid inputs
+
+   batch_results = ci.get_multiple_compounds(identifiers_list)
+
+   print(f"--- Batch Results ({len(batch_results)} entries) ---")
+   for identifier, result in batch_results.items():
+       print(f"Identifier: {repr(identifier)}") # Use repr() to see type clearly
+       if isinstance(result, ci.CompoundData):
+           print(f"  Result: Success! CID={result.cid}, Formula={result.molecular_formula}")
+       elif isinstance(result, ci.NotFoundError):
+           print(f"  Result: Failed - Not Found")
+       elif isinstance(result, ci.AmbiguousIdentifierError):
+           print(f"  Result: Failed - Ambiguous (CIDs: {result.cids})")
+       elif isinstance(result, ValueError):
+            print(f"  Result: Failed - Invalid Input ({result})")
+       else:
+           # Catch other potential errors like network issues during batch fetch
+           print(f"  Result: Failed - Unexpected Error ({type(result).__name__}: {result})")
+   print("--- End of Batch Results ---")
+
+
+Caching API Responses
+=====================
+
+A core feature of ``ChemInformant`` is its built-in automatic caching, powered by ``requests-cache``.
+
+*   **Default Behavior:** API responses are automatically cached to a SQLite database (``pubchem_cache.sqlite`` in your current working directory). Cached entries expire after 7 days by default. This dramatically speeds up subsequent requests for the same information and improves resilience to temporary network problems.
+*   **Configuration:** You can customize the caching behavior (e.g., change the cache location, backend, or expiration time) using ``ci.setup_cache()``. **Important:** Call ``setup_cache()`` *before* making any other ``ChemInformant`` calls if you want to change the defaults.
+
+.. code-block:: python
+
+   import ChemInformant as ci
+   import tempfile
+   import os
+   import time
+
+   # --- Example 1: Use an in-memory cache (fast, but lost when script ends) ---
+   print("Configuring in-memory cache...")
+   ci.setup_cache(backend='memory', expire_after=60) # Cache for 60 seconds
+   start_time = time.time()
+   water_info1 = ci.info("Water")
+   print(f"First call took: {time.time() - start_time:.4f}s")
+
+   start_time = time.time()
+   water_info2 = ci.info("Water") # Should be faster
+   print(f"Second call (cached) took: {time.time() - start_time:.4f}s")
+   print("-" * 20)
+
+
+   # --- Example 2: Use a specific file and longer expiry ---
+   # Must call setup_cache again to change settings
+   temp_dir = tempfile.gettempdir()
+   cache_file = os.path.join(temp_dir, "my_chem_cache")
+   print(f"Configuring file cache: {cache_file}.sqlite")
+   ci.setup_cache(cache_name=cache_file, backend='sqlite', expire_after=3600) # 1 hour
+
+   start_time = time.time()
+   aspirin_info1 = ci.info("Aspirin")
+   print(f"First call took: {time.time() - start_time:.4f}s")
+
+   start_time = time.time()
+   aspirin_info2 = ci.info("Aspirin") # Should be faster
+   print(f"Second call (cached) took: {time.time() - start_time:.4f}s")
+
+
+Further Information
+===================
+
+For detailed information on specific functions and the ``CompoundData`` model, please refer to the :doc:`api` documentation.
