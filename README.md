@@ -5,7 +5,9 @@
 [![Project Status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![PyPI version](https://img.shields.io/pypi/v/ChemInformant.svg)](https://pypi.org/project/ChemInformant/) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/ChemInformant.svg)](https://pypi.org/project/ChemInformant/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-![CI](https://github.com/HzaCode/ChemInformant/actions/workflows/python-ci.yml/badge.svg) [![PyPI - License](https://img.shields.io/pypi/l/ChemInformant.svg)](https://github.com/HzaCode/ChemInformant/blob/main/LICENSE) [![codecov](https://codecov.io/gh/HzaCode/ChemInformant/branch/main/graph/badge.svg)](https://codecov.io/gh/HzaCode/ChemInformant) [![DOWNLOADS](https://static.pepy.tech/personalized-badge/cheminformant?period=total&units=international_system&left_color=grey&right_color=blue&left_text=DOWNLOADS)](https://pepy.tech/project/cheminformant)
+![CI](https://github.com/HzaCode/ChemInformant/actions/workflows/python-ci.yml/badge.svg) [![PyPI - License](https://img.shields.io/pypi/l/ChemInformant.svg)](https://github.com/HzaCode/ChemInformant/blob/main/LICENSE) [![Docs](https://img.shields.io/badge/Docs-Read_Online-blue?style=flat-square&logo=book&logoColor=white)](https://hzacode.github.io/ChemInformant)[![codecov](https://codecov.io/gh/HzaCode/ChemInformant/branch/main/graph/badge.svg)](https://codecov.io/gh/HzaCode/ChemInformant) [![DOWNLOADS](https://static.pepy.tech/personalized-badge/cheminformant?period=total&units=international_system&left_color=grey&right_color=blue&left_text=DOWNLOADS)](https://pepy.tech/project/cheminformant)
+
+
 
 
 **ChemInformant** is a Python library designed for streamlined access to chemical data from the [PubChem](https://pubchem.ncbi.nlm.nih.gov/) database. It simplifies retrieving compound information by providing:
