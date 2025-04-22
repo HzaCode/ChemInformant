@@ -1,11 +1,11 @@
 ChemInformant <img src="https://github.com/HzaCode/ChemInformant/blob/main/images/logo.jpg?raw=true" align="right" />
 ---  
-<!-- 标题下的细线 -->
+
 
 <div align="left">
   <a href="https://pepy.tech/project/cheminformant" target="_blank" title="View Download Stats">
     <img
-      src="https://static.pepy.tech/personalized-badge/cheminformant?period=total&units=international_system&left_color=grey&right_color=blue&left_text=Downloads%20%28%Pepy.tech%29"
+      src="https://static.pepy.tech/personalized-badge/cheminformant?period=total&units=international_system&left_color=grey&right_color=blue&left_text=%2010%20Days%20downloads"
       alt="Downloads"
       height="30"
     >
