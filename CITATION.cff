@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: "HE"
+    given-names: "Zhiang"
+    orcid: "https://orcid.org/0009-0009-0171-4578"
+title: "ChemInformant: A Modern, Lightweight Python Client for PubChem with Robust Caching and Validation"
+version: "1.1.4"
+date-released: 2025
+url: "https://github.com/HzaCode/ChemInformant"
+license: MIT
+keywords:
+  - python
+  - pubchem
+  - chemistry
+  - api
+  - client
+  - cache
+  - pydantic
+  - cheminformatics
+  - computational chemistry
+  - research software
+  - data validation
+  - open source
