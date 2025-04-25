@@ -5,14 +5,13 @@ ChemInformant <img src="https://github.com/HzaCode/ChemInformant/blob/main/image
 <div align="left">
   <a href="https://pepy.tech/project/cheminformant" target="_blank" title="View Download Stats">
     <img
-      src="https://static.pepy.tech/personalized-badge/cheminformant?period=total&units=international_system&left_color=grey&right_color=blue&left_text=Downloads"
-      alt="Downloads"
+      src="https://static.pepy.tech/personalized-badge/cheminformant?period=month&units=international_system&left_color=grey&right_color=blue&left_text=Monthly%20Downloads" 
+      alt="Monthly Downloads" 
       height="30"
     >
   </a>
 </div>
 <br>
-
 
 [![Project Status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![PyPI version](https://img.shields.io/pypi/v/ChemInformant.svg)](https://pypi.org/project/ChemInformant/) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/ChemInformant.svg)](https://pypi.org/project/ChemInformant/)
