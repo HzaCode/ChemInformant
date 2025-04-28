@@ -26,7 +26,7 @@ from .models import CompoundData, NotFoundError, AmbiguousIdentifierError
 # This makes setup_cache available at the package level (ChemInformant.setup_cache)
 from .api_helpers import setup_cache
 
-__version__ = "1.1.4"  # Keep consistent with pyproject.toml
+__version__ = "1.1.5"  # Keep consistent with pyproject.toml
 
 # Define what gets imported with 'from ChemInformant import *'
 # Include setup_cache here
