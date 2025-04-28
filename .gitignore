@@ -113,3 +113,21 @@ Makefile
 
 # Test scripts
 test_cheminformant.py
+
+# LaTeX / arXiv auxiliary files
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+# Optionally ignore the compiled PDF if it's generated from source
+# *.pdf
+
+# arXiv submission folder
+arxiv/
