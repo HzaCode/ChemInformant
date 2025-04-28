@@ -48,8 +48,9 @@ Install the latest stable version from PyPI:
 
 ```bash
 pip install ChemInformant
-
 ```
+*(Requires Python >= 3.8)*
+
 Or, install directly from the GitHub repository (for the latest development version):
 
 ```bash
@@ -73,6 +74,7 @@ The recommended way to use the library is by importing it with the alias `ci`.
 ```python
 import ChemInformant as ci
 import os
+import sys # Needed for stderr printing in case of warnings
 
 # --- Optional: Configure Cache (before first API call) ---
 # Default: 'pubchem_cache.sqlite' in current dir, 7 days expiry
@@ -92,8 +94,11 @@ try:
     print(f"  Weight:         {aspirin_info.molecular_weight:.2f}")
     print(f"  CAS:            {aspirin_info.cas}")
     print(f"  IUPAC Name:     {aspirin_info.iupac_name}")
-    print(f"  PubChem URL:    {aspirin_info.pubchem_url}")
-    print(f"  First Synonym: {aspirin_info.synonyms[0] if aspirin_info.synonyms else 'N/A'}")
+    print(f"  PubChem URL:    {aspirin_info.pubchem_url}") # Useful computed property
+    print(f"  First Synonym:  {aspirin_info.synonyms[0] if aspirin_info.synonyms else 'N/A'}")
+
+    # Accessing a specific attribute after getting the info object:
+    print(f"  Retrieved CAS again: {aspirin_info.cas}")
 
     # Get specific properties directly (using name or CID)
     ethanol_cid = ci.cid("Ethanol") # Get CID first
@@ -118,7 +123,9 @@ except ci.AmbiguousIdentifierError as e:
     # first_cid = e.cids[0]
     # specific_info = ci.info(first_cid)
 except Exception as e:
-    print(f"  An unexpected error occurred: {type(e).__name__}: {e}")
+    # Note: If info() succeeds but some underlying fetches fail,
+    # it might print warnings to stderr. Check stderr output.
+    print(f"  An unexpected error occurred: {type(e).__name__}: {e}", file=sys.stderr)
 
 
 # --- Batch Compound Lookup ---
@@ -128,30 +135,45 @@ identifiers_to_lookup = [
     2244,                     # CID (Aspirin), Success
     "Glucose",                # Name, Success (or Ambiguous depending on PubChem)
     "NonExistentCompoundXYZ", # Name, Not Found
-    "AmbiguousDrug",          # Name, Ambiguous (if mock data setup like tests)
+    "AmbiguousDrug",          # Name, Ambiguous (if mock data setup like tests) - Assuming Not Found here
     -1,                       # Invalid CID input (ValueError)
     702                       # CID (Ethanol), Success
 ]
 
-results = ci.get_multiple_compounds(identifiers_to_lookup)
+# Dictionary to store results
+results = {}
+try:
+    # get_multiple_compounds returns a dictionary mapping input identifier to result
+    results = ci.get_multiple_compounds(identifiers_to_lookup)
+except Exception as e:
+     # Catch errors during the API call itself (e.g., network issues)
+     print(f"Error during get_multiple_compounds call itself: {type(e).__name__}: {e}", file=sys.stderr)
 
 print(f"\nBatch Results ({len(results)} entries):")
-for identifier, result in results.items():
+# Iterate through the results dictionary
+for identifier, result_value in results.items():
     id_repr = repr(identifier) # Show if input was str or int
-    if isinstance(result, ci.CompoundData):
-        print(f"  - {id_repr:<25}: Success - CID={result.cid:<5} Formula={result.molecular_formula}")
-    elif isinstance(result, ci.NotFoundError):
-          print(f"  - {id_repr:<25}: Failed - Not Found")
-    elif isinstance(result, ci.AmbiguousIdentifierError):
-          print(f"  - {id_repr:<25}: Failed - Ambiguous ({len(result.cids)} CIDs)")
-    elif isinstance(result, (ValueError, TypeError)):
-          print(f"  - {id_repr:<25}: Failed - Invalid Input ({type(result).__name__})")
-    elif isinstance(result, Exception): # Catch other potential errors (e.g., network)
-        print(f"  - {id_repr:<25}: Failed - Error during fetch ({type(result).__name__})")
+    # IMPORTANT: Check the type of the value for each identifier
+    if isinstance(result_value, ci.CompoundData):
+        # Success: Value is a CompoundData object
+        print(f"  - {id_repr:<25}: Success - CID={result_value.cid:<5} Formula={result_value.molecular_formula}")
+    elif isinstance(result_value, ci.NotFoundError):
+          # Failure: Value is a NotFoundError exception object
+          print(f"  - {id_repr:<25}: Failed  - Not Found")
+    elif isinstance(result_value, ci.AmbiguousIdentifierError):
+          # Failure: Value is an AmbiguousIdentifierError exception object
+          print(f"  - {id_repr:<25}: Failed  - Ambiguous ({len(result_value.cids)} CIDs)")
+    elif isinstance(result_value, (ValueError, TypeError)):
+          # Failure: Value is a ValueError or TypeError exception object (invalid input)
+          print(f"  - {id_repr:<25}: Failed  - Invalid Input ({type(result_value).__name__})")
+    elif isinstance(result_value, Exception):
+        # Failure: Value is another Exception object (e.g., network error during fetch)
+        print(f"  - {id_repr:<25}: Failed  - Error during fetch ({type(result_value).__name__})")
     else:
-        print(f"  - {id_repr:<25}: Failed - Unknown result type: {type(result)}")
+        # Fallback for unexpected types in the dictionary value
+        print(f"  - {id_repr:<25}: Failed  - Unknown result type: {type(result_value)}")
 
-# --- Caching ---
+# --- Caching Note ---
 print("\n--- Caching Note ---")
 print("Run this script again - subsequent calls for the same compounds should be much faster due to caching.")
 default_cache_path = os.path.abspath('pubchem_cache.sqlite')
@@ -174,7 +196,7 @@ else:
   * Raises `AmbiguousIdentifierError` if a name maps to multiple CIDs.
   * Raises `ValueError` for invalid CIDs (e.g., <= 0).
   * Raises `TypeError` for invalid input types.
-  * Attempts to return partial data if some underlying API calls fail, printing warnings to `stderr`.
+  * Attempts to return partial data if some underlying API calls fail, printing warnings to `stderr`. **Check `stderr` output for potential warnings about incomplete data.**
 
 * **`ci.get_multiple_compounds(identifiers: List[Union[str, int]]) -> Dict[Union[str, int], Union[CompoundData, Exception]]`**:
   * Retrieves data for a list of identifiers efficiently using batch API calls where possible.
@@ -182,6 +204,7 @@ else:
   * Values are either:
     * A `CompoundData` object on success.
     * An `Exception` instance (`NotFoundError`, `AmbiguousIdentifierError`, `ValueError`, `TypeError`, or potentially a `requests.exceptions.RequestException` if a batch fetch fails) indicating the reason for failure for that specific identifier.
+  * **Important:** Always check the type of the value associated with each identifier in the returned dictionary to determine if the lookup was successful (`CompoundData`) or failed (`Exception`).
 
 ### Convenience Functions
 
@@ -211,7 +234,7 @@ These functions provide quick access to specific properties. They internally cal
   * `iupac_name: Optional[str]`
   * `description: Optional[str]`
   * `synonyms: List[str]`
-  * `pubchem_url: Optional[HttpUrl]` (Computed property)
+  * `pubchem_url: Optional[HttpUrl]` (Computed property providing a direct link to the PubChem compound page)
 
 ### Exceptions
 
@@ -221,25 +244,22 @@ These functions provide quick access to specific properties. They internally cal
 ### Cache Configuration
 
 * **`ci.setup_cache(cache_name='pubchem_cache', backend='sqlite', expire_after=604800, **kwargs)`**:
-  * Call this *before* any other `ci` function if you need non-default cache settings.
-  * `cache_name`: Name of the cache file (for `sqlite`) or namespace (for `redis`, etc.).
-  * `backend`: Backend to use (e.g., `'sqlite'`, `'memory'`, `'redis'`, `'mongodb'`). Default is `'sqlite'`.
-  * `expire_after`: Cache duration in seconds (or `None` for indefinite, `timedelta`, etc.). Default is 7 days (604800 seconds).
-  * `**kwargs`: Additional arguments passed to `requests_cache.CachedSession`.
+  * Allows customization of caching behavior. See the **Caching** section below for details and defaults.
+  * **Important:** Call this *before* making any other `ci` function calls if you need non-default settings.
+
+## Caching
+
+* Caching is enabled by default using `requests-cache` with a `sqlite` backend (`pubchem_cache.sqlite` file in the current working directory).
+* Responses (including 404s for not found identifiers) are cached to avoid repeated API calls.
+* The default cache duration is 7 days (604800 seconds).
+* To clear the cache, simply delete the `pubchem_cache.sqlite` file (or clear based on the configured backend if you customized it).
+* Use `ci.setup_cache()` (detailed in **API Overview**) to customize the backend (e.g., `'memory'`, `'redis'`), location (`cache_name`), or expiration time (`expire_after`).
 
 * **Example:** Use Redis cache on localhost, expiring after 1 day.
   ```python
   # Requires `pip install redis`
   # ci.setup_cache(backend='redis', expire_after=86400, host='localhost', port=6379)
   ```
-
-## Caching Details
-
-* Caching is enabled by default using `requests-cache` with a `sqlite` backend (`pubchem_cache.sqlite` file in the current working directory).
-* Responses (including 404s) are cached to avoid repeated API calls for the same identifier.
-* The default cache duration is 7 days.
-* To clear the cache, simply delete the `pubchem_cache.sqlite` file (or clear based on the configured backend).
-* Use `ci.setup_cache()` to customize the backend, location, or expiration time.
 
 ## Contributing
 

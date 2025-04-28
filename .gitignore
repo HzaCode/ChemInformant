@@ -1,4 +1,3 @@
-
 __pycache__/
 *.py[cod]
 *$py.class
@@ -111,3 +110,6 @@ celerybeat.pid
 pubchem_cache.sqlite
 *.sqlite-journal # SQLite temporary files
 Makefile
+
+# Test scripts
+test_cheminformant.py
