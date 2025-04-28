@@ -43,8 +43,15 @@ Issues = "https://github.com/HzaCode/ChemInformant/issues"
 
 # Optional: Define dependencies for development/testing
 [project.optional-dependencies]
-dev = ["pytest>=7.0", "pytest-mock>=3.5"]
+dev = ["pytest>=7.0", "pytest-mock>=3.5", "flake8>=6.0"]
 
 # This tells setuptools to look for packages inside the 'src' directory
 [tool.setuptools.packages.find]
 where = ["src"]
+
+# --- Flake8 Configuration ---
+[tool.flake8]
+# Ignore line length errors (E501) as Black handles formatting
+ignore = ["E501"]
+# Optionally, you could set max-line-length = 88 here if you prefer,
+# but ignoring E501 is simpler if using Black.

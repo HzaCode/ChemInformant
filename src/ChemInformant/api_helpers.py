@@ -2,10 +2,10 @@
 import requests
 import requests_cache  # Import requests_cache here
 import sys
-import time
+# import time # Removed unused import
 from urllib.parse import quote
 import xml.etree.ElementTree as ET
-from typing import Optional, Tuple, List, Dict, Any, Union
+from typing import Optional, Tuple, List, Dict, Any
 
 # --- Constants ---
 PUBCHEM_API_BASE = "https://pubchem.ncbi.nlm.nih.gov/rest/pug"
@@ -54,7 +54,7 @@ def setup_cache(
 
 def get_session():
     """Internal function to get the current session (cached or default)."""
-    global _session
+    global _session  # noqa: F824
     if _session is None:
         # Initialize with defaults if setup_cache wasn't called explicitly
         # print("ChemInformant: Initializing default cache...") # Optional print

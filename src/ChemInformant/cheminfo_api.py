@@ -6,7 +6,7 @@ from PubChem, including ambiguity handling and batch retrieval.
 import sys
 from typing import Optional, List, Union, Dict, Any, Tuple
 import time  # For potential sleeps in batch
-import requests  # Import requests to catch RequestException
+# import requests  # Removed unused import (caught by api_helpers exceptions)
 
 # Use relative imports within the package
 from . import api_helpers
