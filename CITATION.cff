@@ -5,7 +5,7 @@ authors:
     given-names: "Zhiang"
     orcid: "https://orcid.org/0009-0009-0171-4578"
 title: "ChemInformant: A Modern, Lightweight Python Client for PubChem with Robust Caching and Validation"
-version: "1.1.4"
+version: "1.1.5"
 date-released: 2025
 url: "https://github.com/HzaCode/ChemInformant"
 license: MIT
