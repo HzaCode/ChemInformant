@@ -18,4 +18,10 @@ Welcome to ChemInformant's Documentation!
    ChemInformant Package <api/ChemInformant>
    ChemInfo API <api/ChemInformant.cheminfo_api>
    Data Models <api/ChemInformant.models>
-   API Helpers <api/ChemInformant.api_helpers>
+   API Helpers <api_helpers>
+
+.. toctree::
+   :caption: Development
+   :maxdepth: 1
+
+   changelog

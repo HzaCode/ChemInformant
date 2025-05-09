@@ -2,6 +2,7 @@
 import requests
 import requests_cache  # Import requests_cache here
 import sys
+
 # import time # Removed unused import
 from urllib.parse import quote
 import xml.etree.ElementTree as ET
@@ -196,8 +197,13 @@ def get_compound_description(cid: int) -> Optional[str]:
             ns = {"pug": "http://pubchem.ncbi.nlm.nih.gov/pug_rest"}
             root = ET.fromstring(xml_content)
             desc_element = root.find(".//pug:Information/pug:Description", ns)
-            if desc_element is not None and desc_element.text:
-                description = desc_element.text.strip()
+            if desc_element is not None:
+                # MODIFICATION HERE:
+                # If tag exists but text is None (e.g., <Description/>), treat as empty string "".
+                # If text is present (even if just whitespace), strip it.
+                description = (
+                    desc_element.text.strip() if desc_element.text is not None else ""
+                )
         except ET.ParseError as e:
             print(
                 f"Warning: Failed to parse XML description string for CID {cid}: {e}",
@@ -214,8 +220,13 @@ def get_compound_description(cid: int) -> Optional[str]:
             ns = {"pug": "http://pubchem.ncbi.nlm.nih.gov/pug_rest"}
             root = ET.fromstring(xml_content)  # Handles bytes
             desc_element = root.find(".//pug:Information/pug:Description", ns)
-            if desc_element is not None and desc_element.text:
-                description = desc_element.text.strip()
+            if desc_element is not None:
+                # MODIFICATION HERE:
+                # If tag exists but text is None (e.g., <Description/>), treat as empty string "".
+                # If text is present (even if just whitespace), strip it.
+                description = (
+                    desc_element.text.strip() if desc_element.text is not None else ""
+                )
         except Exception as e:
             print(
                 f"Warning: Failed processing description bytes for CID {cid}: {e}",
@@ -242,6 +253,72 @@ def get_all_synonyms(cid: int) -> List[str]:
             ):
                 synonyms = syns
     return synonyms
+
+
+# --- New Function for Image Fetching ---
+def fetch_compound_image_data(cid: int) -> Optional[bytes]:
+    """
+    Fetches the 2D image (PNG) data for a given PubChem CID.
+
+    Args:
+        cid: The PubChem Compound ID.
+
+    Returns:
+        Image data as bytes if successful, None otherwise.
+
+    Raises:
+        TypeError: If cid is not an integer.
+    """
+    if not isinstance(cid, int):
+        raise TypeError(f"CID must be an integer, got {type(cid)}")
+    if cid <= 0:
+        print(
+            f"Warning: Invalid CID provided for image fetching: {cid}", file=sys.stderr
+        )
+        return None
+
+    image_url = f"{PUBCHEM_API_BASE}/compound/cid/{cid}/PNG"
+    session = get_session()  # Use the existing cached session
+
+    try:
+        response = session.get(image_url, timeout=REQUEST_TIMEOUT)
+        # was_cached = getattr(response, 'from_cache', False) # For debugging
+        # print(f"DEBUG: Image Cache hit={was_cached} for URL: {image_url}", file=sys.stderr)
+
+        if response.status_code == 404:
+            print(
+                f"Warning: Image not found for CID {cid} (404 error).", file=sys.stderr
+            )
+            return None
+        response.raise_for_status()  # Raise for other 4xx/5xx errors
+
+        content_type = response.headers.get("Content-Type", "").lower()
+        if "image/png" in content_type:
+            return response.content
+        else:
+            print(
+                f"Warning: Expected PNG image but received content type '{content_type}' for CID {cid}.",
+                file=sys.stderr,
+            )
+            return None
+
+    except requests.exceptions.RequestException as e:
+        if not (
+            hasattr(e, "response")
+            and e.response is not None
+            and e.response.status_code == 404
+        ):
+            print(
+                f"Warning: API request failed for image URL {image_url} (CID: {cid}): {e}",
+                file=sys.stderr,
+            )
+        return None
+    except Exception as e:
+        print(
+            f"Warning: An unexpected error occurred fetching image for CID {cid} from {image_url}: {e}",
+            file=sys.stderr,
+        )
+        return None
 
 
 # --- Batch CID Lookups ---
@@ -294,6 +371,8 @@ def get_batch_properties(
     cids: List[int], properties: List[str]
 ) -> Dict[int, Dict[str, Any]]:
     """Get multiple properties for a list of CIDs in one request."""
+    if not cids:
+        return {}  # Return early if cids list is empty
     if not properties:
         return {
             cid: {} for cid in cids
@@ -309,6 +388,8 @@ def get_batch_properties(
 
 def get_batch_synonyms(cids: List[int]) -> Dict[int, List[str]]:
     """Get synonyms for a list of CIDs in one request."""
+    if not cids:
+        return {}  # Return early if cids list is empty
     raw_results = _get_batch_data_for_cids(cids, "synonyms", "InformationList", "CID")
     synonym_results = {}
     for cid_key, data in raw_results.items():
@@ -348,12 +429,19 @@ def get_batch_descriptions(cids: List[int]) -> Dict[int, Optional[str]]:
                 if (
                     cid_element is not None
                     and cid_element.text
-                    and desc_element is not None
-                    and desc_element.text
+                    and desc_element
+                    is not None  # Ensure the Description tag itself exists
                 ):
                     try:
                         cid_val = int(cid_element.text)
-                        results[cid_val] = desc_element.text.strip()
+                        # MODIFICATION HERE:
+                        # If tag exists but text is None (e.g., <Description/>), treat as empty string "".
+                        # If text is present (even if just whitespace), strip it.
+                        results[cid_val] = (
+                            desc_element.text.strip()
+                            if desc_element.text is not None
+                            else ""
+                        )
                     except (ValueError, TypeError):
                         continue  # Skip if CID is not an integer
         except ET.ParseError as e:

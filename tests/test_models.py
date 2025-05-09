@@ -1,8 +1,5 @@
 """Tests for Pydantic models and custom exceptions."""
 
-import pytest
-from pydantic import ValidationError, HttpUrl
-
 from ChemInformant.models import (
     CompoundData,
     NotFoundError,
@@ -32,6 +29,7 @@ def test_not_found_error():
     err_cid = NotFoundError(CID)
     assert err_cid.identifier == CID
     assert f"Identifier '{CID}' not found" in str(err_cid)
+
 
 def test_ambiguous_identifier_error():
     cids = [1001, 1002]
@@ -73,6 +71,7 @@ def test_compound_data_creation_full():
     assert isinstance(compound.pubchem_url, str)
     assert compound.pubchem_url == EXPECTED_URL
 
+
 def test_compound_data_creation_minimal():
 
     data = {"cid": CID, "input_identifier": CID}
@@ -96,30 +95,23 @@ def test_compound_data_creation_minimal():
 
 def test_compound_data_weight_validator():
 
-
     c1 = CompoundData(cid=1, input_identifier=1, MolecularWeight="123.45")
     assert c1.molecular_weight == 123.45
-
 
     c2 = CompoundData(cid=1, input_identifier=1, MolecularWeight=123.45)
     assert c2.molecular_weight == 123.45
 
-
     c3 = CompoundData(cid=1, input_identifier=1, MolecularWeight=None)
     assert c3.molecular_weight is None
-
 
     c4 = CompoundData(cid=1, input_identifier=1, MolecularWeight="")
     assert c4.molecular_weight is None
 
-
     c5 = CompoundData(cid=1, input_identifier=1, MolecularWeight="N/A")
     assert c5.molecular_weight is None
 
-
     c6 = CompoundData(cid=1, input_identifier=1, MolecularWeight="invalid")
     assert c6.molecular_weight is None
-
 
     c7 = CompoundData(cid=1, input_identifier=1, MolecularWeight=["123"])
     assert c7.molecular_weight is None
@@ -132,15 +124,12 @@ def test_compound_data_pubchem_url_computed():
     assert isinstance(compound.pubchem_url, str)
     assert compound.pubchem_url == EXPECTED_URL
 
+
 def test_compound_data_model_copy():
 
     compound = CompoundData(
-        cid=CID,
-        input_identifier=NAME,
-        cas=CAS,
-        synonyms=SYNONYMS.copy()
+        cid=CID, input_identifier=NAME, cas=CAS, synonyms=SYNONYMS.copy()
     )
-
 
     copy1 = compound.model_copy()
     assert copy1 is not compound
@@ -148,14 +137,12 @@ def test_compound_data_model_copy():
     assert copy1.cas == compound.cas
     assert copy1.synonyms is compound.synonyms
 
-
     copy2 = compound.model_copy(deep=True)
     assert copy2 is not compound
     assert copy2.cid == compound.cid
     assert copy2.cas == compound.cas
     assert copy2.synonyms == compound.synonyms
     assert copy2.synonyms is not compound.synonyms
-
 
     copy3 = compound.model_copy(update={"cas": "NEW-CAS", "description": "New Desc"})
     assert copy3 is not compound
@@ -166,15 +153,33 @@ def test_compound_data_model_copy():
     assert compound.cas == CAS
     assert compound.description is None
 
+
 def test_compound_data_extra_fields_ignored():
 
     data = {
         "cid": CID,
         "input_identifier": NAME,
         "extra_field": "should be ignored",
-        "another": 123
+        "another": 123,
     }
     compound = CompoundData(**data)
     assert compound.cid == CID
     assert not hasattr(compound, "extra_field")
     assert not hasattr(compound, "another")
+
+
+def test_compound_data_model_copy_with_none_update():
+    # 测试当update参数为None时的情况，确保代码中的update=update or {}处理被覆盖
+    compound = CompoundData(cid=CID, input_identifier=NAME, cas=CAS)
+
+    # 显式传递None作为update参数
+    copy1 = compound.model_copy(update=None)
+    assert copy1 is not compound
+    assert copy1.cid == compound.cid
+    assert copy1.cas == compound.cas
+
+    # 传递None并同时设置deep=True
+    copy2 = compound.model_copy(update=None, deep=True)
+    assert copy2 is not compound
+    assert copy2.cid == compound.cid
+    assert copy2.cas == compound.cas
