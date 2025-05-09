@@ -20,6 +20,11 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install ".[dev,plotting]" pytest-cov
+
+    - name: Verify plotting library installation
+      run: |
+        python -c "import sys; print('Python version:', sys.version); import PIL; print('PIL imported successfully:', PIL.__version__); import matplotlib; print('Matplotlib imported successfully:', matplotlib.__version__); import matplotlib.pyplot; print('matplotlib.pyplot imported successfully')"
+
     - name: Run tests and print coverage report content
       run: |
         set -e
