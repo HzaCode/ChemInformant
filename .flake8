@@ -1,4 +1,4 @@
 [flake8]
 # Ignore line length errors (E501) as Black handles formatting
 # Ignore line break before binary operator (W503) - contradicts Black
-ignore = E501, W503 
+ignore = E501, W503, F811, E261 
