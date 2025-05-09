@@ -211,7 +211,7 @@ except (TypeError, IOError) as e: # Catch missing libraries or image processing 
     print(f"  Error displaying image: {e}")
 except Exception as e:
     print(f"  An unexpected error occurred during image display: {type(e).__name__}: {e}", file=sys.stderr)
-
+```
 ## API Overview
 
 ### Primary Functions
