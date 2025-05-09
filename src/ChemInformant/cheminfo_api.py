@@ -462,7 +462,7 @@ def fig(
                 ax = plt_figure.add_subplot(111) if not hasattr(plt_to_use, 'imshow') else plt_to_use
                 
                 ax.imshow(img)
-                ax.set_title(f"Structure: {identifier_str} (CID: {cid_val})")
+                ax.title(f"Structure: {identifier_str} (CID: {cid_val})")
                 ax.axis('off')
                 plt_to_use.show()
                 print(f"Displayed image for {identifier_str} (CID: {cid_val}).")
