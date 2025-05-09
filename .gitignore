@@ -131,3 +131,5 @@ test_cheminformant.py
 
 # arXiv submission folder
 arxiv/
+
+docs/conf.py
