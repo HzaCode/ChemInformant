@@ -22,7 +22,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install ".[dev]" pytest-cov
+        pip install ".[dev,plotting]" pytest-cov
 
     - name: Run tests and print coverage report content
       run: |
