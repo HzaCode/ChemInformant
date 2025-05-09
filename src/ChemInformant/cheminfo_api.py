@@ -430,7 +430,6 @@ def fig(
             )
             print(err_msg, file=sys.stderr)
             raise TypeError(err_msg) from import_err
-    
     # Ensure modules are available (e.g. if only one test mock was passed, the other still needs to be valid)
     if Image_to_use is None or plt_to_use is None:
         # This case should ideally be caught by the ImportError above in normal execution
