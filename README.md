@@ -33,6 +33,7 @@ ChemInformant <img src="https://github.com/HzaCode/ChemInformant/blob/main/image
 * **Convenience Functions:** Offers simple functions (`cid`, `cas`, `form`, `wgt`, etc.) to fetch specific properties.
 * **Batch Processing:** Efficiently retrieves data for multiple compounds in a single call (`get_multiple_compounds`).
 * **Partial Data Retrieval:** Attempts to return as much data as possible even if some underlying API calls fail for a specific compound.
+* **Image Display:** Directly displays 2D chemical structures within your environment (e.g., Jupyter, VS Code interactive) using `fig()`.
 
 ## Key Features
 
@@ -44,6 +45,7 @@ ChemInformant <img src="https://github.com/HzaCode/ChemInformant/blob/main/image
 * Efficient batch retrieval for lists of identifiers.
 * Validated and typed data output via the `CompoundData` model.
 * Computed `pubchem_url` property on the `CompoundData` model.
+* Inline display of 2D compound structures (`ci.fig()`).
 
 ## Installation
 
@@ -68,6 +70,12 @@ For editable installs :
  cd ChemInformant
 
 pip install -e .
+```
+
+To use the image display feature (`ci.fig()`), you will also need `matplotlib` and `Pillow`:
+
+```bash
+pip install matplotlib Pillow
 ```
 
 ## Basic Usage
@@ -185,7 +193,24 @@ if os.path.exists(default_cache_path):
     print("To clear the cache, simply delete this file.")
 else:
       print("Default cache file ('pubchem_cache.sqlite') not created yet (or using memory cache).")
-```
+
+# --- Displaying Compound Structure Image ---
+print("\n--- Display Compound Image ---")
+try:
+    print("Displaying image for Aspirin (should open in a plot window or inline)...")
+    ci.fig("Aspirin") # by name
+    # Example with a CID and custom size
+    # water_cid = ci.cid("Water")
+    # if water_cid:
+    #    ci.fig(water_cid, display_size=(4,4))
+except ci.NotFoundError as e:
+    print(f"  Error displaying image: {e}")
+except ci.AmbiguousIdentifierError as e:
+    print(f"  Error displaying image: Identifier '{e.identifier}' is ambiguous, maps to CIDs: {e.cids}")
+except (TypeError, IOError) as e: # Catch missing libraries or image processing issues
+    print(f"  Error displaying image: {e}")
+except Exception as e:
+    print(f"  An unexpected error occurred during image display: {type(e).__name__}: {e}", file=sys.stderr)
 
 ## API Overview
 
@@ -208,6 +233,14 @@ else:
     * A `CompoundData` object on success.
     * An `Exception` instance (`NotFoundError`, `AmbiguousIdentifierError`, `ValueError`, `TypeError`, or potentially a `requests.exceptions.RequestException` if a batch fetch fails) indicating the reason for failure for that specific identifier.
   * **Important:** Always check the type of the value associated with each identifier in the returned dictionary to determine if the lookup was successful (`CompoundData`) or failed (`Exception`).
+
+* **`ci.fig(name_or_cid: Union[str, int], display_size: Tuple[int, int] = (6, 6)) -> None`**:
+  * Retrieves and displays the 2D chemical structure image of a compound from PubChem.
+  * Requires `matplotlib` and `Pillow` to be installed.
+  * Shows the image inline in environments like Jupyter Notebooks or VS Code's interactive Python window.
+  * Takes a compound name (string) or PubChem CID (integer).
+  * `display_size` is an optional tuple for figure size in inches (default: `(6,6)`).
+  * Raises `NotFoundError`, `AmbiguousIdentifierError`, `ValueError`, `TypeError` (e.g. if libraries are missing), or `IOError` (if image data is corrupt or unprocessable).
 
 ### Convenience Functions
 
