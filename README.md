@@ -34,6 +34,14 @@ ChemInformant <img src="https://github.com/HzaCode/ChemInformant/blob/main/image
 * **Batch Processing:** Efficiently retrieves data for multiple compounds in a single call (`get_multiple_compounds`).
 * **Partial Data Retrieval:** Attempts to return as much data as possible even if some underlying API calls fail for a specific compound.
 * **Image Display:** Directly displays 2D chemical structures within your environment (e.g., Jupyter, VS Code interactive) using `fig()`.
+---
+🎉 **New Feature Spotlight: Visualize Chemical Structures!** 🎉
+
+ChemInformant now empowers you to generate and display 2D chemical structures directly within your Python environment. Simply use the new `ci.fig()` function!
+
+This makes visualizing compounds quick and easy. For detailed examples, see the [Basic Usage](#basic-usage) and [API Overview](#api-overview) sections.
+
+---
 
 ## Key Features
 
