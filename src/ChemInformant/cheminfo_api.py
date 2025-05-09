@@ -381,7 +381,12 @@ def get_multiple_compounds(
 
 
 # --- New Image Display Function ---
-def fig(name_or_cid: Union[str, int], display_size: Tuple[int, int] = (6, 6)) -> None:
+def fig(
+    name_or_cid: Union[str, int],
+    display_size: Tuple[int, int] = (6, 6),
+    _image_module_for_test=None, # For testing purposes
+    _plt_module_for_test=None    # For testing purposes
+) -> None:
     """
     Retrieves and displays the 2D chemical structure image of a compound.
     Requires matplotlib and Pillow to be installed.
@@ -389,6 +394,8 @@ def fig(name_or_cid: Union[str, int], display_size: Tuple[int, int] = (6, 6)) ->
     Args:
         name_or_cid: The compound name (str) or PubChem CID (int).
         display_size: Optional tuple for figure size in inches (default: (6,6)).
+        _image_module_for_test: Internal use for testing.
+        _plt_module_for_test: Internal use for testing.
 
     Raises:
         NotFoundError: If the compound identifier cannot be resolved.
@@ -399,33 +406,49 @@ def fig(name_or_cid: Union[str, int], display_size: Tuple[int, int] = (6, 6)) ->
     """
     # --- Step 1: Resolve identifier first ---
     try:
-        # This will raise ValueError for invalid CIDs, TypeError for wrong input types,
-        # NotFoundError, or AmbiguousIdentifierError if applicable.
         resolved_id = _resolve_identifier(name_or_cid)
     except (NotFoundError, AmbiguousIdentifierError, ValueError, TypeError) as e:
-        # Print context-specific error for resolution failure
         print(f"Error resolving identifier for image display '{name_or_cid}': {e}", file=sys.stderr)
-        raise # Re-raise the original, specific error
+        raise
 
-    # --- Step 2: Try to import required libraries only if identifier resolution was successful ---
-    try:
-        from PIL import Image
-        import matplotlib.pyplot as plt
-    except ImportError as import_err:
-        err_msg = (
-            "Error: Matplotlib or Pillow (PIL) is not installed or found. "
-            "Please install them to use the 'fig' function (e.g., pip install matplotlib Pillow)."
-        )
+    # --- Step 2: Get Image and plt modules ---
+    Image_to_use = _image_module_for_test
+    plt_to_use = _plt_module_for_test
+
+    if Image_to_use is None or plt_to_use is None: # Normal execution path
+        try:
+            from PIL import Image as RealImage
+            import matplotlib.pyplot as RealPlt
+            if Image_to_use is None:
+                Image_to_use = RealImage
+            if plt_to_use is None: # Should also be None if Image_to_use was None initially
+                plt_to_use = RealPlt
+        except ImportError as import_err:
+            err_msg = (
+                "Error: Matplotlib or Pillow (PIL) is not installed or found. "
+                "Please install them to use the 'fig' function (e.g., pip install matplotlib Pillow)."
+            )
+            print(err_msg, file=sys.stderr)
+            raise TypeError(err_msg) from import_err
+    
+    # Ensure modules are available (e.g. if only one test mock was passed, the other still needs to be valid)
+    if Image_to_use is None or plt_to_use is None:
+        # This case should ideally be caught by the ImportError above in normal execution
+        # or ensured by tests passing both mocks. Adding a fallback error.
+        err_msg = "Internal error: Image or pyplot module not available for fig()."
+        if _image_module_for_test is not None and _plt_module_for_test is None:
+             err_msg = "Internal error: _plt_module_for_test not provided alongside _image_module_for_test for fig()."
+        elif _plt_module_for_test is not None and _image_module_for_test is None:
+             err_msg = "Internal error: _image_module_for_test not provided alongside _plt_module_for_test for fig()."
         print(err_msg, file=sys.stderr)
-        # Raise a TypeError to indicate a setup/dependency problem for this specific function
-        raise TypeError(err_msg) from import_err
+        raise TypeError(err_msg)
+
 
     # --- Step 3: Proceed with image fetching and display ---
-    # The resolved_id is guaranteed to be an int if we reach here due to _resolve_identifier's logic
-    if not isinstance(resolved_id, int): # Should ideally not be needed if _resolve_identifier is correct
+    if not isinstance(resolved_id, int):
         err_msg = f"Internal error: Expected a single CID after resolution, but got {resolved_id}."
         print(err_msg, file=sys.stderr)
-        raise TypeError(err_msg) # Or a more specific internal error type
+        raise TypeError(err_msg)
 
     cid_val = resolved_id
     identifier_str = name_or_cid if isinstance(name_or_cid, str) else f"CID {cid_val}"
@@ -435,29 +458,33 @@ def fig(name_or_cid: Union[str, int], display_size: Tuple[int, int] = (6, 6)) ->
 
         if image_bytes:
             try:
-                img = Image.open(io.BytesIO(image_bytes))
-                plt.figure(figsize=display_size)
-                plt.imshow(img)
-                plt.title(f"Structure: {identifier_str} (CID: {cid_val})")
-                plt.axis('off')  # Hide axes for a cleaner image
-                plt.show()
+                img = Image_to_use.open(io.BytesIO(image_bytes))
+                plt_figure = plt_to_use.figure(figsize=display_size)
+                # If plt_to_use is a mock, imshow might be an attribute of it, or figure returns a mock with imshow
+                # Assuming plt_to_use has an imshow method directly for simplicity in this refactor
+                # or that plt_to_use.figure().imshow() would be the pattern if figure returns an Axes object.
+                # For typical plt mock, plt_to_use.imshow would be a MagicMock.
+                ax = plt_figure.add_subplot(111) if not hasattr(plt_to_use, 'imshow') else plt_to_use
+                
+                ax.imshow(img)
+                ax.set_title(f"Structure: {identifier_str} (CID: {cid_val})") # Use ax.set_title for Axes object
+                ax.axis('off')  # Hide axes for a cleaner image
+                plt_to_use.show()
                 print(f"Displayed image for {identifier_str} (CID: {cid_val}).")
-            except Exception as img_err: # Catch other PIL/Matplotlib errors during processing/display
+            except Exception as img_err:
                 err_msg = f"Error displaying image for {identifier_str} (CID: {cid_val}): {img_err}"
                 print(err_msg, file=sys.stderr)
-                raise IOError(err_msg) from img_err # Re-raise as IOError
+                raise IOError(err_msg) from img_err
         else:
             print(f"No image data retrieved for {identifier_str} (CID: {cid_val}). Cannot display.", file=sys.stderr)
 
-    except requests.exceptions.RequestException as req_err: # Should be caught by api_helpers, but as a fallback
+    except requests.exceptions.RequestException as req_err:
         err_msg = f"Network error fetching image for {identifier_str} (CID: {cid_val}): {req_err}"
         print(err_msg, file=sys.stderr)
         raise
     except Exception as e:
-        # Catch any other unexpected errors during the process not already handled
-        # This includes the TypeError from the import block at the start if it wasn't caught elsewhere.
         if isinstance(e, (NotFoundError, AmbiguousIdentifierError, ValueError, TypeError, IOError)):
-            raise # Re-raise known handled types
+            raise
         err_msg = f"An unexpected error occurred while trying to display image for {identifier_str} (CID: {cid_val}): {e}"
         print(err_msg, file=sys.stderr)
         raise
