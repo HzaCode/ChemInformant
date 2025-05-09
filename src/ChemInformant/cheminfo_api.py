@@ -437,9 +437,9 @@ def fig(
         # or ensured by tests passing both mocks. Adding a fallback error.
         err_msg = "Internal error: Image or pyplot module not available for fig()."
         if _image_module_for_test is not None and _plt_module_for_test is None:
-             err_msg = "Internal error: _plt_module_for_test not provided alongside _image_module_for_test for fig()."
+            err_msg = "Internal error: _plt_module_for_test not provided alongside _image_module_for_test for fig()."
         elif _plt_module_for_test is not None and _image_module_for_test is None:
-             err_msg = "Internal error: _image_module_for_test not provided alongside _plt_module_for_test for fig()."
+            err_msg = "Internal error: _image_module_for_test not provided alongside _plt_module_for_test for fig()."
         print(err_msg, file=sys.stderr)
         raise TypeError(err_msg)
 
@@ -460,15 +460,11 @@ def fig(
             try:
                 img = Image_to_use.open(io.BytesIO(image_bytes))
                 plt_figure = plt_to_use.figure(figsize=display_size)
-                # If plt_to_use is a mock, imshow might be an attribute of it, or figure returns a mock with imshow
-                # Assuming plt_to_use has an imshow method directly for simplicity in this refactor
-                # or that plt_to_use.figure().imshow() would be the pattern if figure returns an Axes object.
-                # For typical plt mock, plt_to_use.imshow would be a MagicMock.
                 ax = plt_figure.add_subplot(111) if not hasattr(plt_to_use, 'imshow') else plt_to_use
                 
                 ax.imshow(img)
-                ax.set_title(f"Structure: {identifier_str} (CID: {cid_val})") # Use ax.set_title for Axes object
-                ax.axis('off')  # Hide axes for a cleaner image
+                ax.set_title(f"Structure: {identifier_str} (CID: {cid_val})")
+                ax.axis('off')
                 plt_to_use.show()
                 print(f"Displayed image for {identifier_str} (CID: {cid_val}).")
             except Exception as img_err:
