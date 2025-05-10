@@ -7,7 +7,7 @@ ChemInformant <img src="https://github.com/HzaCode/ChemInformant/blob/main/image
     <img
       src="https://static.pepy.tech/personalized-badge/cheminformant?period=total&units=international_system&left_color=grey&right_color=blue&left_text=Downloads" 
       alt="Monthly Downloads" 
-      height="30"
+      height="35"
     >
   </a>
 </div>
@@ -35,7 +35,7 @@ ChemInformant <img src="https://github.com/HzaCode/ChemInformant/blob/main/image
 * **Partial Data Retrieval:** Attempts to return as much data as possible even if some underlying API calls fail for a specific compound.
 * **Image Display:** Directly displays 2D chemical structures within your environment (e.g., Jupyter, VS Code interactive) using `fig()`.
 ---
-🎉 **New Feature Spotlight: Visualize Chemical Structures!** 🎉
+🎉 **New Feature Launch: Visualize Chemical Structures!** 🎉
 
 ChemInformant now empowers you to generate and display 2D chemical structures directly within your Python environment. Simply use the new `ci.fig()` function!
 
