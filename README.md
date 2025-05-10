@@ -46,7 +46,7 @@ ChemInformant <img src="https://github.com/HzaCode/ChemInformant/blob/main/image
 
 ChemInformant now empowers you to generate and display 2D chemical structures directly within your Python environment. Simply use the new `ci.fig()` function!
 
-This makes visualizing compounds quick and easy. For detailed examples, see the [Basic Usage](#basic-usage) and [API Overview](#api-overview) sections.
+This makes visualizing compounds **quick and easy**. For detailed examples, see the [Basic Usage](#basic-usage) and [API Overview](#api-overview) sections.
 
 ---
 ## Key Features
