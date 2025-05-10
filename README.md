@@ -2,16 +2,21 @@ ChemInformant <img src="https://github.com/HzaCode/ChemInformant/blob/main/image
 ---  
 
 
+
 <div align="left">
   <a href="https://pepy.tech/project/cheminformant" target="_blank" title="View Download Stats">
     <img
-      src="https://static.pepy.tech/personalized-badge/cheminformant?period=total&units=international_system&left_color=grey&right_color=blue&left_text=Downloads" 
-      alt="Monthly Downloads" 
+      src="https://static.pepy.tech/personalized-badge/cheminformant?period=total&left_color=grey&right_color=blue&left_text=Downloads"
+      alt="Total Downloads"
       height="35"
     >
   </a>
 </div>
 <br>
+
+
+
+
 
 
 
