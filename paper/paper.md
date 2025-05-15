@@ -11,7 +11,7 @@ tags:
   - research software
   - data validation
 authors:
-  - name: Zhiang HE
+  - name: Zhiang He
     orcid: 0009-0009-0171-4578
 date: 15 April 2025 
 bibliography: paper.bib 
