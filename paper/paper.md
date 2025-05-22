@@ -43,7 +43,7 @@ Through these focused enhancements, `ChemInformant` serves as a reliable, effici
 
 ## Key Functionality and Architecture
 
-ChemInformant's capabilities are delivered through a modular architecture (refer to Figure 1) and are characterized by the following key features:
+ChemInformant's capabilities are delivered through a modular architecture (refer to Figure \@fig:architecture_flowchart) and are characterized by the following key features:
 
 *   **Lightweight & Pythonic Interface:** A concise API accessible via the `ci` alias (e.g., `ci.info()`, `ci.cid()`).
 *   **Built-in Automatic Caching:** Leverages `requests-cache` [@RequestsCache] for transparent caching (default: SQLite, 7-day expiry, caches 404 responses), configurable via `ci.setup_cache()`.
