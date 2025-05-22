@@ -170,7 +170,7 @@ It accepts a list containing a mix of compound names (str) and CIDs (int). It re
    batch_results = ci.get_multiple_compounds(identifiers_list)
 
    print(f"--- Batch Results ({len(batch_results)} entries) ---")
-   for identifier, result in batch_results.items():
+   for identifier, result in batch_results.items(): 
        print(f"Identifier: {repr(identifier)}") # Use repr() to see type clearly
        if isinstance(result, ci.CompoundData):
            print(f"  Result: Success! CID={result.cid}, Formula={result.molecular_formula}")
@@ -179,7 +179,7 @@ It accepts a list containing a mix of compound names (str) and CIDs (int). It re
        elif isinstance(result, ci.AmbiguousIdentifierError):
            print(f"  Result: Failed - Ambiguous (CIDs: {result.cids})")
        elif isinstance(result, ValueError):
-            print(f"  Result: Failed - Invalid Input ({result})")
+           print(f"  Result: Failed - Invalid Input ({result})")
        else:
            # Catch other potential errors like network issues during batch fetch
            print(f"  Result: Failed - Unexpected Error ({type(result).__name__}: {result})")
@@ -233,4 +233,4 @@ A core feature of ``ChemInformant`` is its built-in automatic caching, powered b
 Further Information
 ===================
 
-For detailed information on specific functions and the ``CompoundData`` model, please refer to the :doc:`api` documentation.
+For detailed information on specific functions and the ``CompoundData`` model, please refer to the :doc:`api/index` documentation.

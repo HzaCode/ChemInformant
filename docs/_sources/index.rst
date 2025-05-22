@@ -13,12 +13,10 @@ Welcome to ChemInformant's Documentation!
    :caption: API Reference
    :maxdepth: 2
 
-  
-
-   ChemInformant Package <api/ChemInformant>
+   API Overview <api/index>
    ChemInfo API <api/ChemInformant.cheminfo_api>
    Data Models <api/ChemInformant.models>
-   API Helpers <api_helpers>
+   API Helpers <api/ChemInformant.api_helpers>
 
 .. toctree::
    :caption: Development
