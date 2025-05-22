@@ -16,13 +16,11 @@ authors:
 affiliations:
   - name: Independent researcher
     index: 1
-date: 2025-04-15
-date: 15 April 2025
+date: "2025-04-15"
 bibliography: paper.bib 
 repository: https://github.com/HzaCode/ChemInformant
 version: 1.2.1 
 license: MIT
-doi:
 ---
 
 
