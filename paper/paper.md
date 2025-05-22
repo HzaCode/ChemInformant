@@ -10,10 +10,13 @@ tags:
   - cheminformatics
   - research software
   - data validation
-authors: 
+authors:
   - name: Zhiang He
-    orcid: 0009-0009-0171-4578
-affiliation: 
+    affiliation: 1
+affiliations:
+  - name: Independent researcher
+    index: 1
+date: 2025-04-15
 date: 15 April 2025
 bibliography: paper.bib 
 repository: https://github.com/HzaCode/ChemInformant
