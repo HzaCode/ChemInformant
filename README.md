@@ -2,6 +2,7 @@ ChemInformant <img src="https://github.com/HzaCode/ChemInformant/blob/main/image
 ---  
 
 
+<!--
 <div align="left">
   <a href="https://pepy.tech/project/cheminformant" target="_blank" title="View download stats">
     <img
@@ -10,7 +11,15 @@ ChemInformant <img src="https://github.com/HzaCode/ChemInformant/blob/main/image
       height="35">
   </a>
 </div>
+-->
 
+<a href="https://pepy.tech/project/cheminformant" target="_blank" title="View download stats">
+  <img
+    src="https://img.shields.io/pepy/dt/cheminformant?label=Downloads&color=blue"
+    alt="Total Downloads"
+    height="35"
+  >
+</a>
 
 
 
