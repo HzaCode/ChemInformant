@@ -2,26 +2,6 @@ ChemInformant <img src="https://github.com/HzaCode/ChemInformant/blob/main/image
 ---  
 
 
-<!--
-<div align="left">
-  <a href="https://pepy.tech/project/cheminformant" target="_blank" title="View download stats">
-    <img
-      src="https://static.pepy.tech/personalized-badge/cheminformant?period=total&units=abbreviation&left_color=grey&right_color=blue&left_text=Downloads"
-      alt="Total Downloads"
-      height="35">
-  </a>
-</div>
--->
-
-<a href="https://pepy.tech/project/cheminformant" target="_blank" title="View download stats">
-  <img
-    src="https://img.shields.io/pepy/dt/cheminformant?label=Downloads&color=blue"
-    alt="Total Downloads"
-    height="35"
-  >
-</a>
-
-
 
 
 
@@ -31,7 +11,7 @@ ChemInformant <img src="https://github.com/HzaCode/ChemInformant/blob/main/image
 [![Build Status](https://img.shields.io/github/actions/workflow/status/HzaCode/ChemInformant/tests.yml?label=Build)](https://github.com/HzaCode/ChemInformant/actions/workflows/tests.yml) [![Code Quality: Flake8](https://img.shields.io/github/actions/workflow/status/HzaCode/ChemInformant/lint.yml?label=Code%20Quality%3A%20Flake8)](https://github.com/HzaCode/ChemInformant/actions/workflows/lint.yml) [![PyPI - License](https://img.shields.io/pypi/l/ChemInformant.svg)](https://github.com/HzaCode/ChemInformant/blob/main/LICENSE) [![codecov](https://codecov.io/gh/HzaCode/ChemInformant/branch/main/graph/badge.svg)](https://codecov.io/gh/HzaCode/ChemInformant)
 [![Docs](https://img.shields.io/badge/Docs-Read_Online-blue?style=flat-square&logo=book&logoColor=white)](https://hzacode.github.io/ChemInformant)
 [![Status: Under Review](https://img.shields.io/badge/Status-Under%20Review-yellow.svg?style=flat-square)](#)
-
+[![Total Downloads](https://img.shields.io/pepy/dt/cheminformant?label=Downloads&color=blue)](https://pepy.tech/project/cheminformant)
 
 
 
