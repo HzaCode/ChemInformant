@@ -32,7 +32,8 @@ keywords = ["chemistry", "cheminformatics", "pubchem", "api", "compound", "drug"
 dependencies = [
     "requests>=2.25.0",
     "requests-cache>=1.1.0",
-    "pydantic>=2.0",
+    "pydantic>=2.0", 
+    "pandas>=1.5.0" 
 ]
 
 [project.urls]
@@ -48,13 +49,9 @@ plotting = [
     "Pillow>=9.0"
 ]
 
-# This tells setuptools to look for packages inside the 'src' directory
 [tool.setuptools.packages.find]
 where = ["src"]
 
 # --- Flake8 Configuration ---
 [tool.flake8]
-# Ignore line length errors (E501) as Black handles formatting
 ignore = ["E501"]
-# Optionally, you could set max-line-length = 88 here if you prefer,
-# but ignoring E501 is simpler if using Black.
