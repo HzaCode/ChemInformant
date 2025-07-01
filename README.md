@@ -5,8 +5,9 @@ ChemInformant <img src="https://github.com/HzaCode/ChemInformant/blob/main/image
 
 
 
-[![Project Status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Status: Under Review](https://img.shields.io/badge/Status-Under%20Review-yellow.svg?style=flat-square)](#)
+[![Status: Revisions in Progress](https://img.shields.io/badge/Status-Revisions%20in%20Progress-orange.svg?style=flat-square)](#)
+<a href="https://joss.theoj.org/papers/b263ab8f865610c7c7a7f981035f78f7"><img src="https://joss.theoj.org/papers/b263ab8f865610c7c7a7f981035f78f7/status.svg"></a>
+
 
 
 
