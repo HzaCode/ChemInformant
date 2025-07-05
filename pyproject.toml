@@ -4,10 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ChemInformant"
-version = "1.2.1"
+version = "1.2.2"
 authors = [
- 
-  { name="Ang", email="ang@hezhiang.com" },
+  { name="Zhiang He", email="ang@hezhiang.com" },
 ]
 description = "A Python library for streamlined access to PubChem chemical data with caching, validation, ambiguity handling, and batch retrieval."
 readme = "README.md"
@@ -23,35 +22,29 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering :: Chemistry",
-    "Topic :: Scientific/Engineering :: Bio-Informatics",
-    "Intended Audience :: Science/Research",
-    "Intended Audience :: Developers",
-    "Development Status :: 4 - Beta",
 ]
 keywords = ["chemistry", "cheminformatics", "pubchem", "api", "compound", "drug", "cache", "pydantic", "batch"]
 dependencies = [
     "requests>=2.25.0",
     "requests-cache>=1.1.0",
-    "pydantic>=2.0", 
-    "pandas>=1.5.0" 
+    "pydantic>=2.0",
+    "pandas>=1.5.0"
 ]
 
 [project.urls]
-
 Homepage = "https://github.com/HzaCode/ChemInformant"
 Issues = "https://github.com/HzaCode/ChemInformant/issues"
 
-# Optional: Define dependencies for development/testing
 [project.optional-dependencies]
-dev = ["pytest>=7.0", "pytest-mock>=3.5", "flake8>=6.0", "pytest-cov>=2.12"]
-plotting = [
+plot = [
     "matplotlib>=3.1",
     "Pillow>=9.0"
 ]
+dev = ["pytest>=7.0", "pytest-mock>=3.5", "flake8>=6.0", "pytest-cov>=2.12"]
+all = ["ChemInformant[plot,dev]"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
-# --- Flake8 Configuration ---
 [tool.flake8]
 ignore = ["E501"]
