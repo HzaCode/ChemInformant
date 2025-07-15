@@ -65,15 +65,18 @@ print(df)
 <summary><b>➡️ Click to see Convenience API Cheatsheet</b></summary>
 <br>
 
-| Function                   | Description                               |
-| -------------------------- | ----------------------------------------- |
-| `get_weight(id)`           | Get the molecular weight *(float)*        |
-| `get_formula(id)`          | Get the molecular formula *(str)*         |
-| `get_cas(id)`              | Get the CAS Registry Number *(str)*        |
-| `get_iupac_name(id)`       | Get the IUPAC name *(str)*                 |
-| `get_canonical_smiles(id)` | Get the canonical SMILES *(str)*           |
-| `get_synonyms(id)`         | Get a list of synonyms *(List[str])*       |
-| `get_compound(id)`         | Get a full, validated `Compound` object   |
+| Function                   | Description                                   |
+|----------------------------|-----------------------------------------------|
+| `get_weight(id)`           | Molecular weight *(float)*                    |
+| `get_formula(id)`          | Molecular formula *(str)*                     |
+| `get_cas(id)`              | CAS Registry Number *(str)*                   |
+| `get_iupac_name(id)`       | IUPAC name *(str)*                            |
+| `get_canonical_smiles(id)` | Canonical SMILES with Canonical→Connectivity fallback *(str)* |
+| `get_isomeric_smiles(id)`  | Isomeric SMILES *(str)*                       |
+| `get_xlogp(id)`            | XLogP (calculated hydrophobicity) *(float)*   |
+| `get_synonyms(id)`         | List of synonyms *(List[str])*                |
+| `get_compound(id)`         | Full, validated **`Compound`** object (Pydantic v2 model) |
+
 
 *All functions accept a **CID, name, or SMILES** and return `None`/`[]` on failure.*
 
