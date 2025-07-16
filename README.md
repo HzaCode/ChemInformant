@@ -10,13 +10,12 @@ It's built to be robust by default, with built-in request caching, smart rate li
 
 ### Key Features
 
-*   **Native Pandas Output:** Core API returns a clean, ready-to-analyze **Pandas DataFrame**.
-*   **Robust by Default:** Built-in caching, rate-limiting, and retries are enabled with zero configuration.
-*   **Intuitive Layered API:** Offers both simple `get_<property>()` functions for quick lookups and a powerful `get_properties` engine for batch operations.
-*   **Automated Pagination:** Transparently handles PubChem's `ListKey`-based pagination for large queries.
-*   **Type-Safe & Validated:** Employs Pydantic v2 models to ensure the data you receive is structured and type-checked.
-*   **Modern & Maintained:** Built on an actively maintained tech stack for long-term stability.
-
+*   **Analysis-Ready Pandas Output:** The core API (`get_properties`) returns a clean Pandas DataFrame, eliminating data wrangling boilerplate and enabling immediate integration with the Python data science ecosystem.
+*   **Zero-Configuration Robustness:** Built-in, persistent caching, smart rate-limiting, and automatic retries for server errors are enabled by default to ensure your workflows run reliably.
+*   **A Dual API for Simplicity and Power:** Offers a clear `get_<property>()` convenience layer for quick lookups, backed by a powerful `get_properties` engine for high-performance batch operations.
+*   **Effortless Large-Scale Queries:** Transparently handles PubChem's `ListKey`-based pagination in the background, ensuring you retrieve complete result sets from large queries without manual intervention.
+*   **Guaranteed Data Integrity:** Employs Pydantic v2 models for rigorous, runtime data validation, preventing malformed or unexpected data from corrupting your analysis pipeline.
+*   **Modern and Actively Maintained:** Built on a contemporary tech stack for long-term stability and compatibility, providing a reliable alternative to older or less frequently updated libraries.
 ### Installation
 
 Install the library from PyPI:
