@@ -20,7 +20,7 @@ It's built to be robust by default, with built-in request caching, smart rate li
 *   **A Dual API for Simplicity and Power:** Offers a clear `get_<property>()` convenience layer for quick lookups, backed by a powerful `get_properties` engine for high-performance batch operations.
 *   **Effortless Large-Scale Queries:** Transparently handles PubChem's `ListKey`-based pagination in the background, ensuring you retrieve complete result sets from large queries without manual intervention.
 *   **Guaranteed Data Integrity:** Employs Pydantic v2 models for rigorous, runtime data validation, preventing malformed or unexpected data from corrupting your analysis pipeline.
-*   **Modern and Actively Maintained:** Built on a contemporary tech stack for long-term stability and compatibility, providing a reliable alternative to older or less frequently updated libraries.
+*   **Modern and Actively Maintained:** Built on a contemporary tech stack for long-term consistency and compatibility, providing a reliable alternative to older or less frequently updated libraries.
 ### Installation
 
 Install the library from PyPI:
