@@ -15,7 +15,7 @@ import uuid, time, statistics
 import ChemInformant as ci
 import pubchempy as pcp
 
-# ---------------- 1. 300 unique drug names ----------------
+# ---------------- 1. 285 unique drug names ----------------
 DRUGS = sorted({
     "abacavir","acetaminophen","acetazolamide","acyclovir","adalimumab",
     "albendazole","albuterol","alclometasone","allopurinol","alprazolam",
