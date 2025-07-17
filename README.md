@@ -1,6 +1,10 @@
 # ChemInformant <img src="https://raw.githubusercontent.com/HzaCode/ChemInformant/joss-review-response/images/logo.png" align="right" width="120px" />
 
-[![Status: Revisions in Progress](https://img.shields.io/badge/Status-Revisions%20in%20Progress-orange.svg?style=flat-square)](#)
+
+
+
+[![Status: Revisions in Progress](https://img.shields.io/badge/Status-Revisions%20in%20Progress-orange.svg?style=flat-square)](#) ![coverage](https://img.shields.io/badge/coverage-82%25-green)
+
 
 **ChemInformant** is a modern, workflow-centric **Python client** for the [PubChem](https://pubchem.ncbi.nlm.nih.gov/) database. It's designed to feel native and intuitive for researchers and data scientists working within the **Python data science ecosystem (e.g., Pandas, Jupyter)**.
 
