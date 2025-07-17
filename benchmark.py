@@ -1,7 +1,7 @@
 
 """
 ChemInformant vs. PubChemPy
-(300 unique drugs × 6 properties)
+(285 unique drugs × 6 properties)
 
 Output:
   • PubChemPy bulk time
