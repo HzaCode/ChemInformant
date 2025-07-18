@@ -53,7 +53,7 @@ To position `ChemInformant` within the broader landscape, we examined related to
 | **Primary Database** | **PubChem** | PubChem | PubChem | Multi-DB | ChemSpider | PubChem |
 | **Persistent HTTP Caching**<br/>*(Improves repetitive query speed)* | **Yes (Built-in)** | No (Object-level memoization only) | No | No | No | N/A (Local DB) |
 | **Rate-Limiting & Retries**<br/>*(Enhances automation robustness)* | **Yes (Built-in)** | No (Requires manual implementation) | No (Requires manual implementation) | Partial (No auto-retry) | No | N/A (Local access) |
-| **Batch Multi-Property Retrieval**<br/>*(Reduces network overhead)* | Yes (Single function, one call for multiple IDs & props) | Partial | Partial | Partial | Partial | Yes (Local SQL) |
+| **Batch Multi-Property Retrieval**<br/>*(Reduces network overhead)* | **Yes (Single function, one call for multiple IDs & props)** | Partial | Partial | Partial | Partial | Yes (Local SQL) |
 | **Mixed Identifier Support**<br/>*(Simplifies data preprocessing)* | **Yes (Native support)** | No (Requires single namespace) | No (Requires single id_type) | No (Requires single 'from' type) | No | N/A |
 | **Batch Query Fault Tolerance**<br/>*(Ensures task integrity)* | **Yes (Structured status reporting)** | No (Fails on single error) | No (Silently returns NULL) | No (Silently returns NA) | No (Silently returns None) | N/A |
 | **Automatic Pagination (ListKey)**<br/>*(Simplifies large dataset queries)* | **Yes (Automatic)** | Partial (Requires manual management) | No | No | No | N/A (Local SQL) |
