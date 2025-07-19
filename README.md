@@ -1,4 +1,4 @@
-# ChemInformant <img src="https://raw.githubusercontent.com/HzaCode/ChemInformant/joss-review-response/images/logo.png" align="right" width="120px" />
+# ChemInformant <img src="https://raw.githubusercontent.com/HzaCode/ChemInformant/main/images/logo.png" align="right" width="120px" />
 
 
 
