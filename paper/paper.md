@@ -31,7 +31,7 @@ ChemInformant is a modern, workflow-centric Python client designed for high-thro
 
 ## Statement of Need
 
-Programmatic access to PubChem [@PubChem] has become a critical infrastructure component in modern chemical and life sciences research. As research scales and automated workflows become more prevalent, researchers face three core challenges with existing client tools: the reliability of network access, the flexibility and fault tolerance of batch processing, and the sustainability risks associated with long-term library maintenance.
+Programmatic access to PubChem [@PubChem; @Kim2018PUGREST] has become a critical infrastructure component in modern chemical and life sciences research. As research scales and automated workflows become more prevalent, researchers face three core challenges with existing client tools: the reliability of network access, the flexibility and fault tolerance of batch processing, and the sustainability risks associated with long-term library maintenance.
 
 First, network reliability is a primary concern. PubChem's API service enforces strict dynamic rate limits (typically ≤5 requests per second) and returns `HTTP 503 (Server Busy)` errors under high load [@PubChemUsagePolicy]. Mainstream clients like PubChemPy [@PubChemPy] generally lack built-in automatic throttling and exponential backoff retry mechanisms, which makes automated scripts brittle when faced with real-world network fluctuations. Community feedback widely reports such stability issues, with common workarounds still relying on manual insertion of delays. Furthermore, the absence of a persistent caching mechanism means that repeated queries often result in redundant network requests, increasing latency and consuming API quotas.
 
@@ -106,6 +106,4 @@ A more comprehensive, interactive user manual that demonstrates how to pipe data
 
 ## Acknowledgements
 
-The author thanks PubChem for providing open data services, and acknowledges the developers of the open-source libraries upon which `ChemInformant` is built, including `requests`, `requests-cache`, `pandas`, and `pydantic`. The author is also grateful for community feedback provided during the development process.
-
-
+The author thanks PubChem for providing open data services, and acknowledges the developers of the open-source libraries upon which `ChemInformant` is built, including `requests`, `requests-cache` [@RequestsCache], `pandas`, and `pydantic`. The author is also grateful for community feedback provided during the development process.
