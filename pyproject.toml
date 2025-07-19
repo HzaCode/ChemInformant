@@ -8,7 +8,7 @@ version = "2.0.0"
 authors = [
   { name = "Zhiang He", email = "ang@hezhiang.com" },
 ]
-description = "A Python library for streamlined access to PubChem chemical data with caching, validation, ambiguity handling, and batch retrieval."
+description = "A robust and high-throughput Python client for the PubChem API, designed for automated data retrieval and analysis"
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.8"
 license = { file = "LICENSE" }
@@ -51,7 +51,7 @@ Issues         = "https://github.com/HzaCode/ChemInformant/issues"
 [project.optional-dependencies]
 plot = [
     "matplotlib>=3.1",
-    "Pillow>=9.0",
+    "Pillow>=10",
     "seaborn>=0.12", 
     "scikit-learn>=1.1"
 ]
@@ -62,8 +62,12 @@ dev = [
     "pytest-cov>=2.12"
 ]
 all = [
+    # From 'plot'
     "matplotlib>=3.1",
-    "Pillow>=9.0",
+    "Pillow>=10",
+    "seaborn>=0.12",
+    "scikit-learn>=1.1",
+    # From 'dev'
     "pytest>=7.0",
     "pytest-mock>=3.5",
     "flake8>=6.0",
