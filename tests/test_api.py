@@ -166,8 +166,7 @@ def test_retry_path(monkeypatch):
 
 
 # ------------------------------------------------------------------#
-# 9. Plotting Function Smoke Test (Revised for Clarity)
-
+# 9. Plotting Function Smoke Test 
 @pytest.fixture
 def mock_plotting_libs(monkeypatch):
     """
