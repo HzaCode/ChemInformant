@@ -4,15 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ChemInformant"
-version = "1.2.1"
+version = "2.0.0"
 authors = [
- 
-  { name="Ang", email="ang@hezhiang.com" },
+  { name = "Zhiang He", email = "ang@hezhiang.com" },
 ]
 description = "A Python library for streamlined access to PubChem chemical data with caching, validation, ambiguity handling, and batch retrieval."
-readme = "README.md"
+readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.8"
-license = { file="LICENSE" }
+license = { file = "LICENSE" }
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
@@ -23,38 +22,56 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering :: Chemistry",
-    "Topic :: Scientific/Engineering :: Bio-Informatics",
-    "Intended Audience :: Science/Research",
-    "Intended Audience :: Developers",
-    "Development Status :: 4 - Beta",
 ]
-keywords = ["chemistry", "cheminformatics", "pubchem", "api", "compound", "drug", "cache", "pydantic", "batch"]
+keywords = [
+    "chemistry",
+    "cheminformatics",
+    "pubchem",
+    "api",
+    "compound",
+    "drug",
+    "cache",
+    "pydantic",
+    "batch",
+    "smiles"
+]
+
 dependencies = [
     "requests>=2.25.0",
-    "requests-cache>=1.1.0",
+    "requests-cache>=1.2.0",      
     "pydantic>=2.0",
+    "pandas>=1.5.0"
 ]
 
 [project.urls]
+Homepage       = "https://github.com/HzaCode/ChemInformant"
+Documentation  = "https://github.com/HzaCode/ChemInformant#readme"
+Issues         = "https://github.com/HzaCode/ChemInformant/issues"
 
-Homepage = "https://github.com/HzaCode/ChemInformant"
-Issues = "https://github.com/HzaCode/ChemInformant/issues"
-
-# Optional: Define dependencies for development/testing
 [project.optional-dependencies]
-dev = ["pytest>=7.0", "pytest-mock>=3.5", "flake8>=6.0", "pytest-cov>=2.12"]
-plotting = [
+plot = [
     "matplotlib>=3.1",
-    "Pillow>=9.0"
+    "Pillow>=9.0",
+    "seaborn>=0.12", 
+    "scikit-learn>=1.1"
+]
+dev = [
+    "pytest>=7.0",
+    "pytest-mock>=3.5",
+    "flake8>=6.0",
+    "pytest-cov>=2.12"
+]
+all = [
+    "matplotlib>=3.1",
+    "Pillow>=9.0",
+    "pytest>=7.0",
+    "pytest-mock>=3.5",
+    "flake8>=6.0",
+    "pytest-cov>=2.12"
 ]
 
-# This tells setuptools to look for packages inside the 'src' directory
 [tool.setuptools.packages.find]
 where = ["src"]
 
-# --- Flake8 Configuration ---
 [tool.flake8]
-# Ignore line length errors (E501) as Black handles formatting
 ignore = ["E501"]
-# Optionally, you could set max-line-length = 88 here if you prefer,
-# but ignoring E501 is simpler if using Black.
