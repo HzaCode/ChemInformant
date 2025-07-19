@@ -1,117 +1,109 @@
 ---
-title: 'ChemInformant: A Modern, Lightweight Python Client for PubChem with Robust Caching and Validation'
+title: 'ChemInformant: A Robust and Workflow-Centric Python Client for High-Throughput PubChem Access'
 tags:
   - python
   - pubchem
   - chemistry
   - api
+  - pandas
   - cache
   - pydantic
   - cheminformatics
-  - research software
-  - data validation
+  - data science
+  - high-throughput
 authors:
   - name: Zhiang He
     affiliation: 1
+    
 affiliations:
-  - name: Independent researcher
+  - name: Independent Researcher
     index: 1
 date: "2025-04-15"
-bibliography: paper.bib 
+bibliography: paper.bib
 repository: https://github.com/HzaCode/ChemInformant
-version: 1.2.1 
+version: 2.0.0
 license: MIT
 ---
 
-
 ## Summary
 
-ChemInformant provides a **lightweight Pythonic interface** characterized by its ease of use for accessing chemical compound data from the PubChem database [@PubChem; @Kim2016NAR]. Designed to abstract the complexities of the PubChem API (`import ChemInformant as ci`), it facilitates streamlined data retrieval for researchers. Key distinguishing features include **built-in automatic caching** via `requests-cache` [@RequestsCache], which enhances performance and contributes to reproducibility; **structured data validation** using Pydantic [@Pydantic] models (`CompoundData`), promoting data quality; **explicit handling of chemical name ambiguity**, enhancing accuracy; and **optimized batch retrieval**. Furthermore, ChemInformant is built upon a minimal set of **modern, actively maintained core dependencies** (`requests` [@Requests], `requests-cache`, `Pydantic`), which contributes to its long-term stability and compatibility. This design addresses certain limitations associated with direct API utilization and offers enhancements over existing tools that may be built upon less contemporary or less actively maintained software foundations. ChemInformant is designed as a reliable and efficient tool for routine chemical information retrieval.
+ChemInformant is a Python client designed for programmatic access to PubChem, with a focus on high-throughput and automated data retrieval tasks. Its architecture facilitates the direct conversion of various chemical identifiers, including mixed-type lists, into analysis-ready Pandas DataFrames [@Pandas], aiming to streamline workflows from data acquisition to analysis. The package integrates several features to enhance operational robustness, such as persistent HTTP caching, automatic rate-limiting with exponential backoff retries, and runtime data validation using Pydantic [@Pydantic]. In benchmark tests comparing batch property retrieval, ChemInformant demonstrated a 4.6-fold performance increase over a widely-used library in initial queries. With caching enabled, this advantage increased to 48-fold, yielding response times suitable for interactive data analysis. By addressing identified limitations in existing tools related to network reliability, batch processing, and maintainability, ChemInformant provides a reliable and efficient component for the Python cheminformatics ecosystem.
 
 ## Statement of Need
 
-Programmatic access to PubChem [@PubChem] is integral for numerous chemistry-related research tasks; however, direct utilization of the PUG REST API [@Kim2018JCheminform; @Kim2018PUGREST] can entail considerable overhead in request handling, response parsing, error management, and data validation. This inherent complexity can impede research progress and potentially introduce errors.
+Programmatic access to the PubChem database [@PubChem] is a foundational component for many research workflows in chemistry and life sciences. As these workflows become increasingly automated and scaled, researchers encounter recurring challenges with existing client libraries, primarily concerning network reliability, batch processing capabilities, and the long-term sustainability of the tools themselves.
 
-While existing libraries, such as PubChemPy [@PubChemPy], provide an interface to PubChem, `ChemInformant` was developed to address specific limitations and to offer a contemporary, robust, and efficient alternative tailored to common research workflows by focusing on the following aspects:
+First, network stability is a significant operational concern. The PubChem API service [@Kim2018PUGREST] enforces dynamic rate limits (e.g., ≤5 requests per second) and may return `HTTP 503 (Server Busy)` errors during periods of high traffic [@PubChemUsagePolicy]. Many existing clients, such as PubChemPy [@PubChemPy], do not include built-in mechanisms for automatic request throttling or exponential backoff retries. This can lead to script fragility in automated environments, often requiring users to implement manual delays. Furthermore, the general absence of a persistent caching layer results in redundant network requests for repeated queries, which increases latency and unnecessarily consumes API usage quotas.
 
-1.  **Dependency Modernity and Maintenance:** `ChemInformant` is designed to rely on a small set of ubiquitous, actively developed, and well-maintained libraries (`requests` [@Requests], `requests-cache` [@RequestsCache], `Pydantic` [@Pydantic]). This approach supports long-term stability, security, and compatibility with evolving Python [@Python] environments.
-2.  **Integrated Automatic Caching:** `ChemInformant` integrates `requests-cache` **by default**. This feature provides transparent, persistent caching, which substantially improves performance for repeated queries and batch operations, enhances operational stability during network variability, and contributes to the reproducibility of analyses. The caching is also readily configurable (`ci.setup_cache()`).
-3.  **Rigorous Data Validation and Structure:** `ChemInformant` employs Pydantic to define a clear `CompoundData` model, ensuring that retrieved data are validated at runtime, data types are enforced, and users interact with consistently structured objects.
-4.  **Explicit Ambiguity Handling:** `ChemInformant` explicitly addresses chemical name ambiguity by raising a distinct `AmbiguousIdentifierError` containing all potential CIDs, thereby preventing silent failures or arbitrary selections.
-5.  **Simplicity and Ease of Use:** The API is designed to be Pythonic and intuitive (e.g., `ci.info()`, `ci.cas()`), reducing the adoption barrier for researchers seeking to integrate PubChem data access into Python scripts or Jupyter notebooks [@Jupyter].
+Second, limitations in handling heterogeneous inputs and providing clear error feedback for batch operations create inefficiencies in high-throughput data processing. Scientific workflows often involve large lists of mixed-type identifiers (e.g., a combination of names, CIDs, and SMILES). Typically, existing tools require users to pre-process these lists into homogeneous groups, adding a preparatory step to the workflow. Additionally, their fault tolerance for batch queries can be limited; a single invalid identifier may cause an entire operation to fail or return incomplete data without explicitly indicating which inputs were problematic. The lack of structured partial success and failure reporting complicates error diagnostics and can affect the reliability of data acquisition pipelines.
 
-Through these focused enhancements, `ChemInformant` serves as a reliable, efficient, and developer-friendly tool for routine chemical information retrieval tasks. The target users include cheminformatics researchers, drug discovery scientists, computational chemists, data scientists, and educators.
+Finally, the maintenance status of some client libraries presents a potential risk to the long-term reproducibility of research. For example, PubChemPy, a prominent library in the Python ecosystem, has not had a formal release since 2017. A lack of active maintenance can prevent a tool from adapting to changes in the underlying PubChem API and from incorporating community-requested improvements. This may compel users to develop custom workarounds or combine multiple tools, which often do not systematically address the aforementioned stability and efficiency challenges.
 
-## Key Functionality and Architecture
+Consequently, there is a need for a client library that integrates robustness, efficiency, and maintainability at an architectural level. ChemInformant was developed to address these specific gaps, providing the Python cheminformatics community with an extensible and performant data access tool designed for long-term use in automated research environments.
 
-ChemInformant's capabilities are delivered through a modular architecture (refer to Figure \@fig:architecture_flowchart) and are characterized by the following key features:
+## State of the Field and Comparison
 
-*   **Lightweight & Pythonic Interface:** A concise API accessible via the `ci` alias (e.g., `ci.info()`, `ci.cid()`).
-*   **Built-in Automatic Caching:** Leverages `requests-cache` [@RequestsCache] for transparent caching (default: SQLite, 7-day expiry, caches 404 responses), configurable via `ci.setup_cache()`.
-*   **Structured Validated Data:** Utilizes a Pydantic [@Pydantic] `CompoundData` model for data consistency and robustness.
-*   **Explicit Ambiguity Handling:** Raises `AmbiguousIdentifierError` for ambiguous names and `NotFoundError` for unfound identifiers.
-*   **Optimized Batch Data Retrieval:** Employs `ci.get_multiple_compounds()` for efficient processing of compound lists.
-*   **Modern Dependencies:** Built upon `requests` [@Requests], `requests-cache`, and `Pydantic`.
+To contextualize `ChemInformant`, a comparative analysis was conducted against related tools, including PubChemPy, PubChemR [@PubChemR], webchem [@webchem], ChemSpiPy [@ChemSpiPy], and PubChem4J [@PubChem4J]. **Table 1** outlines the features of these tools across several dimensions relevant to automated research workflows.
 
-![ChemInformant Architecture Diagram](cheminformant_flowchart.png){#fig:architecture_flowchart}
+**Table 1: Comparative analysis of key features in mainstream chemical information clients.**
 
-Figure 1: ChemInformant architecture. Inputs (user input, PubChem API, dependencies) flow into the central component. ChemInformant utilizes key features (smart caching, robust validation, proactive disambiguation, optimized batch processing, concise API) to produce validated outputs (`CompoundData` objects or specific exceptions), suitable for downstream tools and analysis.
+| Key Feature | **ChemInformant (v2.0)** | PubChemPy (v1.0.4) | PubChemR (v2.1.4) | webchem (v1.3.1) | ChemSpiPy (v2.0.0) | PubChem4J (Java) |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Platform (Language)** | **Python** | Python | R | R | Python | Java |
+| **Primary Database** | **PubChem** | PubChem | PubChem | Multi-DB | ChemSpider | PubChem |
+| **Persistent HTTP Caching**<br/>*(Improves repetitive query speed)* | **Yes (Built-in)** | No (Object-level memoization only) | No | No | No | N/A (Local DB) |
+| **Rate-Limiting & Retries**<br/>*(Enhances automation robustness)* | **Yes (Built-in)** | No (Requires manual implementation) | No (Requires manual implementation) | Partial (No auto-retry) | No | N/A (Local access) |
+| **Batch Multi-Property Retrieval**<br/>*(Reduces network overhead)* | **Yes (Single function call)** | Partial | Partial | Partial | Partial | Yes (Local SQL) |
+| **Mixed Identifier Support**<br/>*(Simplifies data preprocessing)* | **Yes (Native support)** | No (Requires single namespace) | No (Requires single id_type) | No (Requires single 'from' type) | No | N/A |
+| **Batch Query Fault Tolerance**<br/>*(Ensures task integrity)* | **Yes (Structured status reporting)** | No (Fails on single error) | No (Silently returns NULL) | No (Silently returns NA) | No (Silently returns None) | N/A |
+| **Automatic Pagination (ListKey)**<br/>*(Simplifies large dataset queries)* | **Yes (Automatic)** | Partial (Requires manual management) | No | No | No | N/A (Local SQL) |
+| **Runtime Type Safety**<br/>*(Ensures data structure integrity)* | **Yes (Pydantic)** | No (No client-side validation) | Partial (R S3/S4 objects) | No | No | Yes (Static types) |
+| **Integrated 2D Structure Viz.**<br/>*(Aids interactive exploration)* | **Yes (Built-in function)** | Partial (Requires manual rendering) | No | No | Partial (Requires manual rendering) | N/A |
+| **Project Activity/Status**<br/>*(Ensures long-term maintainability)* | **Active** | **Inactive (since 2017)** | Active | Active | **Inactive (since 2018)** | **Archived (since 2011)** |
+
+## Performance Evaluation
+
+To quantify the performance of `ChemInformant`'s design, a benchmark test was performed to retrieve six different properties for a list of 285 drug names. For a direct, same-platform comparison, `PubChemPy` was selected as the baseline. Because `PubChemPy`'s batch property interface does not accept names as input, the test procedure first resolved all names to CIDs. The performance of both libraries was then timed on processing the resulting list of CIDs.
+
+**Table 2** summarizes the performance data for the 280 successfully resolved compounds.
+
+**Table 2: Performance benchmark results.**
+
+| Scenario | Time (s) | Speed-up (vs. PubChemPy) |
+| :--- | :--- | :--- |
+| PubChemPy (batch interface) | 6.50 | 1× (Baseline) |
+| **ChemInformant — Cold Cache** | **1.40** | **4.6×** |
+| **ChemInformant — Warm Cache** | **0.135** | **48×** |
+
+The initial `ChemInformant` batch query completed in **1.4 seconds**, a **4.6-fold** increase in speed compared to `PubChemPy`'s 6.5 seconds. A subsequent query from the cache finished in **135 milliseconds**, representing an overall 48-fold speed-up relative to the baseline. This sub-200ms response time is suitable for interactive applications. The script used for this benchmark is available in the project repository.
 
 ## Example Usage
 
-The following example demonstrates basic usage of ChemInformant:
+`ChemInformant` offers a layered API, with convenience functions for single lookups and a core engine for batch processing.
 
+**Convenience API Example (for single lookups):**
 ```python
-# Recommended import alias
 import ChemInformant as ci
 
-# Optional: Configure cache (e.g., in-memory, 1-hour expiry)
-# ci.setup_cache(backend='memory', expire_after=3600)
+# Retrieve a single property for one identifier
+cas_number = ci.get_cas("ibuprofen")
+# > '15687-27-1'
+````
 
-# Retrieve basic information about Aspirin (by name or CID)
-compound = ci.info("Aspirin")
-print("Name:", compound.common_name)
-print("Formula:", compound.molecular_formula)
-print("Weight:", compound.molecular_weight)
-print("PubChem URL:", compound.pubchem_url)
+**Core API Example (for batch data analysis):**
 
-# Display 2D structure (requires Pillow and matplotlib)
-ci.fig(compound.cid)
-
-# Retrieve CAS number for Ethanol (CID = 702)
-ethanol_cas = ci.cas(702)
-print("Ethanol CAS:", ethanol_cas)
-
-# Batch retrieval: mix of names and CIDs
-ids = ["Water", 2244, "NonExistent", "glucose"]
-results = ci.get_multiple_compounds(ids)
-
-print("\nBatch Results:")
-for ident, result in results.items():
-    if isinstance(result, ci.CompoundData):
-        print(ident, "→", result.molecular_formula)
-    else:
-        print(ident, "→", type(result).__name__)
-
+```python
+# Retrieve multiple properties for a list of mixed-identifier types
+df = ci.get_properties(
+    identifiers=["aspirin", "caffeine", 1983], # Mix of names and a CID
+    properties=["molecular_weight", "xlogp", "cas"]
+)
+# The returned DataFrame is formatted for direct use in downstream analysis tools
+print(df)
 ```
-## Feature Comparison and Advantages
 
-The features detailed in Table 1, particularly when contrasted with the baseline (PCP v1.0.4), highlight ChemInformant's potential to enhance efficiency, data reliability, and overall robustness in routine cheminformatics workflows. Its design philosophy prioritizes ease of use alongside modern software engineering practices.
+A more detailed user manual, including examples of how to integrate with other analysis tools, is available in the project repository.
 
-**Table 1: Comparative analysis of cheminformatics features: ChemInformant (CI) versus PubChemPy (PCP v1.0.4 baseline).**
+## Acknowledgements
 
-| Feature (Cheminformatics Relevance)                             | ChemInformant (CI)                                                                                                                                                                                             | PubChemPy (PCP v1.0.4)                                                                                                                                                                                                |
-| :-------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Automatic Persistent HTTP Caching**<br/>(Efficiency in Repetitive Data Access) | Implements built-in, transparent HTTP caching via `requests-cache`, configurable (e.g., SQLite backend, 7-day expiry, caches 404 responses). This significantly accelerates repetitive chemical data lookups by minimizing network requests. | Lacks a global persistent HTTP response caching mechanism; primarily relies on instance-level attribute caching for chemical properties. This approach is less effective for performance optimization across sessions or during large dataset processing. |
-| **Runtime Data Validation**<br/>(Integrity of Chemical Information)          | Employs Pydantic models (`CompoundData`) for **strict structural and data type validation** of retrieved chemical data (e.g., SMILES, MW, InChI). This ensures data integrity for subsequent modeling or analysis tasks.      | Does not incorporate an explicit client-side data validation layer for chemical attributes. Consequently, there is a potential for inconsistent data types or structures to propagate into downstream processes.                 |
-| **Chemical Name Disambiguation**<br/>(Accuracy of Identifier Mapping)        | **Proactively raises an `AmbiguousIdentifierError`** with candidate CIDs for ambiguous chemical names. This mechanism guides users towards accurate entity selection, crucial for maintaining dataset quality.           | Typically returns a list of matching chemical entities, necessitating user-side logic for disambiguation. This may introduce a higher propensity for errors in automated workflows if not explicitly handled.               |
-| **Optimized Batch Retrieval**<br/>(Efficiency for Multiple Entities/Properties) | Single call to `ci.get_multiple_compounds(ids)`: supports mixed ID types, automatically handles classification, pagination (≤ 200 entries/batch), and rate limiting (≤ 5 reqs/sec); error entries are encapsulated as exception objects, while valid entries return complete `CompoundData`. | Requires users to manually split IDs by namespace, then loop through `get_properties` / `get_compounds`, and self-manage request rates (e.g., via `sleep`); if batch size exceeds limits or URL construction is incorrect, the entire batch request fails. |
-| **Integrated 2D Chemical Structure Plotting**<br/>(Rapid Visual Inspection)    | Includes a convenience function, `ci.fig()` (requires `matplotlib`, `Pillow`), for direct 2D visualization of chemical structures, facilitating quick data exploration and reporting.                              | Lacks a built-in, direct display function for chemical structures; provides image URLs that require user-side processing for visualization.                                                                                |
-| **Core Dependency Status**<br/>(Long-term Sustainability and Ecosystem Integration) | Relies on **modern, actively maintained libraries** (`requests`, `requests-cache`, `Pydantic`), ensuring long-term viability and robust integration with other contemporary cheminformatics tools.                | The library (v1.0.4) has not received significant updates since its 2017 release. This raises potential concerns regarding long-term maintenance and compatibility within evolving cheminformatics pipelines.               |
-
-
-## Acknowledgement
-
-We acknowledge the PubChem database [@PubChem] as the primary data source. This work utilizes a series of open-source Python libraries for tasks including data requests, caching, validation, as well as optional image processing and data visualization.
-
-
+The author thanks PubChem for providing open data services. The author also acknowledges the developers of the open-source libraries upon which `ChemInformant` is built, including `requests`, `requests-cache` [@RequestsCache], `pandas` [@Pandas], and `pydantic` [@Pydantic].
