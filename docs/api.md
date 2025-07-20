@@ -9,20 +9,22 @@ These are the main functions and classes intended for direct, top-level use.
 ::: ChemInformant
     options:
       show_root_toc_entry: false
-      members:
-        - get_properties
-        - get_compound
-        - get_compounds
-        - get_weight
-        - get_formula
-        - get_cas
-        - get_iupac_name
-        - get_canonical_smiles
-        - get_isomeric_smiles
-        - get_xlogp
-        - get_synonyms
-        - draw_compound
-        - setup_cache
-        - Compound
-        - NotFoundError
-        - AmbiguousIdentifierError
+      heading_level: 2
+      members_order: source
+    members:
+      - get_properties
+      - get_compound
+      - get_compounds
+      - get_weight
+      - get_formula
+      - get_cas
+      - get_iupac_name
+      - get_canonical_smiles
+      - get_isomeric_smiles
+      - get_xlogp
+      - get_synonyms
+      - draw_compound
+      - setup_cache
+      - Compound
+      - NotFoundError
+      - AmbiguousIdentifierError
