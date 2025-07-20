@@ -98,7 +98,8 @@ print(df)
 
 This quick start only scratches the surface. For a deep dive, please see our detailed guides:
 
-*   **➡️ Interactive User Manual:** Our [**Jupyter Notebook Tutorial**](examples/ChemInformant_User_Manual_v1.0.ipynb)provides a complete, end-to-end walkthrough. **This is the best place to start.**
+*   **➡️ Online Documentation:** The **[official documentation site](https://hezhiang.com/ChemInformant/usage.html)** contains complete API references, guides, and usage examples. **This is the most comprehensive resource.**
+*   **➡️ Interactive User Manual:** Our [**Jupyter Notebook Tutorial**](examples/ChemInformant_User_Manual_v1.0.ipynb) provides a complete, end-to-end walkthrough. This is the best place to start for a hands-on experience.
 *   **➡️ Performance Benchmarks:** You can review and run our [**Benchmark Script**](./benchmark.py) to see the performance advantages of batching and caching.
 
 ---
