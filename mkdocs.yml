@@ -1,22 +1,18 @@
-# Project information
 site_name: ChemInformant
 site_description: 'A Robust and Workflow-Centric Python Client for High-Throughput PubChem Access'
-site_author: 'Ang' 
-site_url: 'https://hezhiang.com/ChemInformant/' 
+site_author: 'Ang'
+site_url: 'https://hezhiang.com/ChemInformant/'
 
-# Repository
 repo_name: 'HzaCode/ChemInformant'
 repo_url: 'https://github.com/HzaCode/ChemInformant'
 edit_uri: 'edit/main/docs/'
 
-# Navigation
 nav:
   - Home: index.md
   - Usage Guide: usage.md
   - Jupyter Tutorial: notebook.md
   - API Reference: api.md
 
-# Theme
 theme:
   name: material
   palette:
@@ -38,7 +34,6 @@ theme:
     - content.code.copy
     - content.code.annotate
 
-# Plugins
 plugins:
   - search
   - mkdocstrings:
@@ -46,7 +41,6 @@ plugins:
         python:
           paths: [src]
 
-# Markdown extensions
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
@@ -56,7 +50,3 @@ markdown_extensions:
   - admonition
   - toc:
       permalink: true
-  # --- THIS IS THE CRITICAL ADDITION ---
-  # Explicitly load the mkdocstrings extension here.
-  - mkdocstrings:
-      custom_templates: templates
