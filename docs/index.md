@@ -1,5 +1,6 @@
-<img src="assets/logo.png" alt="ChemInformant Logo" align="right" width="180" />
+# <!-- an empty title -->
 
+<img src="assets/logo.png" alt="ChemInformant Logo" align="right" width="180" />
 
 ## A Robust and Workflow-Centric Python Client for High-Throughput PubChem Access
 
