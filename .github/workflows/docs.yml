@@ -1,0 +1,48 @@
+
+name: Deploy Documentation
+
+
+on:
+  
+  push:
+    branches:
+      - main
+
+
+permissions:
+  
+  
+  
+  contents: write
+
+
+jobs:
+ 
+  deploy-docs:
+    
+    runs-on: ubuntu-latest
+
+    # These are the sequential steps the job will execute.
+    steps:
+      # Step 1: Check out the repository's code.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up the Python environment.
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+          cache: "pip" # Cache pip dependencies to speed up future builds.
+
+      # Step 3: Install all the necessary Python packages.
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install mkdocs mkdocs-material "mkdocstrings[python]"
+
+      # Step 4: Build the site and deploy it to GitHub Pages.
+      - name: Deploy to GitHub Pages
+        # This single command builds the site from Markdown/code
+        # and pushes the resulting HTML to the 'gh-pages' branch.
+        run: mkdocs gh-deploy --force

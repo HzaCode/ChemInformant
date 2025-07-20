@@ -1,7 +1,15 @@
+"""
+ChemInformant: A modern, robust, and workflow-centric Python client
+for high-throughput access to the PubChem database.
+
+This package provides high-level functions to retrieve chemical data,
+seamlessly handling identifier conversion, batch processing, and network
+robustness through built-in caching and retry mechanisms.
+"""
 from __future__ import annotations
 
 # Re-export high-level API
-from .cheminfo_api import (             # noqa: F401
+from .cheminfo_api import (  # noqa: F401
     get_properties,
     get_compound,
     get_compounds,
@@ -17,7 +25,7 @@ from .cheminfo_api import (             # noqa: F401
 )
 
 # Cache setup
-from .api_helpers import setup_cache    # noqa: F401
+from .api_helpers import setup_cache  # noqa: F401
 
 # Models and exceptions
 from .models import Compound, NotFoundError, AmbiguousIdentifierError  # noqa: F401

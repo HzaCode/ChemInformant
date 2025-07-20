@@ -1,0 +1,65 @@
+# --- START OF mkdocs.yml ---
+
+# Project information
+site_name: ChemInformant
+site_description: 'A Robust and Workflow-Centric Python Client for High-Throughput PubChem Access'
+site_author: 'Ang'
+site_url: 'https://HzaCode.github.io/ChemInformant/'
+
+# Repository
+repo_name: 'HzaCode/ChemInformant'
+repo_url: 'https://github.com/HzaCode/ChemInformant'
+edit_uri: 'edit/main/docs/'
+
+# Navigation
+nav:
+  - Home: index.md
+  - Usage Guide: usage.md
+  - Jupyter Tutorial: notebook.md 
+  - API Reference: api.md
+
+# Theme
+theme:
+  name: material
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.copy
+    - content.code.annotate
+
+# Plugins
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            show_root_heading: true
+            show_root_full_path: false
+
+# Markdown extensions
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+  - toc:
+      permalink: true
+
+# --- END OF mkdocs.yml ---
