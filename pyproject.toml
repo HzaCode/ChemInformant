@@ -38,7 +38,7 @@ keywords = [
 
 dependencies = [
     "requests>=2.25.0",
-    "requests-cache>=1.2.0",      
+    "requests-cache>=1.2.0",
     "pydantic>=2.0",
     "pandas>=1.5.0"
 ]
@@ -52,14 +52,15 @@ Issues         = "https://github.com/HzaCode/ChemInformant/issues"
 plot = [
     "matplotlib>=3.1",
     "Pillow>=10",
-    "seaborn>=0.12", 
+    "seaborn>=0.12",
     "scikit-learn>=1.1"
 ]
 dev = [
     "pytest>=7.0",
     "pytest-mock>=3.5",
     "flake8>=6.0",
-    "pytest-cov>=2.12"
+    "pytest-cov>=2.12",
+    "black"
 ]
 all = [
     # From 'plot'
@@ -71,7 +72,8 @@ all = [
     "pytest>=7.0",
     "pytest-mock>=3.5",
     "flake8>=6.0",
-    "pytest-cov>=2.12"
+    "pytest-cov>=2.12",
+    "black"
 ]
 
 [tool.setuptools.packages.find]
