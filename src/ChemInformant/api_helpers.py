@@ -90,4 +90,94 @@ def _fetch_with_ratelimit_and_retry(url: str) -> Dict[str, Any] | List[Any] | st
             if getattr(resp, "from_cache", False) and resp.status_code == 503:
                 key = get_session().cache.create_key(resp.request)
                 get_session().cache.delete(key)
-                with get_session().
+                with get_session().cache.disabled():
+                    resp = _execute_fetch(url)
+
+            if resp.status_code in (200, 404):
+                if resp.status_code == 404:
+                    return None
+                ctype = resp.headers.get("Content-Type", "").lower()
+                return resp.json() if "application/json" in ctype else resp.text
+
+            if resp.status_code == 503:
+                print(f"[ChemInformant] 503 Server Busy -> retry in {backoff:.1f}s", file=sys.stderr)
+            else:
+                resp.raise_for_status()
+
+        except requests.exceptions.RequestException as e:
+            print(f"[ChemInformant] Network error {e} -> retry in {backoff:.1f}s", file=sys.stderr)
+
+        time.sleep(backoff)
+        backoff = min(MAX_BACKOFF, backoff * 2) + random.uniform(0, 1)
+        retries += 1
+
+    print(f"[ChemInformant] Giving up after {MAX_RETRIES} retries for URL: {url}", file=sys.stderr)
+    return None
+
+
+
+def get_cids_by_name(name: str) -> List[int] | None:
+    """Fetches CIDs for a given chemical name."""
+    url  = f"{PUBCHEM_API_BASE}/compound/name/{quote(name)}/cids/JSON"
+    data = _fetch_with_ratelimit_and_retry(url)
+    return data.get("IdentifierList", {}).get("CID") if isinstance(data, dict) else None
+
+def get_cids_by_smiles(smiles: str) -> List[int] | None:
+    """Fetches CIDs for a given SMILES string."""
+    url  = f"{PUBCHEM_API_BASE}/compound/smiles/{quote(smiles)}/cids/JSON"
+    data = _fetch_with_ratelimit_and_retry(url)
+    return data.get("IdentifierList", {}).get("CID") if isinstance(data, dict) else None
+
+def get_batch_properties(cids: List[int], props: List[str]) -> Dict[int, Dict[str, Any]]:
+    """Fetches multiple properties for a batch of CIDs."""
+    if not cids or not props:
+        return {}
+    url = (
+        f"{PUBCHEM_API_BASE}/compound/cid/{','.join(map(str, cids))}"
+        f"/property/{','.join(props)}/JSON"
+    )
+
+    all_props, list_key = [], None
+    while True:
+        if list_key:
+            url = (
+                f"{PUBCHEM_API_BASE}/compound/listkey/{list_key}"
+                f"/property/{','.join(props)}/JSON"
+            )
+        data = _fetch_with_ratelimit_and_retry(url)
+        if not isinstance(data, dict):
+            break
+        all_props.extend(data.get("PropertyTable", {}).get("Properties", []))
+        list_key = data.get("ListKey")
+        if not list_key:
+            break
+
+    res = {int(p["CID"]): p for p in all_props if "CID" in p}
+    return {cid: res.get(cid, {}) for cid in cids}
+
+def get_cas_for_cid(cid: int) -> str | None:
+    """Fetches the primary CAS number for a CID using PUG-View."""
+    url  = f"{PUG_VIEW_BASE}/compound/{cid}/JSON"
+    data = _fetch_with_ratelimit_and_retry(url)
+    if isinstance(data, dict):
+        for sec in data.get("Record", {}).get("Section", []):
+            if sec.get("TOCHeading") == "Names and Identifiers":
+                for sub in sec.get("Section", []):
+                    if sub.get("TOCHeading") == "Other Identifiers":
+                        for cas_sec in sub.get("Section", []):
+                            if cas_sec.get("TOCHeading") == "CAS":
+                                for info in cas_sec.get("Information", []):
+                                    markup = info.get("Value", {}).get("StringWithMarkup")
+                                    if markup and isinstance(markup, list) and markup:
+                                        return markup[0].get("String")
+    return None
+
+def get_synonyms_for_cid(cid: int) -> List[str]:
+    """Fetches all synonyms for a given CID."""
+    url  = f"{PUBCHEM_API_BASE}/compound/cid/{cid}/synonyms/JSON"
+    data = _fetch_with_ratelimit_and_retry(url)
+    if isinstance(data, dict):
+        info = data.get("InformationList", {}).get("Information", [])
+        if info and isinstance(info[0].get("Synonym"), list):
+            return info[0]["Synonym"]
+    return []
