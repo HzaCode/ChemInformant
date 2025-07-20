@@ -110,7 +110,7 @@ This quick start only scratches the surface. For a deep dive, please see our det
 
 ChemInformant's core mission is to serve as a high-performance data backbone for the Python cheminformatics ecosystem. By delivering clean, validated, and analysis-ready Pandas DataFrames, it enables researchers to effortlessly pipe PubChem data into powerful toolkits like RDKit, Scikit-learn, or custom machine learning models, transforming multi-step data acquisition and wrangling tasks into single, elegant lines of code.
 
-A detailed comparison with other existing tools is provided in our JOSS paper.
+A detailed comparison with other existing tools is provided in our [JOSS paper](https://github.com/HzaCode/ChemInformant/blob/main/paper/paper.md).
 
 ### Contributing
 
