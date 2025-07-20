@@ -15,7 +15,6 @@
 
 **ChemInformant** is a modern, workflow-centric **Python client** for the [PubChem](https://pubchem.ncbi.nlm.nih.gov/) database. It's designed to feel native and intuitive for researchers and data scientists working within the **Python data science ecosystem**.
 
-It's built to be robust by default, with built-in request caching, smart rate limiting, and automatic retries to handle real-world network conditions.
 
 ---
 
