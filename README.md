@@ -26,6 +26,9 @@
 *   **Effortless Large-Scale Queries:** Transparently handles PubChem's `ListKey`-based pagination in the background, ensuring you retrieve complete result sets from large queries without manual intervention.
 *   **Guaranteed Data Integrity:** Employs Pydantic v2 models for rigorous, runtime data validation, preventing malformed or unexpected data from corrupting your analysis pipeline.
 *   **Modern and Actively Maintained:** Built on a contemporary tech stack for long-term **consistency**  and compatibility, providing a reliable alternative to older or less frequently updated libraries.
+  
+---
+
 ### Installation
 
 Install the library from PyPI:
