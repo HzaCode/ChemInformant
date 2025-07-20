@@ -117,3 +117,10 @@ Contributions are welcome! For guidelines on how to get started, please read our
 ### License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+### Citation
+
+If you use **ChemInformant** in your research, please cite **the software** 
+> **Software**  
+> He, Z. *ChemInformant* (Version&nbsp;2.0.0) [Software]. GitHub repository,  
+> https://github.com/HzaCode/ChemInformant.
+
