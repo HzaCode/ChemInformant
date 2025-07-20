@@ -1,10 +1,8 @@
-# --- START OF mkdocs.yml ---
-
 # Project information
 site_name: ChemInformant
 site_description: 'A Robust and Workflow-Centric Python Client for High-Throughput PubChem Access'
-site_author: 'Ang'
-site_url: 'https://HzaCode.github.io/ChemInformant/'
+site_author: 'Ang' 
+site_url: 'https://hezhiang.com/ChemInformant/' 
 
 # Repository
 repo_name: 'HzaCode/ChemInformant'
@@ -15,7 +13,7 @@ edit_uri: 'edit/main/docs/'
 nav:
   - Home: index.md
   - Usage Guide: usage.md
-  - Jupyter Tutorial: notebook.md 
+  - Jupyter Tutorial: notebook.md
   - API Reference: api.md
 
 # Theme
@@ -47,9 +45,6 @@ plugins:
       handlers:
         python:
           paths: [src]
-          options:
-            show_root_heading: true
-            show_root_full_path: false
 
 # Markdown extensions
 markdown_extensions:
@@ -61,5 +56,7 @@ markdown_extensions:
   - admonition
   - toc:
       permalink: true
-
-# --- END OF mkdocs.yml ---
+  # --- THIS IS THE CRITICAL ADDITION ---
+  # Explicitly load the mkdocstrings extension here.
+  - mkdocstrings:
+      custom_templates: templates
