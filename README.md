@@ -111,7 +111,7 @@ A detailed comparison with other existing tools is provided in our JOSS paper.
 
 ### Contributing
 
-Contributions are welcome! For guidelines on how to get started, please read our [contributing guide](https://github.com/HzaCode/ChemInformant/blob/main/CONTRIBUTING.md). You can [open an issue](https.github.com/HzaCode/ChemInformant/issues) to report bugs or suggest features, or [submit a pull request](https.github.com/HzaCode/ChemInformant/pulls) to contribute code.
+Contributions are welcome! For guidelines on how to get started, please read our [contributing guide](https://github.com/HzaCode/ChemInformant/blob/main/CONTRIBUTING.md). You can [open an issue](https://github.com/HzaCode/ChemInformant/issues) to report bugs or suggest features, or [submit a pull request](https://github.com/HzaCode/ChemInformant/pulls)) to contribute code.
 ### License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
