@@ -11,7 +11,7 @@ nav:
   - Home: index.md
   - Usage Guide: usage.md
   - Jupyter Tutorial: notebook.md
-  - API Reference: api.md
+  #- API Reference: api.md
 
 theme:
   name: material
