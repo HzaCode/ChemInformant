@@ -1,28 +1,39 @@
+
 # Contributing to ChemInformant
 
-First off, thank you for considering contributing to ChemInformant! We welcome contributions from everyone. Whether it's reporting a bug, suggesting an enhancement, improving documentation, or writing code, your help is valuable.
+First off, thank you for considering contributing to ChemInformant! We welcome and value contributions from everyone. Whether it's reporting a bug, suggesting an enhancement, seeking support, or writing code, your help is appreciated.
 
-This document provides guidelines for contributing to make the process smooth for everyone involved.
+This document provides guidelines for contributing to make the process as smooth as possible for everyone involved.
 
 ## Table Of Contents
 
 - [Ways to Contribute](#ways-to-contribute)
+- [Seeking Support or Asking Questions](#seeking-support-or-asking-questions)
 - [Reporting Bugs](#reporting-bugs)
 - [Suggesting Enhancements](#suggesting-enhancements)
 - [Your First Code Contribution](#your-first-code-contribution)
   - [Setting Up Your Development Environment](#setting-up-your-development-environment)
   - [Code Style](#code-style)
   - [Running Tests](#running-tests)
-  - [Writing Documentation](#writing-documentation)
   - [Submitting Pull Requests](#submitting-pull-requests)
 - [Code of Conduct](#code-of-conduct)
 
 ## Ways to Contribute
 
+- **Ask for Help:** If you have questions about how to use the project, please open an issue.
 - **Report Bugs:** If you find a bug, please report it using [GitHub Issues](https://github.com/HzaCode/ChemInformant/issues).
 - **Suggest Enhancements:** Have an idea for a new feature or an improvement? Open an issue to discuss it.
-- **Write Documentation:** Good documentation is crucial. Help us improve the docs, tutorials, or examples.
 - **Submit Pull Requests:** Contribute code to fix bugs or add new features.
+
+## Seeking Support or Asking Questions
+
+If you have a question about how to use ChemInformant or are not sure if you've encountered a bug, the best place to ask is the [GitHub Issues page](https://github.com/HzaCode/ChemInformant/issues).
+
+When you open an issue for support, please be sure to:
+1.  **Search existing issues** first to see if your question has already been answered.
+2.  Provide a clear and descriptive title.
+3.  Explain what you are trying to achieve and what problem you are facing.
+4.  If possible, include a small, self-contained code snippet to illustrate your question.
 
 ## Reporting Bugs
 
@@ -34,7 +45,7 @@ If it hasn't, please open a new issue and include the following information:
 - **Python Version:**
 - **Operating System:**
 - **Description of the Bug:** Clearly describe the issue.
-- **Steps to Reproduce:** Provide a minimal code example that triggers the bug.
+- **Steps to Reproduce:** Provide a minimal, complete, and verifiable code example that triggers the bug.
 - **Expected Behavior:** What you expected to happen.
 - **Actual Behavior:** What actually happened (including any error messages or tracebacks).
 
@@ -56,7 +67,7 @@ Ready to contribute code? Here’s how to set up `ChemInformant` for local devel
 1.  **Fork the Repository:** Click the "Fork" button on the [ChemInformant GitHub page](https://github.com/HzaCode/ChemInformant).
 2.  **Clone Your Fork:**
     ```bash
-    git clone [https://github.com/YOUR_USERNAME/ChemInformant.git](https://github.com/YOUR_USERNAME/ChemInformant.git)
+    git clone https://github.com/YOUR_USERNAME/ChemInformant.git
     cd ChemInformant
     ```
 3.  **Create a Virtual Environment:** It's highly recommended to use a virtual environment (e.g., `venv`, `conda`).
@@ -65,7 +76,7 @@ Ready to contribute code? Here’s how to set up `ChemInformant` for local devel
     python -m venv .venv
     source .venv/bin/activate # On Windows use `.venv\Scripts\activate`
     ```
-4.  **Install Dependencies:** Install the package in editable mode along with development dependencies (like `pytest`, `black`). You might need to define these in your `pyproject.toml` under `[project.optional-dependencies]`. Assuming a `dev` extra:
+4.  **Install Dependencies:** Install the package in editable mode along with development dependencies (like `pytest`, `black`). Assuming a `dev` extra is defined in your `pyproject.toml`:
     ```bash
     pip install -e .[dev]
     # If you don't have a [dev] extra defined yet, install manually:
@@ -80,7 +91,7 @@ Ready to contribute code? Here’s how to set up `ChemInformant` for local devel
 ### Code Style
 
 - ChemInformant follows the **PEP 8** style guide.
-- We use **Black** for automatic code formatting. Before committing your changes, please run Black:
+- We use **Black** for automatic code formatting. Before committing your changes, please run Black to format your code:
   ```bash
   black .
   ```
@@ -94,35 +105,23 @@ Ready to contribute code? Here’s how to set up `ChemInformant` for local devel
   pytest tests/
   ```
 
-### Writing Documentation
-
-- If your changes affect user-facing behavior or add new features, please update the documentation in the `docs/source` directory.
-- We use Sphinx to build the documentation. Make sure your docstrings are clear and follow the Google style format.
-- Build the documentation locally to check for errors and rendering:
-  ```bash
-  # Navigate to the docs/ directory
-  cd docs
-  make html
-  # Open docs/build/html/index.html in your browser
-  ```
-
 ### Submitting Pull Requests
 
-1.  Make your changes, write tests, update documentation, and format your code with Black.
-2.  Commit your changes with a clear commit message.
+1.  Make your changes, write tests, and format your code with Black.
+2.  Commit your changes with a clear and descriptive commit message.
 3.  Push your branch to your fork on GitHub:
     ```bash
     git push origin your-feature-or-bugfix-branch
     ```
 4.  Open a Pull Request (PR) on the ChemInformant GitHub repository.
 5.  Target the `main` branch of the original repository.
-6.  Provide a clear title and description for your PR.
+6.  Provide a clear title and description for your PR. Explain the "why" and "what" of your changes.
 7.  Link to any relevant GitHub issues (e.g., "Closes #123").
 8.  Wait for the automated checks (like CI tests) to pass.
-9.  Respond to any feedback or review comments.
+9.  Be prepared to respond to any feedback or review comments.
 
 ## Code of Conduct
 
-Please note that this project is released with a Contributor Code of Conduct. By participating in this project, you agree to abide by its terms. See the `CODE_OF_CONDUCT.md` file for details.
+Please note that this project is released with a Contributor Code of Conduct. By participating in this project, you agree to abide by its terms. All participants are expected to follow the Code of Conduct in all project spaces, including issues, pull requests, and any other communication channels. Please see the `CODE_OF_CONDUCT.md` file for details.
 
 Thank you again for your contribution!
