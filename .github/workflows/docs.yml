@@ -19,20 +19,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.11
+          python-version: '3.11' 
           cache: "pip"
 
-      - name: Install dependencies with pinned versions
+      - name: Install latest dependencies
         run: |
           python -m pip install --upgrade pip
-          # THIS IS THE CRITICAL FIX:
-          # We are installing a known-good set of versions to avoid
-          # any dependency conflicts that might break the plugins.
-          pip install \
-            "mkdocs==1.5.3" \
-            "mkdocs-material==9.5.15" \
-            "mkdocstrings==0.24.1" \
-            "mkdocstrings-python==1.8.0"
+          pip install mkdocs-material "mkdocstrings[python]"
 
       - name: Deploy to GitHub Pages
         run: python -m mkdocs gh-deploy --force
