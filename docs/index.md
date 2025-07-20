@@ -1,6 +1,6 @@
 <img src="assets/logo.png" alt="ChemInformant Logo" align="right" width="180" />
 
-# ChemInformant
+
 ## A Robust and Workflow-Centric Python Client for High-Throughput PubChem Access
 
 **ChemInformant** is a modern Python client engineered for high-throughput and automated PubChem data tasks. It is designed not merely as an API wrapper, but as a reliable data infrastructure component for the Python cheminformatics ecosystem.
