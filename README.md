@@ -13,8 +13,7 @@
 [![Docs](https://img.shields.io/badge/Docs-Read_Online-blue?style=flat-square&logo=book&logoColor=white)](https://hezhiang.com/ChemInformant/usage.html)
 
 
-**ChemInformant** is a modern, workflow-centric **Python client** for the [PubChem](https://pubchem.ncbi.nlm.nih.gov/) database. It's designed to feel native and intuitive for researchers and data scientists working within the **Python data science ecosystem**.
-
+**ChemInformant** is a robust data acquisition engine for the [PubChem](https.ncbi.nlm.nih.gov/pccompound/) database, engineered for the modern scientific workflow. It intelligently manages network requests, performs rigorous runtime data validation, and delivers analysis-ready results, providing a dependable foundation for any computational chemistry project in Python.
 
 ---
 
