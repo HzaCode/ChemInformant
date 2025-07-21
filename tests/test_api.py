@@ -170,16 +170,15 @@ def test_draw_compound_paths(mock_plotting_libs, monkeypatch, capsys):
     # Success path
     ci.draw_compound("aspirin")
     captured = capsys.readouterr()
-    assert "Failed" not in captured.out
-    assert "missing" not in captured.out
+    assert "Failed" not in captured.err
+    assert "missing" not in captured.err
 
     # Identifier not found path
-    ci.draw_compound("nonexistent")
-    captured = capsys.readouterr()
-    assert "Failed to resolve identifier" in captured.out
+    with pytest.raises(models.NotFoundError):
+        ci.draw_compound("nonexistent")
 
     # Missing dependency path
     monkeypatch.setitem(sys.modules, "matplotlib.pyplot", None)
     ci.draw_compound("aspirin")
     captured = capsys.readouterr()
-    assert "Cannot render structure: missing dependency" in captured.out
+    assert "Cannot render structure: missing dependency" in captured.err
