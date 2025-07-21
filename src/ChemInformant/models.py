@@ -8,19 +8,24 @@ from pydantic import BaseModel, Field, field_validator, computed_field
 
 # --- Custom Exceptions ---
 
+
 class NotFoundError(Exception):
     """Raised when an identifier cannot be found in PubChem."""
+
     def __init__(self, identifier: Union[str, int]):
         super().__init__(f"Identifier '{identifier}' was not found in PubChem.")
 
+
 class AmbiguousIdentifierError(Exception):
     """Raised when a name or SMILES string maps to multiple PubChem CIDs."""
+
     def __init__(self, identifier: str, cids: List[int]):
         msg = f"Identifier '{identifier}' maps to multiple CIDs: {cids}."
         super().__init__(msg)
 
 
 # --- Data Models ---
+
 
 class Compound(BaseModel):
     """
@@ -43,6 +48,7 @@ class Compound(BaseModel):
         pubchem_url: A computed property with the direct link to the compound's
                      PubChem page.
     """
+
     cid: int
     input_identifier: Union[str, int]
 
