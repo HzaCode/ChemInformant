@@ -101,9 +101,7 @@ print(df)
 
 </details>
 
----
 
-### Command-Line Tools
 
 ChemInformant also includes handy command-line tools for quick lookups directly from your terminal:
 
@@ -119,7 +117,7 @@ ChemInformant also includes handy command-line tools for quick lookups directly 
 ---
 ### Documentation & Examples
 
-This quick start only scratches the surface. For a deep dive, please see our detailed guides:
+For a deep dive, please see our detailed guides:
 
 *   **➡️ Online Documentation:** The **[official documentation site](https://hezhiang.com/ChemInformant)** contains complete API references, guides, and usage examples. **This is the most comprehensive resource.**
 *   **➡️ Interactive User Manual:** Our [**Jupyter Notebook Tutorial**](examples/ChemInformant_User_Manual_v1.0.ipynb) provides a complete, end-to-end walkthrough. This is the best place to start for a hands-on experience.
