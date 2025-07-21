@@ -3,6 +3,7 @@ This module contains the high-level, user-facing API for ChemInformant.
 These functions are designed for ease of use and to support common
 cheminformatics workflows.
 """
+
 from __future__ import annotations
 
 import re
@@ -16,9 +17,11 @@ from .models import Compound, NotFoundError, AmbiguousIdentifierError
 
 _SMILES_TOKENS = re.compile(r"[=#\[\]\(\)]|\d|Br|Cl|Si", re.I)
 
+
 def _looks_like_smiles(s: str) -> bool:
     """Checks if a string contains characters typical of SMILES."""
     return bool(_SMILES_TOKENS.search(s))
+
 
 def _resolve_to_single_cid(identifier: Union[str, int]) -> int:
     """
@@ -48,15 +51,17 @@ def _resolve_to_single_cid(identifier: Union[str, int]) -> int:
 
     raise NotFoundError(identifier)
 
+
 PROPERTY_ALIASES: Dict[str, List[str]] = {
-    "molecular_weight":   ["MolecularWeight"],
-    "molecular_formula":  ["MolecularFormula"],
-    "canonical_smiles":   ["CanonicalSMILES", "ConnectivitySMILES"],
-    "isomeric_smiles":    ["IsomericSMILES", "SMILES"],
-    "iupac_name":         ["IUPACName"],
-    "xlogp":              ["XLogP"],
+    "molecular_weight": ["MolecularWeight"],
+    "molecular_formula": ["MolecularFormula"],
+    "canonical_smiles": ["CanonicalSMILES", "ConnectivitySMILES"],
+    "isomeric_smiles": ["IsomericSMILES", "SMILES"],
+    "iupac_name": ["IUPACName"],
+    "xlogp": ["XLogP"],
 }
 _SPECIAL_PROPS = {"cas", "synonyms"}
+
 
 def get_properties(
     identifiers: Iterable[Union[str, int]],
@@ -66,13 +71,13 @@ def get_properties(
     Retrieves multiple properties for a list of chemical identifiers.
     """
     identifiers = list(identifiers)
-    properties  = list(properties)
+    properties = list(properties)
 
     if not identifiers or not properties:
         return pd.DataFrame()
 
-    regular     = [p for p in properties if p in PROPERTY_ALIASES]
-    specials    = [p for p in properties if p in _SPECIAL_PROPS]
+    regular = [p for p in properties if p in PROPERTY_ALIASES]
+    specials = [p for p in properties if p in _SPECIAL_PROPS]
     unsupported = [p for p in properties if p not in regular + specials]
     if unsupported:
         raise ValueError(f"Unsupported properties: {unsupported}")
@@ -111,7 +116,11 @@ def get_properties(
             api_row = fetched_regular.get(lookup_cid, {})
             for p in regular:
                 val = next(
-                    (api_row[tag] for tag in PROPERTY_ALIASES[p] if tag in api_row and api_row[tag]),
+                    (
+                        api_row[tag]
+                        for tag in PROPERTY_ALIASES[p]
+                        if tag in api_row and api_row[tag]
+                    ),
                     None,
                 )
                 entry[p] = val
@@ -130,42 +139,52 @@ def get_properties(
 
     return df
 
+
 def _scalar(prop: str, identifier: Union[str, int]):
     """Internal helper to get a single value from get_properties."""
     df = get_properties([identifier], [prop])
     return df[prop].iat[0] if not df.empty and df["status"].iat[0] == "OK" else None
 
+
 def get_weight(id_: Union[str, int]) -> float | None:
     """Gets the molecular weight for a single identifier."""
-    return _scalar("molecular_weight",   id_)
+    return _scalar("molecular_weight", id_)
+
 
 def get_formula(id_: Union[str, int]) -> str | None:
     """Gets the molecular formula for a single identifier."""
-    return _scalar("molecular_formula",  id_)
+    return _scalar("molecular_formula", id_)
+
 
 def get_canonical_smiles(id_: Union[str, int]) -> str | None:
     """Gets the canonical SMILES string for a single identifier."""
-    return _scalar("canonical_smiles",   id_)
+    return _scalar("canonical_smiles", id_)
+
 
 def get_isomeric_smiles(id_: Union[str, int]) -> str | None:
     """Gets the isomeric SMILES string for a single identifier."""
-    return _scalar("isomeric_smiles",    id_)
+    return _scalar("isomeric_smiles", id_)
+
 
 def get_iupac_name(id_: Union[str, int]) -> str | None:
     """Gets the IUPAC name for a single identifier."""
-    return _scalar("iupac_name",         id_)
+    return _scalar("iupac_name", id_)
+
 
 def get_xlogp(id_: Union[str, int]) -> float | None:
     """Gets the XLogP value for a single identifier."""
-    return _scalar("xlogp",              id_)
+    return _scalar("xlogp", id_)
+
 
 def get_cas(id_: Union[str, int]) -> str | None:
     """Gets the primary CAS number for a single identifier."""
-    return _scalar("cas",                id_)
+    return _scalar("cas", id_)
+
 
 def get_synonyms(id_: Union[str, int]) -> List[str]:
     """Gets a list of synonyms for a single identifier."""
-    return _scalar("synonyms",           id_) or []
+    return _scalar("synonyms", id_) or []
+
 
 def get_compound(identifier: Union[str, int]) -> Compound:
     """
@@ -177,11 +196,13 @@ def get_compound(identifier: Union[str, int]) -> Compound:
         raise RuntimeError(f"Failed to fetch compound for {identifier!r}")
     return Compound(**df.iloc[0].to_dict())
 
+
 def get_compounds(identifiers: Iterable[Union[str, int]]) -> List[Compound]:
     """
     Retrieves all available data for a list of identifiers.
     """
     return [get_compound(x) for x in identifiers]
+
 
 def draw_compound(identifier: Union[str, int]) -> None:
     """
@@ -192,8 +213,11 @@ def draw_compound(identifier: Union[str, int]) -> None:
         from PIL import Image
         import matplotlib.pyplot as plt
     except ImportError as exc:
-        print(f"[ChemInformant] Cannot render structure: missing dependency {exc.name!r}. "
-              "Please `pip install requests pillow matplotlib`.", file=sys.stderr)
+        print(
+            f"[ChemInformant] Cannot render structure: missing dependency {exc.name!r}. "
+            "Please `pip install requests pillow matplotlib`.",
+            file=sys.stderr,
+        )
         return
 
     try:
@@ -211,7 +235,9 @@ def draw_compound(identifier: Union[str, int]) -> None:
         img_bytes = requests.get(url, timeout=15).content
         img = Image.open(io.BytesIO(img_bytes))
     except Exception as exc:
-        print(f"[ChemInformant] Failed to download structure PNG: {exc}", file=sys.stderr)
+        print(
+            f"[ChemInformant] Failed to download structure PNG: {exc}", file=sys.stderr
+        )
         return
 
     plt.imshow(img)
