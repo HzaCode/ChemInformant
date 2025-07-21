@@ -1,3 +1,4 @@
+
 # ChemInformant <img src="https://raw.githubusercontent.com/HzaCode/ChemInformant/main/images/logo.png" align="right" width="120px" />
 
 
@@ -66,10 +67,10 @@ print(df)
 **Output:**
 
 ```
-  input_identifier     cid status  molecular_weight  xlogp       cas
-0          aspirin  2244.0     OK            180.16   1.2   50-78-2
-1         caffeine  2519.0     OK            194.19  -0.1   58-08-2
-2             1983  1983.0     OK            151.16   0.5  103-90-2
+  input_identifier   cid status  molecular_weight  xlogp       cas
+0          aspirin  2244     OK            180.16    1.2   50-78-2
+1         caffeine  2519     OK            194.19   -0.1   58-08-2
+2             1983  1983     OK            151.16    0.5  103-90-2
 ```
 
 <details>
@@ -121,5 +122,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you use **ChemInformant** in your research, please cite **the software** 
 > **Software**: He, Z. *ChemInformant* (v2.0.0) [Software]. GitHub, https://github.com/HzaCode/ChemInformant.  
-
-
