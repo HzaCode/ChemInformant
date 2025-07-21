@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 import sys
 
-# 使用相对导入，因为 cli.py 在 ChemInformant 包内
+# Use relative import because cli.py is inside the ChemInformant package
 from .cheminfo_api import (
     get_properties,
     draw_compound,
@@ -17,7 +17,7 @@ from .models import NotFoundError, AmbiguousIdentifierError
 
 def main_fetch():
     """
-    chemfetch 命令的主入口函数。
+    Main entry point for the chemfetch command.
     """
     available_props = sorted(list(PROPERTY_ALIASES.keys()) + list(_SPECIAL_PROPS))
 
@@ -56,14 +56,14 @@ def main_fetch():
     try:
         properties_list = [prop.strip() for prop in args.props.split(",")]
 
-        # 调用核心API函数
+        # Call the core API function
         df = get_properties(args.identifiers, properties_list)
 
         if df.empty:
             print("No data returned.", file=sys.stderr)
             return
 
-        # 根据用户选择的格式输出结果
+        # Output the results based on the user's chosen format
         if args.format == "csv":
             print(df.to_csv(index=False))
         elif args.format == "json":
@@ -81,7 +81,7 @@ def main_fetch():
 
 def main_draw():
     """
-    chemdraw 命令的主入口函数。
+    Main entry point for the chemdraw command.
     """
     parser = argparse.ArgumentParser(
         prog="chemdraw",
@@ -96,7 +96,7 @@ def main_draw():
         print(
             f"Attempting to draw structure for '{args.identifier}'...", file=sys.stderr
         )
-        # 调用绘图函数
+        # Call the drawing function
         draw_compound(args.identifier)
     except (NotFoundError, AmbiguousIdentifierError) as e:
         # Catch specific, known exceptions from our library.
