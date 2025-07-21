@@ -52,7 +52,7 @@ def setup_cache(
         cache_name     = cache_name,
         backend        = backend,
         expire_after   = expire_after,
-        allowable_codes= [200, 404, 503],
+        allowable_codes= [200, 400, 404, 503], # Added 400 to be cacheable
         **kw,
     )
 
@@ -60,7 +60,7 @@ def get_session() -> requests_cache.CachedSession:
     """Gets the current cached session, initializing it if necessary."""
     global _session
     if _session is None:
-        setup_cache()
+        setup_cache() # Use default settings if not already configured
     return _session
 
 # Unified fetch with retry and rate-limit
@@ -70,7 +70,7 @@ def _execute_fetch(url: str) -> requests.Response:
 
 def _fetch_with_ratelimit_and_retry(url: str) -> Dict[str, Any] | List[Any] | str | None:
     """
-    Performs a GET request with rate-limiting and exponential backoff retry logic.
+    Performs a GET request with rate-limiting and exponential backoff.
     This is the core network function that ensures robustness.
     """
     global last_api_call_time
@@ -86,35 +86,43 @@ def _fetch_with_ratelimit_and_retry(url: str) -> Dict[str, Any] | List[Any] | st
         try:
             resp = _execute_fetch(url)
 
-            # Bust cache for stale 503 errors
-            if getattr(resp, "from_cache", False) and resp.status_code == 503:
-                key = get_session().cache.create_key(resp.request)
-                get_session().cache.delete(key)
-                with get_session().cache.disabled():
-                    resp = _execute_fetch(url)
-
-            if resp.status_code in (200, 404):
-                if resp.status_code == 404:
-                    return None
+            # Case 1: Success
+            if resp.status_code == 200:
                 ctype = resp.headers.get("Content-Type", "").lower()
                 return resp.json() if "application/json" in ctype else resp.text
+            
+            # Case 2: Client-side errors (400, 404). DO NOT RETRY.
+            # These indicate the request is invalid or the resource doesn't exist.
+            if 400 <= resp.status_code < 500:
+                return None
 
-            if resp.status_code == 503:
-                print(f"[ChemInformant] 503 Server Busy -> retry in {backoff:.1f}s", file=sys.stderr)
-            else:
-                resp.raise_for_status()
+            # Case 3: Server-side errors (e.g., 500, 503). These ARE retryable.
+            if resp.status_code >= 500:
+                # Special handling for a cached 503: try a fresh request once.
+                if getattr(resp, "from_cache", False) and resp.status_code == 503:
+                    key = get_session().cache.create_key(resp.request)
+                    get_session().cache.delete(key)
+                    # Make one immediate attempt without cache
+                    with get_session().cache.disabled():
+                        fresh_resp = _execute_fetch(url)
+                        if fresh_resp.status_code == 200:
+                             ctype = fresh_resp.headers.get("Content-Type", "").lower()
+                             return fresh_resp.json() if "application/json" in ctype else fresh_resp.text
+
+                # If not a cached 503 or fresh request failed, proceed to normal retry.
+                print(f"[ChemInformant] Server error {resp.status_code} -> retry in {backoff:.1f}s", file=sys.stderr)
 
         except requests.exceptions.RequestException as e:
-            print(f"[ChemInformant] Network error {e} -> retry in {backoff:.1f}s", file=sys.stderr)
+            # Case 4: Network errors (e.g., timeout, DNS failure). RETRY.
+            print(f"[ChemInformant] Network error ({e}) -> retry in {backoff:.1f}s", file=sys.stderr)
 
+        # Common retry logic for server and network errors
         time.sleep(backoff)
         backoff = min(MAX_BACKOFF, backoff * 2) + random.uniform(0, 1)
         retries += 1
 
     print(f"[ChemInformant] Giving up after {MAX_RETRIES} retries for URL: {url}", file=sys.stderr)
     return None
-
-
 
 def get_cids_by_name(name: str) -> List[int] | None:
     """Fetches CIDs for a given chemical name."""
@@ -136,24 +144,29 @@ def get_batch_properties(cids: List[int], props: List[str]) -> Dict[int, Dict[st
         f"{PUBCHEM_API_BASE}/compound/cid/{','.join(map(str, cids))}"
         f"/property/{','.join(props)}/JSON"
     )
-
-    all_props, list_key = [], None
+    
+    all_props: List[Dict[str, Any]] = []
+    list_key: str | None = None
+    
     while True:
+        current_url = url
         if list_key:
-            url = (
+            # If we have a list_key, subsequent requests must use it
+            current_url = (
                 f"{PUBCHEM_API_BASE}/compound/listkey/{list_key}"
                 f"/property/{','.join(props)}/JSON"
             )
-        data = _fetch_with_ratelimit_and_retry(url)
+        
+        data = _fetch_with_ratelimit_and_retry(current_url)
         if not isinstance(data, dict):
-            break
+            break # Bail out if the response isn't a dictionary as expected
+        
         all_props.extend(data.get("PropertyTable", {}).get("Properties", []))
-        list_key = data.get("ListKey")
+        list_key = data.get("ListKey") # Get the key for the *next* request
         if not list_key:
-            break
-
-    res = {int(p["CID"]): p for p in all_props if "CID" in p}
-    return {cid: res.get(cid, {}) for cid in cids}
+            break # No more pages
+            
+    return {int(p["CID"]): p for p in all_props if "CID" in p}
 
 def get_cas_for_cid(cid: int) -> str | None:
     """Fetches the primary CAS number for a CID using PUG-View."""
@@ -179,5 +192,5 @@ def get_synonyms_for_cid(cid: int) -> List[str]:
     if isinstance(data, dict):
         info = data.get("InformationList", {}).get("Information", [])
         if info and isinstance(info[0].get("Synonym"), list):
-            return info[0]["Synonym"]
+            return info[0]["Synonym"] # type: ignore
     return []
