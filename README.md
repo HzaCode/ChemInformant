@@ -11,7 +11,7 @@
 [![codecov](https://codecov.io/gh/HzaCode/ChemInformant/graph/badge.svg)](https://codecov.io/gh/HzaCode/ChemInformant)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![PyPI - License](https://img.shields.io/pypi/l/ChemInformant.svg)](https://github.com/HzaCode/ChemInformant/blob/main/LICENSE)
-[![Docs](https://img.shields.io/badge/Docs-Read_Online-blue?style=flat-square&logo=book&logoColor=white)](https://hezhiang.com/ChemInformant/usage.html)
+[![Docs](https://img.shields.io/badge/Docs-Read_Online-blue?style=flat-square&logo=book&logoColor=white)](https://hezhiang.com/ChemInformant)
 
 
 **ChemInformant** is a robust data acquisition engine for the [PubChem](https.ncbi.nlm.nih.gov/pccompound/) database, engineered for the modern scientific workflow. It intelligently manages network requests, performs rigorous runtime data validation, and delivers analysis-ready results, providing a dependable foundation for any computational chemistry project in Python.
@@ -121,7 +121,7 @@ ChemInformant also includes handy command-line tools for quick lookups directly 
 
 This quick start only scratches the surface. For a deep dive, please see our detailed guides:
 
-*   **➡️ Online Documentation:** The **[official documentation site](https://hezhiang.com/ChemInformant/usage.html)** contains complete API references, guides, and usage examples. **This is the most comprehensive resource.**
+*   **➡️ Online Documentation:** The **[official documentation site](https://hezhiang.com/ChemInformant)** contains complete API references, guides, and usage examples. **This is the most comprehensive resource.**
 *   **➡️ Interactive User Manual:** Our [**Jupyter Notebook Tutorial**](examples/ChemInformant_User_Manual_v1.0.ipynb) provides a complete, end-to-end walkthrough. This is the best place to start for a hands-on experience.
 *   **➡️ Performance Benchmarks:** You can review and run our [**Benchmark Script**](./benchmark.py) to see the performance advantages of batching and caching.
 
