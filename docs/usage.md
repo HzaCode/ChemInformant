@@ -61,8 +61,8 @@ The output is a clean Pandas DataFrame, perfect for data analysis. It includes a
 | | input_identifier | cid | status | molecular_weight | xlogp | cas |
 |---|---|---|---|---|---|---|
 | 0 | aspirin | 2244 | OK | 180.160 | 1.2 | 50-78-2 |
-| 1 | caffeine | 2519 | OK | 194.190 | -0.0 | 58-08-2 |
-| 2 | 1983 | 1983 | OK | 151.160 | 1.2 | 50-00-0 |
+| 1 | caffeine | 2519 | OK | 194.190 | -0.1 | 58-08-2 |
+| 2 | 1983 | 1983 | OK | 151.160 | 1.2 | 103-90-2 |
 | 3 | invalid_identifier | None | NotFoundError | NaN | NaN | None |
 
 
