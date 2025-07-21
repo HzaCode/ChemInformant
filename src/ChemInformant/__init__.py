@@ -6,6 +6,7 @@ This package provides high-level functions to retrieve chemical data,
 seamlessly handling identifier conversion, batch processing, and network
 robustness through built-in caching and retry mechanisms.
 """
+
 from __future__ import annotations
 
 # Re-export high-level API
