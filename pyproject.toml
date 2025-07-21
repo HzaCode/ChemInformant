@@ -43,6 +43,15 @@ dependencies = [
     "pandas>=1.5.0"
 ]
 
+
+
+# =========================================================
+[project.scripts]
+chemfetch = "ChemInformant.cli:main_fetch"
+chemdraw = "ChemInformant.cli:main_draw"
+# =========================================================
+
+
 [project.urls]
 Homepage       = "https://github.com/HzaCode/ChemInformant"
 Documentation  = "https://github.com/HzaCode/ChemInformant#readme"
