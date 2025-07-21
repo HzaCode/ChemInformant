@@ -13,9 +13,6 @@ import pandas as pd
 from . import api_helpers
 from .models import Compound, NotFoundError, AmbiguousIdentifierError
 
-# --- Internal Helper Functions ---
-
-# SMILES pattern tokens
 _SMILES_TOKENS = re.compile(r"[=#\[\]\(\)]|\d|Br|Cl|Si", re.I)
 
 def _looks_like_smiles(s: str) -> bool:
@@ -50,9 +47,6 @@ def _resolve_to_single_cid(identifier: Union[str, int]) -> int:
 
     raise NotFoundError(identifier)
 
-
-# --- Core API ---
-
 PROPERTY_ALIASES: Dict[str, List[str]] = {
     "molecular_weight":   ["MolecularWeight"],
     "molecular_formula":  ["MolecularFormula"],
@@ -69,28 +63,6 @@ def get_properties(
 ) -> pd.DataFrame:
     """
     Retrieves multiple properties for a list of chemical identifiers.
-
-    This is the main workhorse function for batch data retrieval. It accepts a
-    list of mixed-type identifiers (names, CIDs, SMILES) and returns an
-    "analysis-ready" Pandas DataFrame with a status column indicating the
-    success or failure for each input.
-
-    Args:
-        identifiers: An iterable of chemical identifiers. Can be a mix of
-            PubChem CIDs (int), names (str), or SMILES strings (str).
-        properties: An iterable of property names to retrieve. Supported
-            properties include 'molecular_weight', 'molecular_formula',
-            'canonical_smiles', 'isomeric_smiles', 'iupac_name', 'xlogp',
-            'cas', and 'synonyms'.
-
-    Returns:
-        A pandas DataFrame where each row corresponds to an input identifier.
-        The DataFrame includes standard columns like `input_identifier`, `cid`,
-        `status`, followed by a column for each requested property. The status
-        can be 'OK', 'NotFoundError', or 'AmbiguousIdentifierError'.
-
-    Raises:
-        ValueError: If any of the requested properties are not supported.
     """
     identifiers = list(identifiers)
     properties  = list(properties)
@@ -109,10 +81,10 @@ def get_properties(
     for ident in identifiers:
         try:
             cid = _resolve_to_single_cid(ident)
-            meta[ident] = {"status": "OK", "cid": cid}
+            meta[ident] = {"status": "OK", "cid": str(cid)}
             cids_needed.add(cid)
         except Exception as exc:
-            meta[ident] = {"status": type(exc).__name__, "cid": None}
+            meta[ident] = {"status": type(exc).__name__, "cid": pd.NA}
 
     fetched_regular: Dict[int, Dict[str, Any]] = {}
     if cids_needed and regular:
@@ -132,9 +104,10 @@ def get_properties(
     rows = []
     for ident in identifiers:
         entry: Dict[str, Any] = {"input_identifier": ident, **meta[ident]}
-        if entry["status"] == "OK":
-            cid = entry["cid"]
-            api_row = fetched_regular.get(cid, {})
+        lookup_cid = int(entry["cid"]) if pd.notna(entry["cid"]) else None
+
+        if entry["status"] == "OK" and lookup_cid is not None:
+            api_row = fetched_regular.get(lookup_cid, {})
             for p in regular:
                 val = next(
                     (api_row[tag] for tag in PROPERTY_ALIASES[p] if tag in api_row and api_row[tag]),
@@ -142,21 +115,24 @@ def get_properties(
                 )
                 entry[p] = val
             for p in specials:
-                entry[p] = fetched_special[p][cid]
+                entry[p] = fetched_special[p][lookup_cid]
         else:
             for p in properties:
                 entry[p] = None
         rows.append(entry)
 
     cols = ["input_identifier", "cid", "status"] + properties
-    return pd.DataFrame(rows)[cols]
+    df = pd.DataFrame(rows)[cols]
+
+    if "cid" in df.columns:
+        df = df.astype({"cid": "string"})
+
+    return df
 
 def _scalar(prop: str, identifier: Union[str, int]):
     """Internal helper to get a single value from get_properties."""
     df = get_properties([identifier], [prop])
     return df[prop].iat[0] if not df.empty and df["status"].iat[0] == "OK" else None
-
-# --- Convenience Functions ---
 
 def get_weight(id_: Union[str, int]) -> float | None:
     """Gets the molecular weight for a single identifier."""
@@ -193,15 +169,6 @@ def get_synonyms(id_: Union[str, int]) -> List[str]:
 def get_compound(identifier: Union[str, int]) -> Compound:
     """
     Retrieves all available data for an identifier and returns it as a `Compound` object.
-
-    Args:
-        identifier: The chemical identifier (name, CID, or SMILES).
-
-    Returns:
-        A `Compound` object populated with data from PubChem.
-
-    Raises:
-        RuntimeError: If data fetching fails for the given identifier.
     """
     props = list(PROPERTY_ALIASES.keys()) + list(_SPECIAL_PROPS)
     df = get_properties([identifier], props)
@@ -212,26 +179,12 @@ def get_compound(identifier: Union[str, int]) -> Compound:
 def get_compounds(identifiers: Iterable[Union[str, int]]) -> List[Compound]:
     """
     Retrieves all available data for a list of identifiers.
-
-    Args:
-        identifiers: An iterable of chemical identifiers.
-
-    Returns:
-        A list of `Compound` objects.
     """
     return [get_compound(x) for x in identifiers]
 
 def draw_compound(identifier: Union[str, int]) -> None:
     """
     Displays the 2D structure of a compound using Matplotlib.
-
-    Note:
-        This function requires `requests`, `pillow`, and `matplotlib` to be
-        installed. It will print a message if they are missing.
-        This function will block and display a plot window.
-
-    Args:
-        identifier: The chemical identifier (name, CID, or SMILES).
     """
     try:
         import io, requests
