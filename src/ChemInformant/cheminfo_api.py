@@ -6,6 +6,7 @@ cheminformatics workflows.
 from __future__ import annotations
 
 import re
+import sys
 from typing import Iterable, List, Union, Dict, Any
 
 import pandas as pd
@@ -192,13 +193,17 @@ def draw_compound(identifier: Union[str, int]) -> None:
         import matplotlib.pyplot as plt
     except ImportError as exc:
         print(f"[ChemInformant] Cannot render structure: missing dependency {exc.name!r}. "
-              "Please `pip install requests pillow matplotlib`.")
+              "Please `pip install requests pillow matplotlib`.", file=sys.stderr)
         return
 
     try:
         cid = _resolve_to_single_cid(identifier)
+    except (NotFoundError, AmbiguousIdentifierError) as exc:
+        # Re-raise known, specific errors for the CLI to handle gracefully.
+        raise exc
     except Exception as exc:
-        print(f"[ChemInformant] Failed to resolve identifier: {exc}")
+        # Catch any other unexpected resolution errors.
+        print(f"[ChemInformant] Failed to resolve identifier: {exc}", file=sys.stderr)
         return
 
     url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/PNG"
@@ -206,7 +211,7 @@ def draw_compound(identifier: Union[str, int]) -> None:
         img_bytes = requests.get(url, timeout=15).content
         img = Image.open(io.BytesIO(img_bytes))
     except Exception as exc:
-        print(f"[ChemInformant] Failed to download structure PNG: {exc}")
+        print(f"[ChemInformant] Failed to download structure PNG: {exc}", file=sys.stderr)
         return
 
     plt.imshow(img)
