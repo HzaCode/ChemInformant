@@ -67,9 +67,9 @@ print(df)
 
 ```
   input_identifier     cid status  molecular_weight  xlogp       cas
-0          aspirin  2244.0     OK            180.16   1.20   50-78-2
-1         caffeine  2519.0     OK            194.19  -0.07   58-08-2
-2             1983  1983.0     OK            151.16   0.51  103-90-2
+0          aspirin  2244.0     OK            180.16   1.2   50-78-2
+1         caffeine  2519.0     OK            194.19  -0.1   58-08-2
+2             1983  1983.0     OK            151.16   0.5  103-90-2
 ```
 
 <details>
