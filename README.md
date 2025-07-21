@@ -140,4 +140,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### Citation
 
 If you use **ChemInformant** in your research, please cite **the software** 
-> **Software**: He, Z. *ChemInformant* (v2.0.0) [Software]. GitHub, https://github.com/HzaCode/ChemInformant.  
+> **Software**: He, Z. *ChemInformant* (v2.1.0) [Software]. GitHub, https://github.com/HzaCode/ChemInformant.  
