@@ -96,6 +96,20 @@ print(df)
 
 ---
 
+### Command-Line Tools
+
+ChemInformant also includes handy command-line tools for quick lookups directly from your terminal:
+
+*   **`chemfetch`**: Fetches properties for one or more compounds.
+    ```bash
+    chemfetch aspirin --props "cas,molecular_weight,iupac_name"
+    ```
+
+*   **`chemdraw`**: Renders the 2D structure of a compound.
+    ```bash
+    chemdraw aspirin
+    ```
+---
 ### Documentation & Examples
 
 This quick start only scratches the surface. For a deep dive, please see our detailed guides:
