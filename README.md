@@ -21,11 +21,18 @@
 ### Key Features
 
 *   **Analysis-Ready Pandas Output:** The core API (`get_properties`) returns a clean Pandas DataFrame, eliminating data wrangling boilerplate and enabling immediate integration with the Python data science ecosystem.
-*   **Zero-Configuration Robustness:** Built-in, persistent caching, smart rate-limiting, and automatic retries for server errors are enabled by default to ensure your workflows run reliably.
+
+*   **Automated Network Reliability:** Ensures your workflows run flawlessly with built-in persistent caching, smart rate-limiting, and automatic retries. It also transparently handles API pagination (`ListKey`) for large-scale queries, delivering complete result sets without any manual intervention.
+
+*   **Flexible & Fault-Tolerant Input:** Natively accepts mixed lists of identifiers (names, CIDs, SMILES) and intelligently handles any invalid inputs by flagging them with a clear status in the output, ensuring a single bad entry never fails an entire batch operation.
+
 *   **A Dual API for Simplicity and Power:** Offers a clear `get_<property>()` convenience layer for quick lookups, backed by a powerful `get_properties` engine for high-performance batch operations.
-*   **Effortless Large-Scale Queries:** Transparently handles PubChem's `ListKey`-based pagination in the background, ensuring you retrieve complete result sets from large queries without manual intervention.
-*   **Guaranteed Data Integrity:** Employs Pydantic v2 models for rigorous, runtime data validation, preventing malformed or unexpected data from corrupting your analysis pipeline.
-*   **Modern and Actively Maintained:** Built on a contemporary tech stack for long-term **consistency**  and compatibility, providing a reliable alternative to older or less frequently updated libraries.
+
+*   **Guaranteed Data Integrity:** Employs Pydantic v2 models for rigorous, runtime data validation when using the object-based API, preventing malformed or unexpected data from corrupting your analysis pipeline.
+
+*   **Terminal-Ready CLI Tools:** Includes `chemfetch` and `chemdraw` for rapid data retrieval and 2D structure visualization directly from your terminal, perfect for quick lookups without writing a script.
+
+*   **Modern and Actively Maintained:** Built on a contemporary tech stack for long-term consistency and compatibility, providing a reliable alternative to older or less frequently updated libraries.
   
 ---
 
