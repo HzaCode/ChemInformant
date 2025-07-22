@@ -12,7 +12,7 @@
 [![Build Status](https://img.shields.io/github/actions/workflow/status/HzaCode/ChemInformant/tests.yml?label=Build)](https://github.com/HzaCode/ChemInformant/actions/workflows/tests.yml) 
 [![codecov](https://codecov.io/gh/HzaCode/ChemInformant/graph/badge.svg)](https://codecov.io/gh/HzaCode/ChemInformant)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![PyPI - License](https://img.shields.io/pypi/l/ChemInformant.svg)](https://github.com/HzaCode/ChemInformant/blob/main/LICENSE)
+[![PyPI - License](https://img.shields.io/pypi/l/ChemInformant.svg)](https://github.com/HzaCode/ChemInformant/blob/main/LICENSE.md)
 [![Docs](https://img.shields.io/badge/Docs-Read_Online-blue?style=flat-square&logo=book&logoColor=white)](https://hezhiang.com/ChemInformant)
 
 
@@ -138,7 +138,7 @@ A detailed comparison with other existing tools is provided in our [JOSS paper](
 Contributions are welcome! For guidelines on how to get started, please read our [contributing guide](https://github.com/HzaCode/ChemInformant/blob/main/CONTRIBUTING.md). You can [open an issue](https://github.com/HzaCode/ChemInformant/issues) to report bugs or suggest features, or [submit a pull request](https://github.com/HzaCode/ChemInformant/pulls) to contribute code.
 ### License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
 ### Citation
 
 If you use **ChemInformant** in your research, please cite **the software** 
