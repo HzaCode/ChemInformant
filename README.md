@@ -69,8 +69,13 @@ properties = ["molecular_weight", "xlogp", "cas"]
 # 3. Call the core function
 df = ci.get_properties(identifiers, properties)
 
-# 4. Analyze your results!
+# 4. Save the results to an SQL database
+ci.df_to_sql(df, "sqlite:///chem_data.db", "results", if_exists="replace")
+
+# 5. Analyze your results!
 print(df)
+
+
 ```
 
 **Output:**
