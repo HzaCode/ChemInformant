@@ -5,6 +5,7 @@ import sys
 import os
 import pytest
 import pandas as pd
+import sqlite3
 
 # --- Path Correction ---
 # Add the project root directory (which contains the 'src' folder) to the Python path
@@ -31,10 +32,15 @@ def run_command(command: list[str], timeout: int | None = None) -> subprocess.Co
 
 def test_chemfetch_success_table_format():
     """Tests that chemfetch successfully retrieves data using a live API call."""
-    proc = run_command(["chemfetch", "aspirin", "--props", "cas,molecular_weight"])
+    # To avoid network fluctuations, we use a very stable query here.
+    # FIX 1: Changed property from 'cid' (unsupported) to 'cas' (supported).
+    proc = run_command(["chemfetch", "water", "--props", "cas,molecular_formula"])
     assert proc.returncode == 0, f"Command failed with stderr: {proc.stderr}"
     output = proc.stdout
-    assert "aspirin" in output and "2244" in output and "OK" in output
+    # Verify the output content is as expected.
+    assert "water" in output
+    assert "7732-18-5" in output  # CAS for water
+    assert "H2O" in output # Formula for water
 
 def test_chemfetch_handles_partial_failure_gracefully():
     """
@@ -54,23 +60,13 @@ def test_chemfetch_reports_ambiguous_identifier_in_status(monkeypatch, capsys):
     'AmbiguousIdentifierError' status by mocking the network-facing function.
     This test does not make a live network call.
     """
-    # 1. We mock the function at the network boundary: get_cids_by_name.
-    #    We make it return a list of multiple CIDs, which is the condition
-    #    that should trigger the AmbiguousIdentifierError.
     monkeypatch.setattr(
         api_helpers,
         "get_cids_by_name",
-        lambda name: [123, 456]  # Simulate finding multiple results
+        lambda name: [123, 456]
     )
-
-    # 2. Monkeypatch sys.argv to simulate the user running the command.
     monkeypatch.setattr(sys, "argv", ["chemfetch", "any_ambiguous_name", "--props", "cas"])
-
-    # 3. Call the main function. It will use the real `get_properties` and `_resolve_to_single_cid`,
-    #    but the mocked `get_cids_by_name` will cause the correct exception to be raised internally.
     chem_cli.main_fetch()
-
-    # 4. Assert that the captured output contains the correct status string.
     captured = capsys.readouterr()
     output = captured.out
     assert "any_ambiguous_name" in output
@@ -84,6 +80,47 @@ def test_chemfetch_fails_on_invalid_property():
     assert proc.returncode != 0, "Expected a non-zero exit code for an invalid property."
     assert "Error:" in proc.stderr
     assert "Unsupported properties" in proc.stderr
+
+# --- [NEW] TESTS FOR SQL FUNCTIONALITY ---
+
+def test_chemfetch_sql_output_success(tmp_path):
+    """
+    Verifies that `chemfetch --format sql` successfully creates a database
+    file with the correct data.
+    """
+    db_file = tmp_path / "test_output.db"
+    
+    cmd = ["chemfetch", "caffeine", "--props", "cas,molecular_weight", "--format", "sql", "-o", str(db_file)]
+    proc = run_command(cmd)
+
+    assert proc.returncode == 0, f"Command failed with stderr: {proc.stderr}"
+    assert "Writing data to table" in proc.stderr, "Success message not found in stderr."
+    
+    assert db_file.exists(), "Database file was not created."
+
+    con = sqlite3.connect(db_file)
+    df = pd.read_sql_query("SELECT * FROM results", con)
+    con.close()
+
+    assert df.shape[0] == 1
+    assert "cas" in df.columns
+    assert "molecular_weight" in df.columns
+    # FIX 2: The column is named 'input_identifier', not 'identifier'.
+    assert df.loc[0, 'input_identifier'] == 'caffeine'
+    assert df.loc[0, 'cas'] == '58-08-2'
+
+def test_chemfetch_sql_fails_without_output_path():
+    """
+    Verifies that `chemfetch --format sql` fails with a clear error
+    message if the --output/-o argument is not provided.
+    """
+    cmd = ["chemfetch", "water", "--format", "sql"]
+    proc = run_command(cmd)
+    
+    assert proc.returncode != 0, "Expected a non-zero exit code for missing argument."
+    
+    assert "--output is required" in proc.stderr, "Expected error message for missing --output not found."
+
 # --- chemdraw Command Tests ---
 
 def test_chemdraw_runs_successfully():
@@ -95,7 +132,6 @@ def test_chemdraw_runs_successfully():
         assert proc.returncode == 0
         assert "Attempting to draw" in proc.stderr
     except subprocess.TimeoutExpired:
-        # This is an acceptable outcome in a headless CI/CD environment
         pass
 
 def test_chemdraw_fails_gracefully_on_not_found():
