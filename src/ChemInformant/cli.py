@@ -13,8 +13,10 @@ from .cheminfo_api import (
     _SPECIAL_PROPS,
 )
 from .models import NotFoundError, AmbiguousIdentifierError
+
 # --- NEUE ERGÄNZUNG: Importieren der SQL-Helferfunktion ---
 from .sql import df_to_sql
+
 # ----------------------------------------------------
 
 

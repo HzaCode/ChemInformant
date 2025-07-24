@@ -3,6 +3,7 @@ import pandas as pd
 from sqlalchemy import create_engine, Engine
 from typing import Union
 
+
 def df_to_sql(
     df: pd.DataFrame,
     con: Union[str, Engine],
