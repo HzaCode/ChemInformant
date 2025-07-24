@@ -21,7 +21,7 @@ affiliations:
 date: "2025-04-15"
 bibliography: paper.bib
 repository: https://github.com/HzaCode/ChemInformant
-version: 2.1.1
+version: 2.2
 license: MIT
 ---
 
@@ -47,7 +47,7 @@ To contextualize `ChemInformant`, a comparative analysis was conducted against r
 
 **Table 1: Comparative analysis of key features in mainstream chemical information clients.**
 
-| Key Feature | **ChemInformant (v2.0)** | PubChemPy (v1.0.4) | PubChemR (v2.1.4) | webchem (v1.3.1) | ChemSpiPy (v2.0.0) | PubChem4J (Java) |
+| Key Feature | **ChemInformant (v2.2)** | PubChemPy (v1.0.4) | PubChemR (v2.1.4) | webchem (v1.3.1) | ChemSpiPy (v2.0.0) | PubChem4J (Java) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Platform (Language)** | **Python** | Python | R | R | Python | Java |
 | **Primary Database** | **PubChem** | PubChem | PubChem | Multi-DB | ChemSpider | PubChem |
