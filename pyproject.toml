@@ -1,10 +1,14 @@
+# =========================================================
+#          pyproject.toml for ChemInformant
+# =========================================================
+
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "ChemInformant"
-version = "2.1.1"
+version = "2.2.1" 
 authors = [
   { name = "Zhiang He", email = "ang@hezhiang.com" },
 ]
@@ -24,38 +28,29 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Chemistry",
 ]
 keywords = [
-    "chemistry",
-    "cheminformatics",
-    "pubchem",
-    "api",
-    "compound",
-    "drug",
-    "cache",
-    "pydantic",
-    "batch",
-    "smiles"
+    "chemistry", "cheminformatics", "pubchem", "api", "compound", "drug",
+    "cache", "pydantic", "batch", "smiles", "sql"
 ]
 
 dependencies = [
     "requests>=2.25.0",
     "requests-cache>=1.2.0",
     "pydantic>=2.0",
-    "pandas>=1.5.0"
+    "pandas>=1.5.0",
+    "sqlalchemy>=1.4"  # MOVED HERE: Now a core dependency
 ]
 
 
-
-# =========================================================
 [project.scripts]
 chemfetch = "ChemInformant.cli:main_fetch"
 chemdraw = "ChemInformant.cli:main_draw"
-# =========================================================
 
 
 [project.urls]
 Homepage       = "https://github.com/HzaCode/ChemInformant"
 Documentation  = "https://github.com/HzaCode/ChemInformant#readme"
 Issues         = "https://github.com/HzaCode/ChemInformant/issues"
+
 
 [project.optional-dependencies]
 plot = [
@@ -64,29 +59,18 @@ plot = [
     "seaborn>=0.12",
     "scikit-learn>=1.1"
 ]
+
+all = [
+    "ChemInformant[plot]"
+]
+
 dev = [
     "pytest>=7.0",
     "pytest-mock>=3.5",
-    "flake8>=6.0",
     "pytest-cov>=2.12",
     "black"
 ]
-all = [
-    # From 'plot'
-    "matplotlib>=3.1",
-    "Pillow>=10",
-    "seaborn>=0.12",
-    "scikit-learn>=1.1",
-    # From 'dev'
-    "pytest>=7.0",
-    "pytest-mock>=3.5",
-    "flake8>=6.0",
-    "pytest-cov>=2.12",
-    "black"
-]
+
 
 [tool.setuptools.packages.find]
 where = ["src"]
-
-[tool.flake8]
-ignore = ["E501"]
