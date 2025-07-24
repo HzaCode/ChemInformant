@@ -1,4 +1,4 @@
-# src/ChemInformant/cli.py
+# src/ChemInformant/cli.py (UPDATED)
 
 from __future__ import annotations
 
@@ -13,6 +13,9 @@ from .cheminfo_api import (
     _SPECIAL_PROPS,
 )
 from .models import NotFoundError, AmbiguousIdentifierError
+# --- NEUE ERGÄNZUNG: Importieren der SQL-Helferfunktion ---
+from .sql import df_to_sql
+# ----------------------------------------------------
 
 
 def main_fetch():
@@ -24,7 +27,7 @@ def main_fetch():
     parser = argparse.ArgumentParser(
         prog="chemfetch",
         description="ChemInformant: A command-line tool to fetch chemical data from PubChem.",
-        epilog=f"Example: chemfetch aspirin caffeine --props cas,molecular_weight",
+        epilog=f"Example: chemfetch aspirin caffeine --props cas,molecular_weight --format sql -o results.db",
     )
 
     parser.add_argument(
@@ -46,12 +49,27 @@ def main_fetch():
     parser.add_argument(
         "-f",
         "--format",
-        choices=["table", "csv", "json"],
+        # --- NEUE ERGÄNZUNG: 'sql' als Formatoption hinzugefügt ---
+        choices=["table", "csv", "json", "sql"],
+        # ----------------------------------------------------
         default="table",
-        help="Output format. Defaults to 'table'.",
+        help="Output format. Defaults to 'table'. Use 'sql' to save to a SQLite database.",
     )
 
+    # --- NEUE ERGÄNZUNG: Output-Argument für SQL- und andere Dateiformate hinzugefügt ---
+    parser.add_argument(
+        "-o",
+        "--output",
+        help="Output file path. Required when format is 'sql'.",
+    )
+    # ------------------------------------------------------------------------
+
     args = parser.parse_args()
+
+    # --- NEUE ERGÄNZUNG: Überprüfen, ob --output für SQL bereitgestellt wird ---
+    if args.format == "sql" and not args.output:
+        parser.error("--output is required when using --format=sql")
+    # ----------------------------------------------------------------
 
     try:
         properties_list = [prop.strip() for prop in args.props.split(",")]
@@ -68,6 +86,18 @@ def main_fetch():
             print(df.to_csv(index=False))
         elif args.format == "json":
             print(df.to_json(orient="records", indent=2))
+        # --- NEUE ERGÄNZUNG: Logik zum Speichern in einer SQL-Datenbank ---
+        elif args.format == "sql":
+            db_uri = f"sqlite:///{args.output}"
+            table_name = "results"  # Standard-Tabellenname
+            print(
+                f"Writing data to table '{table_name}' in database '{args.output}'...",
+                file=sys.stderr,
+            )
+            # Aufruf Ihrer zuvor erstellten Funktion
+            df_to_sql(df, con=db_uri, table=table_name, if_exists="replace")
+            print("Done.", file=sys.stderr)
+        # ----------------------------------------------------------
         else:  # table
             print(df.to_string(index=False))
 
