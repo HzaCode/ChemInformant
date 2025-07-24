@@ -1,6 +1,6 @@
 import pandas as pd
 import pytest
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 import ChemInformant as ci  
 
 @pytest.fixture(scope="session")
@@ -40,12 +40,12 @@ def test_if_exists_replace(in_memory_engine, test_data):
 
 
     ci.df_to_sql(df_aspirin, in_memory_engine, TABLE_NAME, if_exists="replace")
-    count1 = pd.read_sql(f"SELECT COUNT(*) FROM {TABLE_NAME}", in_memory_engine).iloc[0, 0]
+    count1 = pd.read_sql(text(f"SELECT COUNT(*) FROM {TABLE_NAME}"), in_memory_engine).iloc[0, 0]
     assert count1 == 1, "Failed to write initial data"
 
 
     ci.df_to_sql(df_others, in_memory_engine, TABLE_NAME, if_exists="replace")
-    count2 = pd.read_sql(f"SELECT COUNT(*) FROM {TABLE_NAME}", in_memory_engine).iloc[0, 0]
+    count2 = pd.read_sql(text(f"SELECT COUNT(*) FROM {TABLE_NAME}"), in_memory_engine).iloc[0, 0]
     assert count2 == 2, "if_exists='replace' failed to overwrite data"
 
 
@@ -61,7 +61,7 @@ def test_if_exists_append(in_memory_engine, test_data):
 
     ci.df_to_sql(df_others, in_memory_engine, TABLE_NAME, if_exists="append")
 
-    total_count = pd.read_sql(f"SELECT COUNT(*) FROM {TABLE_NAME}", in_memory_engine).iloc[0, 0]
+    total_count = pd.read_sql(text(f"SELECT COUNT(*) FROM {TABLE_NAME}"), in_memory_engine).iloc[0, 0]
     expected_count = len(df_aspirin) + len(df_others)
     assert total_count == expected_count, "if_exists='append' failed to add new data"
 
@@ -88,5 +88,5 @@ def test_writing_empty_dataframe(in_memory_engine, test_data):
     df_empty = test_data["empty"]
     ci.df_to_sql(df_empty, in_memory_engine, TABLE_NAME, if_exists="replace")
     
-    count = pd.read_sql(f"SELECT COUNT(*) FROM {TABLE_NAME}", in_memory_engine).iloc[0, 0]
+    count = pd.read_sql(text(f"SELECT COUNT(*) FROM {TABLE_NAME}"), in_memory_engine).iloc[0, 0]
     assert count == 0, "Writing an empty DataFrame did not result in an empty table"
