@@ -45,7 +45,8 @@ jobs:
         run: |
           pytest --cov=src/ChemInformant --cov-report=xml -v tests/
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@412140b9574a4a1595e8ebb4e3ea3b1437146e33
         with:
-          verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+          # slug: HzaCode/ChemInformant (this is optional)

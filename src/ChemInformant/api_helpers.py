@@ -8,7 +8,7 @@ These functions are not intended for direct use by end-users.
 
 from __future__ import annotations
 
-import random
+import secrets
 import sys
 import time
 from typing import List, Dict, Any
@@ -135,7 +135,7 @@ def _fetch_with_ratelimit_and_retry(
 
         # Common retry logic for server and network errors
         time.sleep(backoff)
-        backoff = min(MAX_BACKOFF, backoff * 2) + random.uniform(0, 1)
+        backoff = min(MAX_BACKOFF, backoff * 2) + secrets.SystemRandom().uniform(0, 1)
         retries += 1
 
     print(

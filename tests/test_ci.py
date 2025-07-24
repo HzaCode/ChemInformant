@@ -18,10 +18,10 @@ from src.ChemInformant import cheminfo_api
 from src.ChemInformant import api_helpers
 from src.ChemInformant import models
 
-def run_command(command: list[str], timeout: int | None = None) -> subprocess.CompletedProcess:
+def run_command(command: str, *args: str, timeout: int | None = None) -> subprocess.CompletedProcess:
     """Helper function to run a command as a subprocess and capture its output."""
     return subprocess.run(
-        command,
+        [command, *args],
         capture_output=True,
         text=True,
         check=False,
@@ -34,7 +34,7 @@ def test_chemfetch_success_table_format():
     """Tests that chemfetch successfully retrieves data using a live API call."""
     # To avoid network fluctuations, we use a very stable query here.
     # FIX 1: Changed property from 'cid' (unsupported) to 'cas' (supported).
-    proc = run_command(["chemfetch", "water", "--props", "cas,molecular_formula"])
+    proc = run_command("chemfetch", "water", "--props", "cas,molecular_formula")
     assert proc.returncode == 0, f"Command failed with stderr: {proc.stderr}"
     output = proc.stdout
     # Verify the output content is as expected.
@@ -47,8 +47,7 @@ def test_chemfetch_handles_partial_failure_gracefully():
     Verifies that chemfetch handles a mix of valid and invalid identifiers
     by returning a table with appropriate statuses using a live API call.
     """
-    cmd = ["chemfetch", "caffeine", "NotARealCompound12345"]
-    proc = run_command(cmd)
+    proc = run_command("chemfetch", "caffeine", "NotARealCompound12345")
     assert proc.returncode == 0, f"Expected exit code 0 for partial failure, but got {proc.returncode}. Stderr: {proc.stderr}"
     output = proc.stdout
     assert "caffeine" in output and "OK" in output
@@ -75,8 +74,7 @@ def test_chemfetch_reports_ambiguous_identifier_in_status(monkeypatch, capsys):
 
 def test_chemfetch_fails_on_invalid_property():
     """Tests that chemfetch exits with a non-zero code for an unsupported property."""
-    cmd = ["chemfetch", "water", "--props", "boiling_point"]
-    proc = run_command(cmd)
+    proc = run_command("chemfetch", "water", "--props", "boiling_point")
     assert proc.returncode != 0, "Expected a non-zero exit code for an invalid property."
     assert "Error:" in proc.stderr
     assert "Unsupported properties" in proc.stderr
@@ -90,8 +88,7 @@ def test_chemfetch_sql_output_success(tmp_path):
     """
     db_file = tmp_path / "test_output.db"
     
-    cmd = ["chemfetch", "caffeine", "--props", "cas,molecular_weight", "--format", "sql", "-o", str(db_file)]
-    proc = run_command(cmd)
+    proc = run_command("chemfetch", "caffeine", "--props", "cas,molecular_weight", "--format", "sql", "-o", str(db_file))
 
     assert proc.returncode == 0, f"Command failed with stderr: {proc.stderr}"
     assert "Writing data to table" in proc.stderr, "Success message not found in stderr."
@@ -114,8 +111,7 @@ def test_chemfetch_sql_fails_without_output_path():
     Verifies that `chemfetch --format sql` fails with a clear error
     message if the --output/-o argument is not provided.
     """
-    cmd = ["chemfetch", "water", "--format", "sql"]
-    proc = run_command(cmd)
+    proc = run_command("chemfetch", "water", "--format", "sql")
     
     assert proc.returncode != 0, "Expected a non-zero exit code for missing argument."
     
@@ -128,7 +124,7 @@ def test_chemdraw_runs_successfully():
     if os.environ.get('CI'):
         pytest.skip("Skipping GUI-based test in CI environment")
     try:
-        proc = run_command(["chemdraw", "caffeine"], timeout=15)
+        proc = run_command("chemdraw", "caffeine", timeout=15)
         assert proc.returncode == 0
         assert "Attempting to draw" in proc.stderr
     except subprocess.TimeoutExpired:
@@ -139,7 +135,7 @@ def test_chemdraw_fails_gracefully_on_not_found():
     Verifies that chemdraw exits with a non-zero code and a clear error message
     when an identifier is not found.
     """
-    proc = run_command(["chemdraw", "NotARealCompound12345"])
+    proc = run_command("chemdraw", "NotARealCompound12345")
     assert proc.returncode != 0, "Expected a non-zero exit code for a non-existent compound."
     assert "[ChemInformant] Error:" in proc.stderr
     assert "was not found" in proc.stderr
