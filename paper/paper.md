@@ -43,23 +43,25 @@ Consequently, there is a need for a client library that integrates robustness, e
 
 ## State of the Field and Comparison
 
-To contextualize `ChemInformant`, a comparative analysis was conducted against related tools, including PubChemPy, PubChemR [@PubChemR], webchem [@webchem], ChemSpiPy [@ChemSpiPy], and PubChem4J [@PubChem4J]. **Table 1** outlines the features of these tools across several dimensions relevant to automated research workflows.
+To contextualize `ChemInformant`, a comparative analysis was conducted against related tools, including PubChemPy, PubChemR [@PubChemR], webchem [@webchem], ChemSpiPy [@ChemSpiPy], and PubChem4J [@PubChem4J]. **Table 1** outlines the features of these tools across several dimensions relevant to automated research workflows. The maintenance status of several key libraries is particularly noteworthy: PubChemPy has not had a formal release since 2017, and ChemSpiPy has been inactive since 2018, which underscores the need for a modern, actively maintained tool.
 
 **Table 1: Comparative analysis of key features in mainstream chemical information clients.**
 
-| Key Feature | **ChemInformant (v2.2)** | PubChemPy (v1.0.4) | PubChemR (v2.1.4) | webchem (v1.3.1) | ChemSpiPy (v2.0.0) | PubChem4J (Java) |
+| Key Feature | **ChemInformant** | PubChemPy | PubChemR | webchem | ChemSpiPy | PubChem4J |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Platform (Language)** | **Python** | Python | R | R | Python | Java |
+| **Platform** | **Python** | Python | R | R | Python | Java |
 | **Primary Database** | **PubChem** | PubChem | PubChem | Multi-DB | ChemSpider | PubChem |
-| **Persistent HTTP Caching**<br/>*(Improves repetitive query speed)* | **Yes (Built-in)** | No (Object-level memoization only) | No | No | No | N/A (Local DB) |
-| **Rate-Limiting & Retries**<br/>*(Enhances automation robustness)* | **Yes (Built-in)** | No (Requires manual implementation) | No (Requires manual implementation) | Partial (No auto-retry) | No | N/A (Local access) |
-| **Batch Multi-Property Retrieval**<br/>*(Reduces network overhead)* | **Yes (Single function call)** | Partial | Partial | Partial | Partial | Yes (Local SQL) |
-| **Mixed Identifier Support**<br/>*(Simplifies data preprocessing)* | **Yes (Native support)** | No (Requires single namespace) | No (Requires single id_type) | No (Requires single 'from' type) | No | N/A |
-| **Batch Query Fault Tolerance**<br/>*(Ensures task integrity)* | **Yes (Structured status reporting)** | No (Fails on single error) | No (Silently returns NULL) | No (Silently returns NA) | No (Silently returns None) | N/A |
-| **Automatic Pagination (ListKey)**<br/>*(Simplifies large dataset queries)* | **Yes (Automatic)** | Partial (Requires manual management) | No | No | No | N/A (Local SQL) |
-| **Runtime Type Safety**<br/>*(Ensures data structure integrity)* | **Yes (Pydantic)** | No (No client-side validation) | Partial (R S3/S4 objects) | No | No | Yes (Static types) |
-| **Integrated 2D Structure Viz.**<br/>*(Aids interactive exploration)* | **Yes (Built-in function)** | Partial (Requires manual rendering) | No | No | Partial (Requires manual rendering) | N/A |
-| **Project Activity/Status**<br/>*(Ensures long-term maintainability)* | **Active** | **Inactive (since 2017)** | Active | Active | **Inactive (since 2018)** | **Archived (since 2011)** |
+| **Persistent Caching**¹ | **Yes** | No | No | No | No | N/A |
+| **Rate-Limiting & Retries**² | **Yes** | No | No | Partial | No | N/A |
+| **Batch Retrieval** | **Yes** | Partial | Partial | Partial | Partial | Yes |
+| **Mixed Identifier Support** | **Yes** | No | No | No | No | N/A |
+| **Fault Tolerance**³ | **Yes** | No | No | No | No | N/A |
+| **Automatic Pagination** | **Yes** | Partial | No | No | No | N/A |
+| **Runtime Type Safety** | **Yes** | No | Partial | No | No | Yes |
+| **Project Activity** | **Active** | Inactive | Active | Active | Inactive | Archived |
+
+<small>Notes: ¹ **Persistent Caching**: Improves speed on repeated queries by storing results locally. ² **Rate-Limiting & Retries**: Automatically manages API request limits and server errors, enhancing automation robustness. ³ **Fault Tolerance**: Provides structured status reporting for each item in a batch query, avoiding complete failure on a single error.</small>
+
 
 ## Performance Evaluation
 
