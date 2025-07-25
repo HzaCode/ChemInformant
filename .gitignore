@@ -79,3 +79,6 @@ test_cheminformant.py
 *.fls
 *.fdb_latexmk
 arxiv/
+examples/compounds_smiles.smi
+examples/drug_analysis.xlsx
+/examples
