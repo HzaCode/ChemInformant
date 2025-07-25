@@ -130,7 +130,7 @@ def _fetch_with_ratelimit_and_retry(url: str) -> Dict[str, Any] | List[Any] | st
             if resp.status_code == 200:
                 ctype = resp.headers.get("Content-Type", "").lower()
                 return resp.json() if "application/json" in ctype else resp.text
-            
+
             if resp.status_code == 404:
                 return None  # Resource not found is a valid, final state.
 
@@ -180,7 +180,8 @@ def get_cids_by_smiles(smiles: str) -> List[int] | None:
 
 def get_batch_properties(cids: List[int], props: List[str]) -> Dict[int, Dict[str, Any]]:
     """
-    Fetches multiple properties for a batch of CIDs in a single request.
+    Fetches multiple properties for a batch of CIDs in a single request,
+    handling API pagination automatically.
 
     :param cids: A list of CIDs to query.
     :type cids: List[int]
@@ -192,22 +193,45 @@ def get_batch_properties(cids: List[int], props: List[str]) -> Dict[int, Dict[st
     """
     if not cids or not props:
         return {}
-        
-    url = (
+
+    # Build the initial URL
+    initial_url = (
         f"{PUBCHEM_API_BASE}/compound/cid/{','.join(map(str, cids))}"
         f"/property/{','.join(props)}/JSON"
     )
-    data = _fetch_with_ratelimit_and_retry(url)
+    data = _fetch_with_ratelimit_and_retry(initial_url)
 
-    # The API might not return all results in one go and may use a listkey for pagination.
-    # This loop is currently not fully implemented to handle pagination but sets the foundation.
-    if isinstance(data, dict):
-        all_props = data.get("PropertyTable", {}).get("Properties", [])
-        res = {int(p["CID"]): p for p in all_props if "CID" in p}
-        # Ensure every requested CID has an entry in the result for consistency.
-        return {cid: res.get(cid, {}) for cid in cids}
+    if not isinstance(data, dict):
+        return {cid: {} for cid in cids}
+
+    # Extract properties from the first page and check for a pagination key
+    all_props = data.get("PropertyTable", {}).get("Properties", [])
+    list_key = data.get("ListKey")
+
+    # Loop as long as the API provides a ListKey for the next page
+    while list_key:
+        print(f"[ChemInformant] Pagination detected, fetching next page with ListKey: {list_key}", file=sys.stderr)
+        paginated_url = (
+            f"{PUBCHEM_API_BASE}/compound/listkey/{list_key}"
+            f"/property/{','.join(props)}/JSON"
+        )
+        data = _fetch_with_ratelimit_and_retry(paginated_url)
+
+        if isinstance(data, dict):
+            # Add properties from the new page to our list
+            all_props.extend(data.get("PropertyTable", {}).get("Properties", []))
+            # Get the next ListKey, or None if this is the last page
+            list_key = data.get("ListKey")
+        else:
+            # If a paginated request fails, stop looping
+            list_key = None
+
+    # Organize all collected properties by CID
+    res = {int(p["CID"]): p for p in all_props if "CID" in p}
     
-    return {cid: {} for cid in cids} # Return empty dict for each CID on failure
+    # Ensure every originally requested CID has an entry in the final dictionary
+    return {cid: res.get(cid, {}) for cid in cids}
+
 
 def get_cas_for_cid(cid: int) -> str | None:
     """
