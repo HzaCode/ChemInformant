@@ -1,9 +1,9 @@
 """
-Internal helper module for handling direct communication with the PubChem API.
+ChemInformant – low‑level helper functions for PubChem PUG‑REST.
 
-This module manages the HTTP session, caching, rate-limiting, and retry logic,
-and provides low-level functions that wrap specific PubChem PUG-REST endpoints.
-These functions are not intended for direct use by end-users.
+• Manages HTTP session, persistent caching, rate‑limit, retries.  
+• Since v2.3.0 the cache path is resolved via PyStow:
+  ~/.data/cheminformant/cache/pubchem_cache.sqlite (overridable via env vars).
 """
 
 from __future__ import annotations
@@ -11,78 +11,88 @@ from __future__ import annotations
 import secrets
 import sys
 import time
-from typing import List, Dict, Any
-from urllib.parse import quote
+from datetime import timedelta
+from pathlib import Path
+from typing import Any, Dict, List
 
 import requests
 import requests_cache
 
-# Config
+# ──────────────────────────────────────────────────────────────────────────────
+#  Cache path resolution (PyStow-aware; fallback supported)
+# ──────────────────────────────────────────────────────────────────────────────
+try:
+    import pystow
+except ImportError:
+    pystow = None
+
+
+def _resolve_cache_path(cache_name: str) -> str | Path:
+    if pystow is not None:
+        module = pystow.module("cheminformant")
+        return module.join("cache", name=f"{cache_name}.sqlite")
+    return cache_name
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+#  Constants
+# ──────────────────────────────────────────────────────────────────────────────
 PUBCHEM_API_BASE = "https://pubchem.ncbi.nlm.nih.gov/rest/pug"
 PUG_VIEW_BASE = "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data"
 REQUEST_TIMEOUT = 15
 
-MAX_RETRIES, INITIAL_BACKOFF, MAX_BACKOFF = 5, 1, 16
+MAX_RETRIES = 5
+INITIAL_BACKOFF = 1
+MAX_BACKOFF = 16
 REQUEST_RATE_LIMIT = 5
 MIN_REQUEST_INTERVAL = 1.0 / REQUEST_RATE_LIMIT
 
-last_api_call_time = 0.0
+last_api_call_time: float = 0.0
 _session: requests_cache.CachedSession | None = None
 
 
-# Session & caching
+# ──────────────────────────────────────────────────────────────────────────────
+#  Session & caching
+# ──────────────────────────────────────────────────────────────────────────────
 def setup_cache(
     cache_name: str = "pubchem_cache",
     backend: str = "sqlite",
-    expire_after: int = 7 * 24 * 3600,
+    expire_after: int | float | str | timedelta = 7 * 24 * 3600,
     **kw: Any,
 ) -> None:
-    """
-    Configures and initializes the persistent cache for API requests.
-
-    This function sets up a `requests_cache` session that will store API
-    responses on disk, significantly speeding up repeated queries.
-
-    Args:
-        cache_name: The name of the cache file (without extension).
-        backend: The cache backend to use (e.g., 'sqlite', 'redis').
-        expire_after: The cache expiration time in seconds. Defaults to one week.
-        **kw: Additional keyword arguments passed to `requests_cache.CachedSession`.
-    """
+    """Configure the global CachedSession."""
     global _session
+    cache_path = _resolve_cache_path(cache_name)
     _session = requests_cache.CachedSession(
-        cache_name=cache_name,
+        cache_name=str(cache_path),
         backend=backend,
         expire_after=expire_after,
-        allowable_codes=[200, 400, 404, 503],  # Added 400 to be cacheable
+        allowable_codes=[200, 400, 404, 503],
         **kw,
     )
 
 
 def get_session() -> requests_cache.CachedSession:
-    """Gets the current cached session, initializing it if necessary."""
+    """Return the global CachedSession, initializing if necessary."""
     global _session
     if _session is None:
-        setup_cache()  # Use default settings if not already configured
-    return _session
+        setup_cache()
+    return _session  # type: ignore
 
 
-# Unified fetch with retry and rate-limit
+# ──────────────────────────────────────────────────────────────────────────────
+#  HTTP helpers
+# ──────────────────────────────────────────────────────────────────────────────
 def _execute_fetch(url: str) -> requests.Response:
-    """Executes a single GET request using the global session."""
     return get_session().get(url, timeout=REQUEST_TIMEOUT)
 
 
-def _fetch_with_ratelimit_and_retry(
-    url: str,
-) -> Dict[str, Any] | List[Any] | str | None:
+def _fetch_with_ratelimit_and_retry(url: str) -> Dict[str, Any] | List[Any] | str | None:
     """
-    Performs a GET request with rate-limiting and exponential backoff.
-    This is the core network function that ensures robustness.
+    Perform GET request with client-side rate limiting and exponential backoff.
     """
     global last_api_call_time
 
-    # Enforce rate limit
     elapsed = time.time() - last_api_call_time
     if elapsed < MIN_REQUEST_INTERVAL:
         time.sleep(MIN_REQUEST_INTERVAL - elapsed)
@@ -93,109 +103,77 @@ def _fetch_with_ratelimit_and_retry(
         try:
             resp = _execute_fetch(url)
 
-            # Case 1: Success
             if resp.status_code == 200:
                 ctype = resp.headers.get("Content-Type", "").lower()
                 return resp.json() if "application/json" in ctype else resp.text
 
-            # Case 2: Client-side errors (400, 404). DO NOT RETRY.
-            # These indicate the request is invalid or the resource doesn't exist.
             if 400 <= resp.status_code < 500:
                 return None
 
-            # Case 3: Server-side errors (e.g., 500, 503). These ARE retryable.
             if resp.status_code >= 500:
-                # Special handling for a cached 503: try a fresh request once.
-                if getattr(resp, "from_cache", False) and resp.status_code == 503:
-                    key = get_session().cache.create_key(resp.request)
-                    get_session().cache.delete(key)
-                    # Make one immediate attempt without cache
-                    with get_session().cache.disabled():
-                        fresh_resp = _execute_fetch(url)
-                        if fresh_resp.status_code == 200:
-                            ctype = fresh_resp.headers.get("Content-Type", "").lower()
-                            return (
-                                fresh_resp.json()
-                                if "application/json" in ctype
-                                else fresh_resp.text
-                            )
+                if resp.from_cache and resp.status_code == 503:
+                    session = get_session()
+                    key = session.cache.create_key(resp.request)
+                    session.cache.delete(key)
+                    with session.cache.disabled():
+                        fresh = _execute_fetch(url)
+                        if fresh.status_code == 200:
+                            ctype = fresh.headers.get("Content-Type", "").lower()
+                            return fresh.json() if "application/json" in ctype else fresh.text
+        except requests.exceptions.RequestException as exc:
+            print(f"[ChemInformant] network error: {exc}", file=sys.stderr)
 
-                # If not a cached 503 or fresh request failed, proceed to normal retry.
-                print(
-                    f"[ChemInformant] Server error {resp.status_code} -> retry in {backoff:.1f}s",
-                    file=sys.stderr,
-                )
-
-        except requests.exceptions.RequestException as e:
-            # Case 4: Network errors (e.g., timeout, DNS failure). RETRY.
-            print(
-                f"[ChemInformant] Network error ({e}) -> retry in {backoff:.1f}s",
-                file=sys.stderr,
-            )
-
-        # Common retry logic for server and network errors
         time.sleep(backoff)
-        backoff = min(MAX_BACKOFF, backoff * 2) + secrets.SystemRandom().uniform(0, 1)
+        backoff = min(MAX_BACKOFF, backoff * 2) + secrets.randbelow(1000) / 1000
         retries += 1
 
-    print(
-        f"[ChemInformant] Giving up after {MAX_RETRIES} retries for URL: {url}",
-        file=sys.stderr,
-    )
+    print(f"[ChemInformant] failed after {MAX_RETRIES} retries", file=sys.stderr)
     return None
 
 
+# ──────────────────────────────────────────────────────────────────────────────
+#  Low‑level PubChem helpers
+# ──────────────────────────────────────────────────────────────────────────────
 def get_cids_by_name(name: str) -> List[int] | None:
-    """Fetches CIDs for a given chemical name."""
-    url = f"{PUBCHEM_API_BASE}/compound/name/{quote(name)}/cids/JSON"
+    url = f"{PUBCHEM_API_BASE}/compound/name/{requests.utils.quote(name)}/cids/JSON"
     data = _fetch_with_ratelimit_and_retry(url)
     return data.get("IdentifierList", {}).get("CID") if isinstance(data, dict) else None
 
 
 def get_cids_by_smiles(smiles: str) -> List[int] | None:
-    """Fetches CIDs for a given SMILES string."""
-    url = f"{PUBCHEM_API_BASE}/compound/smiles/{quote(smiles)}/cids/JSON"
+    url = f"{PUBCHEM_API_BASE}/compound/smiles/{requests.utils.quote(smiles)}/cids/JSON"
     data = _fetch_with_ratelimit_and_retry(url)
     return data.get("IdentifierList", {}).get("CID") if isinstance(data, dict) else None
 
 
 def get_batch_properties(
-    cids: List[int], props: List[str]
+    cids: List[int],
+    props: List[str],
 ) -> Dict[int, Dict[str, Any]]:
-    """Fetches multiple properties for a batch of CIDs."""
     if not cids or not props:
         return {}
-    url = (
-        f"{PUBCHEM_API_BASE}/compound/cid/{','.join(map(str, cids))}"
-        f"/property/{','.join(props)}/JSON"
-    )
 
-    all_props: List[Dict[str, Any]] = []
-    list_key: str | None = None
+    props_str = ",".join(props)
+    current_url = f"{PUBCHEM_API_BASE}/compound/cid/{','.join(map(str, cids))}/property/{props_str}/JSON"
+    all_props_data: List[Dict[str, Any]] = []
 
-    while True:
-        current_url = url
-        if list_key:
-            # If we have a list_key, subsequent requests must use it
-            current_url = (
-                f"{PUBCHEM_API_BASE}/compound/listkey/{list_key}"
-                f"/property/{','.join(props)}/JSON"
-            )
-
+    while current_url:
         data = _fetch_with_ratelimit_and_retry(current_url)
-        if not isinstance(data, dict):
-            break  # Bail out if the response isn't a dictionary as expected
+        next_url = None
 
-        all_props.extend(data.get("PropertyTable", {}).get("Properties", []))
-        list_key = data.get("ListKey")  # Get the key for the *next* request
-        if not list_key:
-            break  # No more pages
+        if isinstance(data, dict):
+            all_props_data.extend(data.get("PropertyTable", {}).get("Properties", []))
 
-    return {int(p["CID"]): p for p in all_props if "CID" in p}
+            list_key = data.get("ListKey") or data.get("Waiting", {}).get("ListKey")
+            if list_key:
+                next_url = f"{PUBCHEM_API_BASE}/compound/listkey/{list_key}/property/{props_str}/JSON"
+
+        current_url = next_url
+
+    return {int(p["CID"]): p for p in all_props_data if "CID" in p}
 
 
 def get_cas_for_cid(cid: int) -> str | None:
-    """Fetches the primary CAS number for a CID using PUG-View."""
     url = f"{PUG_VIEW_BASE}/compound/{cid}/JSON"
     data = _fetch_with_ratelimit_and_retry(url)
     if isinstance(data, dict):
@@ -206,20 +184,17 @@ def get_cas_for_cid(cid: int) -> str | None:
                         for cas_sec in sub.get("Section", []):
                             if cas_sec.get("TOCHeading") == "CAS":
                                 for info in cas_sec.get("Information", []):
-                                    markup = info.get("Value", {}).get(
-                                        "StringWithMarkup"
-                                    )
+                                    markup = info.get("Value", {}).get("StringWithMarkup")
                                     if markup and isinstance(markup, list) and markup:
                                         return markup[0].get("String")
     return None
 
 
 def get_synonyms_for_cid(cid: int) -> List[str]:
-    """Fetches all synonyms for a given CID."""
     url = f"{PUBCHEM_API_BASE}/compound/cid/{cid}/synonyms/JSON"
     data = _fetch_with_ratelimit_and_retry(url)
     if isinstance(data, dict):
-        info = data.get("InformationList", {}).get("Information", [])
-        if info and isinstance(info[0].get("Synonym"), list):
-            return info[0]["Synonym"]  # type: ignore
+        info_list = data.get("InformationList", {}).get("Information", [])
+        if info_list and isinstance(info_list[0].get("Synonym"), list):
+            return info_list[0]["Synonym"]
     return []

@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ChemInformant"
-version = "2.2.2" 
+version = "2.3.0"
 authors = [
   { name = "Zhiang He", email = "ang@hezhiang.com" },
 ]
@@ -32,26 +32,30 @@ keywords = [
     "cache", "pydantic", "batch", "smiles", "sql"
 ]
 
+# ---------------------------
+#  Core runtime dependencies
+# ---------------------------
 dependencies = [
     "requests>=2.25.0",
     "requests-cache>=1.2.0",
     "pydantic>=2.0",
     "pandas>=1.5.0",
-    "sqlalchemy>=1.4"  # MOVED HERE: Now a core dependency
+    "sqlalchemy>=1.4",
+    "pystow>=0.7"            
 ]
-
 
 [project.scripts]
 chemfetch = "ChemInformant.cli:main_fetch"
-chemdraw = "ChemInformant.cli:main_draw"
-
+chemdraw  = "ChemInformant.cli:main_draw"
 
 [project.urls]
 Homepage       = "https://github.com/HzaCode/ChemInformant"
 Documentation  = "https://github.com/HzaCode/ChemInformant#readme"
 Issues         = "https://github.com/HzaCode/ChemInformant/issues"
 
-
+# ---------------------------
+#  Optional / dev extras
+# ---------------------------
 [project.optional-dependencies]
 plot = [
     "matplotlib>=3.1",
@@ -70,7 +74,6 @@ dev = [
     "pytest-cov>=2.12",
     "black"
 ]
-
 
 [tool.setuptools.packages.find]
 where = ["src"]
