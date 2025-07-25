@@ -3,7 +3,7 @@ import sys
 from datetime import datetime
 
 # -- Path setup ---------------------------------------------------------------
-sys.path.insert(0, os.path.abspath('../../src'))
+sys.path.insert(0, os.path.abspath('../..'))
 
 # -- Project information ------------------------------------------------------
 project   = "ChemInformant"
@@ -31,13 +31,11 @@ pygments_style   = "sphinx"
 html_theme       = "sphinx_rtd_theme"
 html_static_path = ["_static"]
 
-
 html_theme_options = {
     "collapse_navigation": True,   
     "navigation_depth"  : 2,       
     "style_external_links": True,  
 }
-
 
 # -- Intersphinx --------------------------------------------------------------
 intersphinx_mapping = {
