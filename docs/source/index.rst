@@ -12,6 +12,7 @@ Welcome to the official documentation for ChemInformant. This page serves as the
    basic_usage
    advanced_usage
    cli
+   caching_guide
 
 .. toctree::
    :caption: 🎓 Tutorials
