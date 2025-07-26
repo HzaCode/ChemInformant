@@ -23,7 +23,7 @@
 
 ### Key Features
 
-*   **Analysis-Ready Pandas Output:** The core API (`get_properties`) returns a clean Pandas DataFrame, eliminating data wrangling boilerplate and enabling immediate integration with the Python data science ecosystem.
+*   **Analysis-Ready Pandas&SQL Output:** The core API (`get_properties`) returns either a clean Pandas DataFrame or a direct SQL output, eliminating data wrangling boilerplate and enabling immediate integration with both the Python data science ecosystem and modern database workflows.
 
 *   **Automated Network Reliability:** Ensures your workflows run flawlessly with built-in persistent caching, smart rate-limiting, and automatic retries. It also transparently handles API pagination (`ListKey`) for large-scale queries, delivering complete result sets without any manual intervention.
 
