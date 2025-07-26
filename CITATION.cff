@@ -1,0 +1,24 @@
+cff-version: 2.1.1
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: "He"
+    given-names: "Zhiang"
+    orcid: "https://orcid.org/0009-0009-0171-4578"
+title: "ChemInformant"
+version: 2.2.2
+date-released: 2025
+url: "https://github.com/HzaCode/ChemInformant"
+license: MIT
+keywords:
+  - python
+  - pubchem
+  - chemistry
+  - api
+  - client
+  - cache
+  - pydantic
+  - cheminformatics
+  - computational chemistry
+  - research software
+  - data validation
+  - open source

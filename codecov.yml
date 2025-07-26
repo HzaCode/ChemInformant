@@ -1,0 +1,22 @@
+coverage:
+  range: "60..79.99"
+  status:
+    project:
+      default:
+        target: 80%
+        threshold: 1%
+        informational: false
+    patch:
+      default:
+        target: 85%
+        informational: false
+
+fixes:
+  - "src/::"
+
+comment:
+  layout: "reach,diff,flags,files,footer"
+  behavior: default
+  require_changes: false
+  require_base: no
+  require_head: yes

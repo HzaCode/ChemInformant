@@ -1,0 +1,82 @@
+# =========================================================
+#          pyproject.toml for ChemInformant
+# =========================================================
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ChemInformant"
+version = "2.3.0"
+authors = [
+  { name = "Zhiang He", email = "ang@hezhiang.com" },
+]
+description = "A robust and high-throughput Python client for the PubChem API, designed for automated data retrieval and analysis"
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.8"
+license = { file = "LICENSE" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Chemistry",
+]
+keywords = [
+    "chemistry", "cheminformatics", "pubchem", "api", "compound", "drug",
+    "cache", "pydantic", "batch", "smiles", "sql"
+]
+
+# ---------------------------
+#  Core runtime dependencies
+# ---------------------------
+dependencies = [
+    "requests>=2.25.0",
+    "requests-cache>=1.2.0",
+    "pydantic>=2.0",
+    "pandas>=1.5.0",
+    "sqlalchemy>=1.4",
+    "pystow>=0.7"            
+]
+
+[project.scripts]
+chemfetch = "ChemInformant.cli:main_fetch"
+chemdraw  = "ChemInformant.cli:main_draw"
+
+[project.urls]
+Homepage       = "https://github.com/HzaCode/ChemInformant"
+Documentation  = "https://github.com/HzaCode/ChemInformant#readme"
+Issues         = "https://github.com/HzaCode/ChemInformant/issues"
+
+# ---------------------------
+#  Optional / dev extras
+# ---------------------------
+[project.optional-dependencies]
+plot = [
+    "matplotlib>=3.1",
+    "Pillow>=10",
+    "seaborn>=0.12",
+    "scikit-learn>=1.1"
+]
+
+all = [
+    "ChemInformant[plot]"
+]
+
+dev = [
+    "pytest>=7.0",
+    "pytest-mock>=3.5",
+    "pytest-cov>=2.12",
+    "black"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.coverage.run]
+source = ["ChemInformant"]
