@@ -60,7 +60,10 @@ To contextualize `ChemInformant`, a comparative analysis was conducted against r
 | **Runtime Type Safety** | **Yes** | No | Partial | No | No | Yes |
 | **Project Activity** | **Active** | Inactive | Active | Active | Inactive | Archived |
 
-<small>Notes: ¹ **Persistent Caching**: Improves speed on repeated queries by storing results locally. ² **Rate-Limiting & Retries**: Automatically manages API request limits and server errors, enhancing automation robustness. ³ **Fault Tolerance**: Provides structured status reporting for each item in a batch query, avoiding complete failure on a single error.</small>
+[^1]: **Persistent Caching**: Improves speed on repeated queries by storing results locally.  
+[^2]: **Rate‑Limiting & Retries**: Automatically manages API request limits and server errors, enhancing automation robustness.  
+[^3]: **Fault Tolerance**: Provides structured status reporting for each item in a batch query, avoiding complete failure on a single error.
+
 
 
 ## Performance Evaluation
