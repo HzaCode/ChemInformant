@@ -111,4 +111,4 @@ A more detailed user manual, including examples of how to integrate with other a
 
 ## Acknowledgements
 
-The author thanks PubChem for providing open data services [@PubChem, @Kim2018PUGREST]. The author also acknowledges the developers of the open-source libraries upon which ChemInformant is built, including requests, pandas [@Pandas], pydantic [@Pydantic], requests-cache [@RequestsCache], and pystow [@pystow].
+The author thanks PubChem for providing open data services [@PubChem]. The author also acknowledges the developers of the open-source libraries upon which ChemInformant is built, including requests, pandas [@Pandas], pydantic [@Pydantic], requests-cache [@RequestsCache], and pystow [@pystow].
