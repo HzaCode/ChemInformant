@@ -29,8 +29,7 @@ def setup_test_environment(expire_after=0.2):
     cleanup()
     TMP_HOME.mkdir(exist_ok=True)
     os.environ["CHEMINFORMANT_HOME"] = str(TMP_HOME)
-    importlib.reload(api_helpers)
-    importlib.reload(ci)
+    # Don't reload modules as it breaks mocking
     ci.setup_cache(backend="sqlite", expire_after=expire_after)
 
 
@@ -87,21 +86,22 @@ def mock_pubchem_responses(url: str, **kwargs) -> requests.Response:
     return mock_resp
 
 
-@mock.patch('ChemInformant.api_helpers._execute_fetch', side_effect=mock_pubchem_responses)
-def test_cache_expires(mocked_fetch):
-    setup_test_environment(expire_after=0.2)
+def test_cache_expires():
+    """Test that cache expiration works correctly."""
+    with mock.patch('ChemInformant.api_helpers._execute_fetch', side_effect=mock_pubchem_responses):
+        setup_test_environment(expire_after=0.2)
 
-    # First call should trigger mock network responses
-    c1 = ci.get_compound("caffeine")
-    assert c1.cid == 2519
-    assert c1.cas == "58-08-2"
+        # First call should trigger mock network responses
+        c1 = ci.get_compound("caffeine")
+        assert c1.cid == 2519
+        assert c1.cas == "58-08-2"
 
-    time.sleep(0.3)
+        time.sleep(0.3)
 
-    # Second call (after cache expiry) should still return the same result
-    c2 = ci.get_compound("caffeine")
-    assert c2.cid == 2519
-    assert c2.cas == "58-08-2"
+        # Second call (after cache expiry) should still return the same result
+        c2 = ci.get_compound("caffeine")
+        assert c2.cid == 2519
+        assert c2.cas == "58-08-2"
 
-    print("✅ test_cache_expires passed")
-    cleanup()
+        print("✅ test_cache_expires passed")
+        cleanup()

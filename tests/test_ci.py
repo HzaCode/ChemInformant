@@ -6,6 +6,7 @@ import os
 import pytest
 import pandas as pd
 import sqlite3
+import requests
 
 # --- Path Correction ---
 # Add the project root directory (which contains the 'src' folder) to the Python path
@@ -28,8 +29,17 @@ def run_command(command: str, *args: str, timeout: int | None = None) -> subproc
         timeout=timeout
     )
 
+def is_pubchem_available():
+    """Check if PubChem API is available."""
+    try:
+        response = requests.get('https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/water/cids/JSON', timeout=5)
+        return response.status_code == 200 and 'IdentifierList' in response.text
+    except:
+        return False
+
 # --- chemfetch Command Tests ---
 
+@pytest.mark.skipif(not is_pubchem_available(), reason="PubChem API is under maintenance or unavailable")
 def test_chemfetch_success_table_format():
     """Tests that chemfetch successfully retrieves data using a live API call."""
     # To avoid network fluctuations, we use a very stable query here.
@@ -42,6 +52,7 @@ def test_chemfetch_success_table_format():
     assert "7732-18-5" in output  # CAS for water
     assert "H2O" in output # Formula for water
 
+@pytest.mark.skipif(not is_pubchem_available(), reason="PubChem API is under maintenance or unavailable")
 def test_chemfetch_handles_partial_failure_gracefully():
     """
     Verifies that chemfetch handles a mix of valid and invalid identifiers
@@ -53,6 +64,7 @@ def test_chemfetch_handles_partial_failure_gracefully():
     assert "caffeine" in output and "OK" in output
     assert "NotARealCompound12345" in output and "NotFoundError" in output
 
+@pytest.mark.skipif(not is_pubchem_available(), reason="PubChem API is under maintenance or unavailable")
 def test_chemfetch_reports_ambiguous_identifier_in_status(monkeypatch, capsys):
     """
     Verifies that for an ambiguous identifier, chemfetch correctly reports the
@@ -72,6 +84,7 @@ def test_chemfetch_reports_ambiguous_identifier_in_status(monkeypatch, capsys):
     assert "AmbiguousIdentifierError" in output
     assert "OK" not in output
 
+@pytest.mark.skipif(not is_pubchem_available(), reason="PubChem API is under maintenance or unavailable")
 def test_chemfetch_fails_on_invalid_property():
     """Tests that chemfetch exits with a non-zero code for an unsupported property."""
     proc = run_command("chemfetch", "water", "--props", "boiling_point")
@@ -81,6 +94,7 @@ def test_chemfetch_fails_on_invalid_property():
 
 # --- [NEW] TESTS FOR SQL FUNCTIONALITY ---
 
+@pytest.mark.skipif(not is_pubchem_available(), reason="PubChem API is under maintenance or unavailable")
 def test_chemfetch_sql_output_success(tmp_path):
     """
     Verifies that `chemfetch --format sql` successfully creates a database
@@ -106,6 +120,7 @@ def test_chemfetch_sql_output_success(tmp_path):
     assert df.loc[0, 'input_identifier'] == 'caffeine'
     assert df.loc[0, 'cas'] == '58-08-2'
 
+@pytest.mark.skipif(not is_pubchem_available(), reason="PubChem API is under maintenance or unavailable")
 def test_chemfetch_sql_fails_without_output_path():
     """
     Verifies that `chemfetch --format sql` fails with a clear error
@@ -119,6 +134,7 @@ def test_chemfetch_sql_fails_without_output_path():
 
 # --- chemdraw Command Tests ---
 
+@pytest.mark.skipif(not is_pubchem_available(), reason="PubChem API is under maintenance or unavailable")
 def test_chemdraw_runs_successfully():
     """Tests that the chemdraw command can be invoked without crashing."""
     if os.environ.get('CI'):
@@ -128,8 +144,9 @@ def test_chemdraw_runs_successfully():
         assert proc.returncode == 0
         assert "Attempting to draw" in proc.stderr
     except subprocess.TimeoutExpired:
-        pass
+        pytest.skip("chemdraw command timed out, likely waiting for user interaction")
 
+@pytest.mark.skipif(not is_pubchem_available(), reason="PubChem API is under maintenance or unavailable")
 def test_chemdraw_fails_gracefully_on_not_found():
     """
     Verifies that chemdraw exits with a non-zero code and a clear error message
