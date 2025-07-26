@@ -7,8 +7,8 @@ import argparse
 import pytest
 import pandas as pd
 
-from src.ChemInformant import cli
-from src.ChemInformant.models import NotFoundError
+from ChemInformant import cli
+from ChemInformant.models import NotFoundError
 
 
 class TestMainFetch:
@@ -23,7 +23,7 @@ class TestMainFetch:
         })
         
         with mock.patch('sys.argv', ['chemfetch', 'caffeine', '--props', 'cas,molecular_weight']):
-            with mock.patch('src.ChemInformant.cli.get_properties', return_value=test_data):
+            with mock.patch('ChemInformant.cli.get_properties', return_value=test_data):
                 with mock.patch('builtins.print') as mock_print:
                     cli.main_fetch()
                     mock_print.assert_called()
@@ -37,7 +37,7 @@ class TestMainFetch:
         })
         
         with mock.patch('sys.argv', ['chemfetch', 'caffeine', '--format', 'csv']):
-            with mock.patch('src.ChemInformant.cli.get_properties', return_value=test_data):
+            with mock.patch('ChemInformant.cli.get_properties', return_value=test_data):
                 with mock.patch('builtins.print') as mock_print:
                     cli.main_fetch()
                     mock_print.assert_called()
@@ -52,7 +52,7 @@ class TestMainFetch:
         })
         
         with mock.patch('sys.argv', ['chemfetch', 'caffeine', '--format', 'json']):
-            with mock.patch('src.ChemInformant.cli.get_properties', return_value=test_data):
+            with mock.patch('ChemInformant.cli.get_properties', return_value=test_data):
                 with mock.patch('builtins.print') as mock_print:
                     cli.main_fetch()
                     mock_print.assert_called()
@@ -68,8 +68,8 @@ class TestMainFetch:
             tmp_path = tmp_file.name
         
         with mock.patch('sys.argv', ['chemfetch', 'caffeine', '--format', 'sql', '-o', tmp_path]):
-            with mock.patch('src.ChemInformant.cli.get_properties', return_value=test_data):
-                with mock.patch('src.ChemInformant.cli.df_to_sql') as mock_df_to_sql:
+            with mock.patch('ChemInformant.cli.get_properties', return_value=test_data):
+                with mock.patch('ChemInformant.cli.df_to_sql') as mock_df_to_sql:
                     with mock.patch('builtins.print') as mock_print:
                         cli.main_fetch()
                         mock_df_to_sql.assert_called_once()
@@ -84,14 +84,14 @@ class TestMainFetch:
         empty_df = pd.DataFrame()
         
         with mock.patch('sys.argv', ['chemfetch', 'caffeine']):
-            with mock.patch('src.ChemInformant.cli.get_properties', return_value=empty_df):
+            with mock.patch('ChemInformant.cli.get_properties', return_value=empty_df):
                 with mock.patch('builtins.print') as mock_print:
                     cli.main_fetch()
                     assert mock_print.called
 
     def test_main_fetch_value_error_handling(self):
         with mock.patch('sys.argv', ['chemfetch', 'caffeine']):
-            with mock.patch('src.ChemInformant.cli.get_properties', side_effect=ValueError("Invalid property")):
+            with mock.patch('ChemInformant.cli.get_properties', side_effect=ValueError("Invalid property")):
                 with mock.patch('builtins.print') as mock_print:
                     with pytest.raises(SystemExit) as exc_info:
                         cli.main_fetch()
@@ -100,7 +100,7 @@ class TestMainFetch:
 
     def test_main_fetch_general_exception_handling(self):
         with mock.patch('sys.argv', ['chemfetch', 'caffeine']):
-            with mock.patch('src.ChemInformant.cli.get_properties', side_effect=Exception("Unexpected error")):
+            with mock.patch('ChemInformant.cli.get_properties', side_effect=Exception("Unexpected error")):
                 with mock.patch('builtins.print') as mock_print:
                     with pytest.raises(SystemExit) as exc_info:
                         cli.main_fetch()
@@ -115,7 +115,7 @@ class TestMainFetch:
         })
         
         with mock.patch('sys.argv', ['chemfetch', 'caffeine', 'aspirin']):
-            with mock.patch('src.ChemInformant.cli.get_properties', return_value=test_data):
+            with mock.patch('ChemInformant.cli.get_properties', return_value=test_data):
                 with mock.patch('builtins.print') as mock_print:
                     cli.main_fetch()
                     mock_print.assert_called()
@@ -130,7 +130,7 @@ class TestMainFetch:
         })
         
         with mock.patch('sys.argv', ['chemfetch', 'caffeine', '--props', 'molecular_formula,xlogp']):
-            with mock.patch('src.ChemInformant.cli.get_properties', return_value=test_data):
+            with mock.patch('ChemInformant.cli.get_properties', return_value=test_data):
                 with mock.patch('builtins.print') as mock_print:
                     cli.main_fetch()
                     mock_print.assert_called()
@@ -140,20 +140,20 @@ class TestMainDraw:
 
     def test_main_draw_basic(self):
         with mock.patch('sys.argv', ['chemdraw', 'caffeine']):
-            with mock.patch('src.ChemInformant.cli.draw_compound') as mock_draw:
+            with mock.patch('ChemInformant.cli.draw_compound') as mock_draw:
                 with mock.patch('builtins.print') as mock_print:
                     cli.main_draw()
                     mock_draw.assert_called_once_with('caffeine')
 
     def test_main_draw_with_output_file(self):        
         with mock.patch('sys.argv', ['chemdraw', 'caffeine']):
-            with mock.patch('src.ChemInformant.cli.draw_compound') as mock_draw:
+            with mock.patch('ChemInformant.cli.draw_compound') as mock_draw:
                 cli.main_draw()
                 mock_draw.assert_called_once()
 
     def test_main_draw_not_found_error(self):
         with mock.patch('sys.argv', ['chemdraw', 'invalid_compound']):
-            with mock.patch('src.ChemInformant.cli.draw_compound', side_effect=NotFoundError('invalid_compound')):
+            with mock.patch('ChemInformant.cli.draw_compound', side_effect=NotFoundError('invalid_compound')):
                 with mock.patch('builtins.print') as mock_print:
                     with pytest.raises(SystemExit) as exc_info:
                         cli.main_draw()
@@ -162,7 +162,7 @@ class TestMainDraw:
 
     def test_main_draw_general_exception(self):
         with mock.patch('sys.argv', ['chemdraw', 'caffeine']):
-            with mock.patch('src.ChemInformant.cli.draw_compound', side_effect=Exception("Drawing failed")):
+            with mock.patch('ChemInformant.cli.draw_compound', side_effect=Exception("Drawing failed")):
                 with mock.patch('builtins.print') as mock_print:
                     with pytest.raises(SystemExit) as exc_info:
                         cli.main_draw()

@@ -2,8 +2,8 @@ from unittest import mock
 import pytest
 import pandas as pd
 
-from src.ChemInformant import cheminfo_api
-from src.ChemInformant.models import Compound, NotFoundError, AmbiguousIdentifierError
+from ChemInformant import cheminfo_api
+from ChemInformant.models import Compound, NotFoundError, AmbiguousIdentifierError
 
 
 class TestResolveCid:
@@ -25,31 +25,31 @@ class TestResolveCid:
             cheminfo_api._resolve_to_single_cid(0)
 
     def test_resolve_name_single_result(self):
-        with mock.patch('src.ChemInformant.api_helpers.get_cids_by_name', return_value=[2519]):
+        with mock.patch('ChemInformant.api_helpers.get_cids_by_name', return_value=[2519]):
             result = cheminfo_api._resolve_to_single_cid("caffeine")
             assert result == 2519
 
     def test_resolve_name_multiple_results_raises_ambiguous(self):
-        with mock.patch('src.ChemInformant.api_helpers.get_cids_by_name', return_value=[2519, 2520]):
+        with mock.patch('ChemInformant.api_helpers.get_cids_by_name', return_value=[2519, 2520]):
             with pytest.raises(AmbiguousIdentifierError):
                 cheminfo_api._resolve_to_single_cid("ambiguous_name")
 
     def test_resolve_name_no_results_try_smiles(self):
-        with mock.patch('src.ChemInformant.api_helpers.get_cids_by_name', return_value=None):
+        with mock.patch('ChemInformant.api_helpers.get_cids_by_name', return_value=None):
             with mock.patch.object(cheminfo_api, '_looks_like_smiles', return_value=True):
-                with mock.patch('src.ChemInformant.api_helpers.get_cids_by_smiles', return_value=[2519]):
+                with mock.patch('ChemInformant.api_helpers.get_cids_by_smiles', return_value=[2519]):
                     result = cheminfo_api._resolve_to_single_cid("CC(=O)OC1=CC=CC=C1C(=O)O")
                     assert result == 2519
 
     def test_resolve_smiles_multiple_results_raises_ambiguous(self):
-        with mock.patch('src.ChemInformant.api_helpers.get_cids_by_name', return_value=None):
+        with mock.patch('ChemInformant.api_helpers.get_cids_by_name', return_value=None):
             with mock.patch.object(cheminfo_api, '_looks_like_smiles', return_value=True):
-                with mock.patch('src.ChemInformant.api_helpers.get_cids_by_smiles', return_value=[2519, 2520]):
+                with mock.patch('ChemInformant.api_helpers.get_cids_by_smiles', return_value=[2519, 2520]):
                     with pytest.raises(AmbiguousIdentifierError):
                         cheminfo_api._resolve_to_single_cid("CC(=O)OC1=CC=CC=C1C(=O)O")
 
     def test_resolve_not_found_raises_error(self):
-        with mock.patch('src.ChemInformant.api_helpers.get_cids_by_name', return_value=None):
+        with mock.patch('ChemInformant.api_helpers.get_cids_by_name', return_value=None):
             with mock.patch.object(cheminfo_api, '_looks_like_smiles', return_value=False):
                 with pytest.raises(NotFoundError):
                     cheminfo_api._resolve_to_single_cid("unknown_compound")
@@ -100,8 +100,8 @@ class TestGetProperties:
         mock_batch_data = {2519: {"MolecularWeight": "194.19", "IUPACName": "caffeine"}}
         
         with mock.patch.object(cheminfo_api, '_resolve_to_single_cid', return_value=2519):
-            with mock.patch('src.ChemInformant.api_helpers.get_batch_properties', return_value=mock_batch_data):
-                with mock.patch('src.ChemInformant.api_helpers.get_cas_for_cid', return_value="58-08-2"):
+            with mock.patch('ChemInformant.api_helpers.get_batch_properties', return_value=mock_batch_data):
+                with mock.patch('ChemInformant.api_helpers.get_cas_for_cid', return_value="58-08-2"):
                     result = cheminfo_api.get_properties(["caffeine"], ["molecular_weight", "iupac_name", "cas"])
                     
                     assert len(result) == 1
@@ -131,7 +131,7 @@ class TestGetProperties:
         mock_batch_data = {2519: {"MolecularWeight": "194.19"}}
         
         with mock.patch.object(cheminfo_api, '_resolve_to_single_cid', side_effect=mock_resolve):
-            with mock.patch('src.ChemInformant.api_helpers.get_batch_properties', return_value=mock_batch_data):
+            with mock.patch('ChemInformant.api_helpers.get_batch_properties', return_value=mock_batch_data):
                 result = cheminfo_api.get_properties(["caffeine", "unknown"], ["molecular_weight"])
                 
                 assert len(result) == 2
@@ -194,7 +194,7 @@ class TestDrawCompound:
 
     def test_draw_compound_success(self):
         with mock.patch.object(cheminfo_api, '_resolve_to_single_cid', return_value=2519):
-            with mock.patch('src.ChemInformant.api_helpers.get_synonyms_for_cid', return_value=["Caffeine"]):
+            with mock.patch('ChemInformant.api_helpers.get_synonyms_for_cid', return_value=["Caffeine"]):
                 with mock.patch('requests.get') as mock_get:
                     mock_response = mock.Mock()
                     mock_response.status_code = 200
@@ -214,7 +214,7 @@ class TestDrawCompound:
 
     def test_draw_compound_image_request_fails(self):
         with mock.patch.object(cheminfo_api, '_resolve_to_single_cid', return_value=2519):
-            with mock.patch('src.ChemInformant.api_helpers.get_synonyms_for_cid', return_value=["Caffeine"]):
+            with mock.patch('ChemInformant.api_helpers.get_synonyms_for_cid', return_value=["Caffeine"]):
                 with mock.patch('requests.get') as mock_get:
                     mock_response = mock.Mock()
                     mock_response.status_code = 404

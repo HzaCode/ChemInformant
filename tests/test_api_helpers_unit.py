@@ -6,7 +6,7 @@ import pytest
 import requests
 import requests_cache
 
-from src.ChemInformant import api_helpers
+from ChemInformant import api_helpers
 
 
 class TestCacheSetup:
