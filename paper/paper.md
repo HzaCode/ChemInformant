@@ -13,15 +13,15 @@ tags:
   - high-throughput
 authors:
   - name: Zhiang He
+    orcid: 0009-0009-0171-4578
     affiliation: 1
-    
 affiliations:
   - name: Independent Researcher
     index: 1
 date: "2025-04-15"
 bibliography: paper.bib
 repository: https://github.com/HzaCode/ChemInformant
-version: 2.2
+version: 2.3.0
 license: MIT
 ---
 
