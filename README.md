@@ -14,7 +14,7 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![PyPI - License](https://img.shields.io/pypi/l/ChemInformant.svg)](https://github.com/HzaCode/ChemInformant/blob/main/LICENSE.md)
 [![Docs](https://img.shields.io/badge/Docs-Read_Online-blue?style=flat-square&logo=book&logoColor=white)](https://hezhiang.com/ChemInformant)
-
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16482964.svg)](https://doi.org/10.5281/zenodo.16482964)
 
 
 **ChemInformant** is a robust data acquisition engine for the [PubChem](https.ncbi.nlm.nih.gov/pccompound/) database, engineered for the modern scientific workflow. It intelligently manages network requests, performs rigorous runtime data validation, and delivers analysis-ready results, providing a dependable foundation for any computational chemistry project in Python.
