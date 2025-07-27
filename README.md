@@ -17,7 +17,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16482964.svg)](https://doi.org/10.5281/zenodo.16482964)
 
 
-**ChemInformant** is a robust data acquisition engine for the [PubChem](https.ncbi.nlm.nih.gov/pccompound/) database, engineered for the modern scientific workflow. It intelligently manages network requests, performs rigorous runtime data validation, and delivers analysis-ready results, providing a dependable foundation for any computational chemistry project in Python.
+**ChemInformant** is a robust data acquisition engine for the [PubChem](https://pubchem.ncbi.nlm.nih.gov/)) database, engineered for the modern scientific workflow. It intelligently manages network requests, performs rigorous runtime data validation, and delivers analysis-ready results, providing a dependable foundation for any computational chemistry project in Python.
 
 ---
 
