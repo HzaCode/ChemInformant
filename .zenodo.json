@@ -1,0 +1,25 @@
+{
+    "title": "ChemInformant: A Robust and Workflow-Centric Python Client for High-Throughput PubChem Access",
+    "description": "ChemInformant is a Python client engineered for programmatic access to PubChem, specifically targeting high-throughput and automated data retrieval tasks. Its architecture streamlines the entire workflow from data acquisition to analysis by directly converting large, mixed-type lists of chemical identifiers into analysis-ready Pandas DataFrames. To ensure operational resilience, the package natively integrates a suite of robustness features, including persistent HTTP caching, automatic rate-limiting with exponential backoff retries, and runtime data validation using Pydantic. By systematically addressing critical limitations in existing tools—such as network instability and inefficient batch processing—and offering up to a 48-fold performance increase, ChemInformant delivers a significantly more reliable and efficient component for the modern Python cheminformatics ecosystem.",
+    "upload_type": "software",
+    "creators": [
+        {
+            "name": "He, Zhiang",
+            "affiliation": "Independent Researcher",
+            "orcid": "0000-0000-0000-0000"
+        }
+    ],
+    "keywords": [
+        "python",
+        "pubchem",
+        "chemistry",
+        "api",
+        "pandas",
+        "cache",
+        "pydantic",
+        "cheminformatics",
+        "data science",
+        "high-throughput"
+    ],
+    "license": "MIT"
+}
