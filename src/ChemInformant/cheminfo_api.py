@@ -59,6 +59,7 @@ PROPERTY_ALIASES: Dict[str, List[str]] = {
     "isomeric_smiles": ["IsomericSMILES", "SMILES"],
     "iupac_name": ["IUPACName"],
     "xlogp": ["XLogP"],
+    "inchi": ["InChI"]
 }
 _SPECIAL_PROPS = {"cas", "synonyms"}
 
