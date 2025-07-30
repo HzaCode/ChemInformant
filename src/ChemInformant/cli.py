@@ -9,10 +9,9 @@ import sys
 from .cheminfo_api import (
     get_properties,
     draw_compound,
-    PROPERTY_ALIASES,
-    _SPECIAL_PROPS,
 )
 from .models import NotFoundError, AmbiguousIdentifierError
+from .constants import ALL_PROPS
 
 # --- NEUE ERGÄNZUNG: Importieren der SQL-Helferfunktion ---
 from .sql import df_to_sql
@@ -22,9 +21,37 @@ from .sql import df_to_sql
 
 def main_fetch():
     """
-    Main entry point for the chemfetch command.
+    Main entry point for the chemfetch command-line tool.
+    
+    Provides a command-line interface for retrieving chemical data from PubChem
+    with support for multiple output formats including CSV, JSON, and SQL databases.
+    Supports all ChemInformant features including batch processing, property selection,
+    and the new snake_case standardized format.
+    
+    Command format:
+        chemfetch [identifiers...] [options]
+        
+    Key features:
+        - Multiple output formats: CSV, JSON, SQL database
+        - Property selection: --props for specific properties
+        - Batch modes: --all-properties, --include-3d
+        - Direct SQL export: --format sql -o database.db
+        - Error handling: Shows failed lookups with status information
+        
+    Examples:
+        # Basic usage - core properties to CSV
+        chemfetch aspirin caffeine
+        
+        # Specific properties to JSON
+        chemfetch aspirin --props molecular_weight,xlogp --format json
+        
+        # All properties to SQL database
+        chemfetch aspirin caffeine --all-properties --format sql -o chemicals.db
+        
+        # Include 3D descriptors
+        chemfetch aspirin --include-3d --format csv -o results.csv
     """
-    available_props = sorted(list(PROPERTY_ALIASES.keys()) + list(_SPECIAL_PROPS))
+    available_props = sorted(ALL_PROPS)
 
     parser = argparse.ArgumentParser(
         prog="chemfetch",
@@ -39,13 +66,21 @@ def main_fetch():
     )
 
     parser.add_argument(
-        "--props",
-        default="cas,molecular_weight,iupac_name",
-        help=(
-            "Comma-separated list of properties to fetch. "
-            f"Defaults to 'cas,molecular_weight,iupac_name'. "
-            f"Available: {', '.join(available_props)}"
-        ),
+        "--props", "-p",
+        type=str,
+        default=None,
+        help="Comma-separated list of properties (e.g., 'molecular_weight,xlogp'). If not provided, returns default core property set."
+    )
+    # Add new command line arguments
+    parser.add_argument(
+        "--include-3d",
+        action="store_true",
+        help="Include 3D properties in addition to the default core set."
+    )
+    parser.add_argument(
+        "--all-properties",
+        action="store_true",
+        help="Retrieve all ~40 available standard properties from PubChem."
     )
 
     parser.add_argument(
@@ -74,10 +109,13 @@ def main_fetch():
     # ----------------------------------------------------------------
 
     try:
-        properties_list = [prop.strip() for prop in args.props.split(",")]
-
-        # Call the core API function
-        df = get_properties(args.identifiers, properties_list)
+        # Call the core API function with new parameters
+        df = get_properties(
+            args.identifiers,
+            properties=args.props,
+            include_3d=args.include_3d,
+            all_properties=args.all_properties,
+        )
 
         if df.empty:
             print("No data returned.", file=sys.stderr)
@@ -113,7 +151,30 @@ def main_fetch():
 
 def main_draw():
     """
-    Main entry point for the chemdraw command.
+    Main entry point for the chemdraw command-line tool.
+    
+    Provides a simple command-line interface for visualizing 2D chemical structures
+    directly from the terminal. Fetches structure images from PubChem and displays
+    them using matplotlib.
+    
+    Command format:
+        chemdraw [identifier]
+        
+    Features:
+        - Accepts any ChemInformant identifier (name, CID, SMILES)
+        - Displays structure with compound name as title
+        - Requires matplotlib and PIL (install with: pip install ChemInformant[plot])
+        - High-quality PNG images from PubChem
+        
+    Examples:
+        # Visualize by name
+        chemdraw aspirin
+        
+        # Visualize by CID
+        chemdraw 2244
+        
+        # Visualize by SMILES
+        chemdraw "CC(=O)OC1=CC=CC=C1C(=O)O"
     """
     parser = argparse.ArgumentParser(
         prog="chemdraw",

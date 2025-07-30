@@ -4,6 +4,7 @@ import pandas as pd
 
 from ChemInformant import cheminfo_api
 from ChemInformant.models import Compound, NotFoundError, AmbiguousIdentifierError
+from ChemInformant.constants import CORE_PROPS, THREED_PROPS, ALL_PROPS
 
 
 class TestResolveCid:
@@ -138,6 +139,76 @@ class TestGetProperties:
                 assert result.iloc[0]["status"] == "OK"
                 assert result.iloc[1]["status"] == "NotFoundError"
 
+    def test_get_properties_default_core_set(self):
+        """Verify: When called without any property parameters, returns core property set."""
+        mock_batch_data = {2244: {prop: f"value_{prop}" for prop in CORE_PROPS}}
+        
+        with mock.patch.object(cheminfo_api, '_resolve_to_single_cid', return_value=2244):
+            with mock.patch('ChemInformant.api_helpers.get_batch_properties', return_value=mock_batch_data):
+                result = cheminfo_api.get_properties([2244])
+                
+                # Check that core properties are included but 3D properties are not
+                for prop in CORE_PROPS:
+                    assert prop in result.columns
+                for prop in THREED_PROPS:
+                    assert prop not in result.columns
+                assert len(result.columns) == len(CORE_PROPS) + 3  # +3 for 'input_identifier', 'cid', 'status'
+
+    def test_get_properties_include_3d(self):
+        """Verify: `include_3d=True` adds 3D properties."""
+        all_props_data = {prop: f"value_{prop}" for prop in CORE_PROPS + THREED_PROPS}
+        mock_batch_data = {2244: all_props_data}
+        
+        with mock.patch.object(cheminfo_api, '_resolve_to_single_cid', return_value=2244):
+            with mock.patch('ChemInformant.api_helpers.get_batch_properties', return_value=mock_batch_data):
+                result = cheminfo_api.get_properties([2244], include_3d=True)
+                
+                for prop in CORE_PROPS:
+                    assert prop in result.columns
+                for prop in THREED_PROPS:
+                    assert prop in result.columns
+                assert len(result.columns) == len(CORE_PROPS) + len(THREED_PROPS) + 3
+
+    def test_get_properties_all_properties(self):
+        """Verify: `all_properties=True` gets complete property list."""
+        all_props_data = {prop: f"value_{prop}" for prop in ALL_PROPS}
+        mock_batch_data = {2244: all_props_data}
+        
+        with mock.patch.object(cheminfo_api, '_resolve_to_single_cid', return_value=2244):
+            with mock.patch('ChemInformant.api_helpers.get_batch_properties', return_value=mock_batch_data):
+                result = cheminfo_api.get_properties([2244], all_properties=True)
+                
+                for prop in ALL_PROPS:
+                    assert prop in result.columns
+                assert len(result.columns) == len(ALL_PROPS) + 3
+
+    def test_get_properties_custom_list(self):
+        """Verify: Using aliases to get custom property list."""
+        props = ["tpsa", "charge", "isomeric_smiles"]
+        expected_props_camel = ["TPSA", "Charge", "IsomericSMILES"]  # API return format
+        expected_props_snake = ["tpsa", "charge", "isomeric_smiles"]  # DataFrame column format
+        mock_batch_data = {2244: {prop: f"value_{prop}" for prop in expected_props_camel}}
+        
+        with mock.patch.object(cheminfo_api, '_resolve_to_single_cid', return_value=2244):
+            with mock.patch('ChemInformant.api_helpers.get_batch_properties', return_value=mock_batch_data):
+                result = cheminfo_api.get_properties([2244], properties=props)
+                
+                for prop in expected_props_snake:
+                    assert prop in result.columns
+                assert list(result.columns) == ['input_identifier', 'cid', 'status'] + expected_props_snake
+
+    def test_get_properties_raises_on_unknown_prop(self):
+        """Verify: When requesting an invalid property name, raises ValueError."""
+        with pytest.raises(ValueError, match="Unsupported properties"):
+            cheminfo_api.get_properties([2244], properties=["not_a_real_property"])
+
+    def test_get_properties_raises_on_exclusive_args(self):
+        """Verify: When using mutually exclusive parameters, raises ValueError."""
+        with pytest.raises(ValueError, match="mutually exclusive"):
+            cheminfo_api.get_properties([2244], all_properties=True, include_3d=True)
+        with pytest.raises(ValueError, match="mutually exclusive"):
+            cheminfo_api.get_properties([2244], all_properties=True, properties=["TPSA"])
+
 
 class TestGetCompound:
 
@@ -194,27 +265,32 @@ class TestDrawCompound:
 
     def test_draw_compound_success(self):
         with mock.patch.object(cheminfo_api, '_resolve_to_single_cid', return_value=2519):
-            with mock.patch('ChemInformant.api_helpers.get_synonyms_for_cid', return_value=["Caffeine"]):
+            with mock.patch.object(cheminfo_api.api_helpers, 'get_synonyms_for_cid', return_value=["Caffeine"]):
                 with mock.patch('requests.get') as mock_get:
                     mock_response = mock.Mock()
                     mock_response.status_code = 200
                     mock_response.content = b"fake_png_data"
                     mock_get.return_value = mock_response
                     
-                    with mock.patch('PIL.Image.open') as mock_image_open:
-                        mock_img = mock.Mock()
-                        mock_image_open.return_value = mock_img
+                    with mock.patch('io.BytesIO') as mock_bytesio:
+                        mock_bytesio.return_value = mock.Mock()
                         
-                        with mock.patch('matplotlib.pyplot.show') as mock_show:
-                            with mock.patch('matplotlib.pyplot.imshow') as mock_imshow:
-                                with mock.patch('matplotlib.pyplot.axis') as mock_axis:
-                                    with mock.patch('matplotlib.pyplot.title') as mock_title:
-                                        cheminfo_api.draw_compound("caffeine")
-                                        mock_show.assert_called_once()
+                        with mock.patch('PIL.Image.open') as mock_image_open:
+                            mock_img = mock.Mock()
+                            mock_image_open.return_value = mock_img
+                            
+                            with mock.patch('matplotlib.pyplot.show') as mock_show:
+                                with mock.patch('matplotlib.pyplot.imshow') as mock_imshow:
+                                    with mock.patch('matplotlib.pyplot.axis') as mock_axis:
+                                        with mock.patch('matplotlib.pyplot.title') as mock_title:
+                                            with mock.patch('matplotlib.pyplot.figure') as mock_figure:
+                                                with mock.patch('matplotlib.pyplot.tight_layout') as mock_layout:
+                                                    cheminfo_api.draw_compound("caffeine")
+                                                    mock_show.assert_called_once()
 
     def test_draw_compound_image_request_fails(self):
         with mock.patch.object(cheminfo_api, '_resolve_to_single_cid', return_value=2519):
-            with mock.patch('ChemInformant.api_helpers.get_synonyms_for_cid', return_value=["Caffeine"]):
+            with mock.patch.object(cheminfo_api.api_helpers, 'get_synonyms_for_cid', return_value=["Caffeine"]):
                 with mock.patch('requests.get') as mock_get:
                     mock_response = mock.Mock()
                     mock_response.status_code = 404

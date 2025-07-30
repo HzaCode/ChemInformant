@@ -14,19 +14,36 @@ def df_to_sql(
     **engine_kwargs,
 ) -> None:
     """
-    Persists a DataFrame to an SQL table using SQLAlchemy.
+    Persists a ChemInformant DataFrame to an SQL database table.
 
-    Parameters
-    ----------
-    df : pd.DataFrame
-        The DataFrame to be written to the database.
-    con : str or sqlalchemy.engine.Engine
-        A SQLAlchemy-compatible database URI (e.g., "sqlite:///mylab.db")
-        OR an existing SQLAlchemy Engine object.
-    table : str
-        The name of the SQL table to write to.
-    if_exists : {"fail", "replace", "append"}, default "append"
-        ... (rest of the docstring is the same)
+    This function provides a convenient way to store chemical data retrieved
+    from get_properties() into various SQL databases. Supports SQLite, PostgreSQL,
+    MySQL, and other SQLAlchemy-compatible databases.
+
+    Args:
+        df: DataFrame from get_properties() or similar ChemInformant functions
+        con: Database connection string (e.g., "sqlite:///chemicals.db") 
+             or existing SQLAlchemy Engine object
+        table: Name of the SQL table to create/write to
+        if_exists: Action when table exists - "fail", "replace", or "append"
+        dtype: Dictionary specifying SQL types for specific columns
+        **engine_kwargs: Additional arguments passed to create_engine()
+
+    Examples:
+        >>> # Get chemical data
+        >>> df = get_properties(["aspirin", "caffeine"], properties=["molecular_weight", "xlogp"])
+        
+        >>> # Save to SQLite database
+        >>> df_to_sql(df, "sqlite:///my_chemicals.db", "compounds")
+        
+        >>> # Save to PostgreSQL with specific types
+        >>> df_to_sql(df, "postgresql://user:pass@localhost/db", "chemicals",
+        ...           dtype={"molecular_weight": "REAL", "xlogp": "REAL"})
+
+    Note:
+        - Automatically handles ChemInformant's snake_case column names
+        - Use if_exists="replace" to overwrite existing tables
+        - For large datasets, consider using chunks or specialized bulk loaders
     """
     # If 'con' is a string, create a new engine.
     # Otherwise, assume it's an existing engine.

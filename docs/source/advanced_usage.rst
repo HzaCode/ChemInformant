@@ -5,6 +5,9 @@ Application in Real-World Scientific Workflows
 The core value of ChemInformant lies in its role as a starting point for data science workflows, seamlessly injecting chemical data into Python's powerful scientific computing ecosystem. This page will demonstrate through three cases that more closely resemble real-world research scenarios how ChemInformant can be combined with advanced libraries like **RDKit**, **Scikit-learn**, and **NetworkX** to accomplish diverse tasks ranging from data preprocessing and multi-class classification to community detection.
 
 .. note::
+   All examples use ChemInformant's standardized **snake_case** property names for consistent data handling across workflows.
+
+.. note::
    The examples on this page depend on additional specialized libraries.
 
    .. code-block:: bash
@@ -100,12 +103,14 @@ We can use the **data obtained from ChemInformant** as features to train a machi
        ids.extend(drugs)
        labels.extend([cls] * len(drugs))
 
-   # 2. Use ci to get feature data and calculate TPSA with RDKit
-   df_feat = ci.get_properties(ids, ['molecular_weight', 'xlogp', 'isomeric_smiles'])
+   # 2. Use ci to get comprehensive feature data efficiently
+   # NEW: Using all_properties for comprehensive dataset
+   df_feat = ci.get_properties(ids, all_properties=True)
    df_feat_clean = df_feat[df_feat['status'] == 'OK'].copy()
-   df_feat_clean['tpsa'] = df_feat_clean['isomeric_smiles'].apply(
-       lambda s: rdMolDescriptors.CalcTPSA(Chem.MolFromSmiles(s))
-   )
+   
+   # Extract key features already available from ChemInformant
+   features = ['molecular_weight', 'xlogp', 'tpsa', 'h_bond_donor_count', 
+              'h_bond_acceptor_count', 'rotatable_bond_count']
 
    # 3. Prepare training data and perform cross-validation
    features = ['molecular_weight', 'xlogp', 'tpsa']
