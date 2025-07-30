@@ -1,6 +1,6 @@
-==================================
+=======================================
 Data Models and Exceptions (`models`)
-==================================
+=======================================
 
 .. module:: ChemInformant.models
 
@@ -16,7 +16,6 @@ By defining clear data models, this module ensures that all data consumed by the
    :show-inheritance:
    :member-order: bysource
    :exclude-members: __init__
-   :no-value:
 
 .. rubric:: Custom Exceptions
 

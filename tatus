@@ -1,0 +1,21 @@
+warning: in the working copy of 'examples/ChemInformant_User_Manual_v1.0.ipynb', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/ChemInformant/__init__.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/ChemInformant/cheminfo_api.py', LF will be replaced by CRLF the next time Git touches it
+README.md
+benchmark.py
+docs/source/advanced_usage.rst
+docs/source/api/api_helpers.rst
+docs/source/api/cheminfo_api.rst
+docs/source/api/models.rst
+docs/source/api_reference.rst
+docs/source/basic_usage.rst
+docs/source/cli.rst
+docs/source/index.rst
+examples/ChemInformant_User_Manual_v1.0.ipynb
+paper/paper.md
+src/ChemInformant/__init__.py
+src/ChemInformant/api_helpers.py
+src/ChemInformant/cheminfo_api.py
+src/ChemInformant/cli.py
+src/ChemInformant/sql.py
+tests/test_cheminfo_api_unit.py

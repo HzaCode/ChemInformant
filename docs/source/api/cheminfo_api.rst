@@ -1,6 +1,6 @@
-=============================
+====================================
 Main API Interface (`cheminfo_api`)
-=============================
+====================================
 
 .. module:: ChemInformant.cheminfo_api
 
@@ -21,13 +21,47 @@ This module is the main entry point for all user interactions. It is designed ar
 
 .. rubric:: Convenience Lookups
 
+**Basic Properties**
+
 .. autofunction:: get_weight
 .. autofunction:: get_formula
 .. autofunction:: get_cas
 .. autofunction:: get_iupac_name
+
+**SMILES and Identifiers**
+
 .. autofunction:: get_canonical_smiles
 .. autofunction:: get_isomeric_smiles
+.. autofunction:: get_inchi
+.. autofunction:: get_inchi_key
+
+**Molecular Descriptors**
+
 .. autofunction:: get_xlogp
+.. autofunction:: get_tpsa
+.. autofunction:: get_complexity
+
+**Mass Properties**
+
+.. autofunction:: get_exact_mass
+.. autofunction:: get_monoisotopic_mass
+
+**Molecular Counts**
+
+.. autofunction:: get_h_bond_donor_count
+.. autofunction:: get_h_bond_acceptor_count
+.. autofunction:: get_rotatable_bond_count
+.. autofunction:: get_heavy_atom_count
+.. autofunction:: get_charge
+
+**Stereochemistry**
+
+.. autofunction:: get_atom_stereo_count
+.. autofunction:: get_bond_stereo_count
+.. autofunction:: get_covalent_unit_count
+
+**Synonyms and Names**
+
 .. autofunction:: get_synonyms
 
 .. rubric:: Visualization Functions

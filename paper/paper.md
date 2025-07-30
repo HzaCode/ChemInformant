@@ -21,7 +21,7 @@ affiliations:
 date: "2025-04-15"
 bibliography: paper.bib
 repository: https://github.com/HzaCode/ChemInformant
-version: 2.3.0
+version: 2.4.0
 license: MIT
 ---
 
