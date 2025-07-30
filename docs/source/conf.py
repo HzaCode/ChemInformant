@@ -8,7 +8,7 @@ sys.path.insert(0, os.path.abspath('../..'))
 # -- Project information ------------------------------------------------------
 project   = "ChemInformant"
 author    = "Ang"
-release   = "2.3.0"
+release   = "2.4.0"
 copyright = f"{datetime.now().year}, {author}"
 
 # -- General configuration ----------------------------------------------------

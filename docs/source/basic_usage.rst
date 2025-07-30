@@ -1,19 +1,22 @@
-==========
+===========
 Basic Usage
-==========
+===========
 
 This guide covers the fundamental features of the ChemInformant library, designed to help users quickly get started with common chemical information query tasks.
 
 .. contents:: Contents
     :local:
 
-----------------------------------------------------
+-----------------------------------------------------
 Core Functionality: Bulk Fetching of Multiple Properties
-----------------------------------------------------
+-----------------------------------------------------
 
 The most central feature of ChemInformant is :func:`~ChemInformant.get_properties`. This function is designed for batch processing, allowing users to query multiple chemical properties for a group of compounds in a single call. This approach is significantly more efficient than querying each compound individually in a loop because it effectively consolidates network requests.
 
-The function accepts a list of various identifiers (such as common names, PubChem CIDs, or SMILES strings) and returns a structured Pandas DataFrame, ready for direct use in subsequent data analysis.
+The function accepts a list of various identifiers (such as common names, PubChem CIDs, or SMILES strings) and returns a structured Pandas DataFrame with **standardized snake_case column names**, ready for direct use in subsequent data analysis.
+
+.. note::
+   **Snake_case Property Names**: ChemInformant uses consistent snake_case naming (e.g., ``molecular_weight``, ``h_bond_donor_count``) for all returned data. Both snake_case and CamelCase inputs are accepted, but output is always standardized.
 
 .. code-block:: python
 
@@ -24,7 +27,7 @@ The function accepts a list of various identifiers (such as common names, PubChe
     #    (Aspirin, Caffeine, Acetaminophen)
     identifiers = ['aspirin', 'caffeine', 1983] 
 
-    # 2. Specify the properties you want to fetch
+    # 2. Specify the properties you want to fetch (using snake_case names)
     properties_to_fetch = ['molecular_weight', 'xlogp', 'cas', 'iupac_name']
 
     # 3. Call the core function to perform the query
@@ -43,6 +46,24 @@ Output:
   caffeine            2519.0   OK    194.19            -0.07     58-08-2    1,3,7-trimethylpurine-2,6-dione
   1983                1983.0   OK    151.16            0.51      103-90-2   N-(4-hydroxyphenyl)acetamide
 
+---------------------------------------------------------
+Getting All Properties or Including 3D Descriptors
+---------------------------------------------------------
+
+ChemInformant offers convenient options to retrieve comprehensive data sets:
+
+.. code-block:: python
+
+    # Get all ~40 available properties for a compound
+    complete_data = ci.get_properties(['aspirin'], all_properties=True)
+    print(f"Retrieved {len(complete_data.columns)} columns of data")
+
+    # Get core properties plus 3D molecular descriptors
+    data_with_3d = ci.get_properties(['aspirin'], include_3d=True)
+    
+    # Both approaches are much more efficient than multiple API calls
+
+The ``all_properties=True`` option retrieves every available property from PubChem, including core properties, 3D descriptors, and special properties like CAS numbers and synonyms. The ``include_3d=True`` option adds 3D molecular descriptors to the default core property set.
 
 ------------------------------------------------
 Getting Complete Information for a Single Compound
@@ -108,6 +129,8 @@ Output:
     Molecular weight of aspirin: 180.16
     CAS number for water: 7732-18-5
     Molecular formula of ethanol: C2H6O
+
+ChemInformant provides **22 convenience functions** for individual properties, covering molecular descriptors, structural features, mass properties, and identifiers. All functions return None for compounds that cannot be found, making error handling straightforward.
 
 -----------------------------
 Visualizing Compound Structures

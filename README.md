@@ -99,11 +99,12 @@ print(df)
 | `get_cas(id)`              | CAS Registry Number *(str)*                   |
 | `get_iupac_name(id)`       | IUPAC name *(str)*                            |
 | `get_canonical_smiles(id)` | Canonical SMILES with Canonical→Connectivity fallback *(str)* |
-| `get_isomeric_smiles(id)`  | Isomeric SMILES *(str)*                       |
+| `get_isomeric_smiles(id)`  | Isomeric SMILES with Isomeric→SMILES fallback *(str)* |
 | `get_xlogp(id)`            | XLogP (calculated hydrophobicity) *(float)*   |
 | `get_synonyms(id)`         | List of synonyms *(List[str])*                |
 | `get_compound(id)`         | Full, validated **`Compound`** object (Pydantic v2 model) |
 
+*Note: This table shows key convenience functions for demonstration. ChemInformant provides **22 convenience functions** in total, covering molecular descriptors, mass properties, stereochemistry, and more.*
 
 *All functions accept a **CID, name, or SMILES** and return `None`/`[]` on failure.*
 

@@ -156,10 +156,24 @@ def get_cids_by_name(name: str) -> List[int] | None:
     """
     Fetches PubChem Compound IDs (CIDs) for a given chemical name.
 
-    :param name: The chemical name to search for (e.g., "aspirin").
-    :type name: str
-    :return: A list of integer CIDs matching the name, or ``None`` if not found.
-    :rtype: List[int] | None
+    This function searches PubChem's database for compounds matching the provided
+    chemical name. It can return multiple CIDs if the name matches multiple compounds.
+
+    Args:
+        name: The chemical name to search for (e.g., "aspirin", "acetylsalicylic acid")
+
+    Returns:
+        List of integer CIDs matching the name, or None if not found
+
+    Examples:
+        >>> get_cids_by_name("aspirin")
+        [2244]
+        >>> get_cids_by_name("glucose") 
+        [5793, 64689, ...]  # Multiple isomers/forms
+
+    Note:
+        This function is used internally by get_properties() for name-to-CID resolution.
+        End users should typically use get_properties() instead.
     """
     url  = f"{PUBCHEM_API_BASE}/compound/name/{quote(name)}/cids/JSON"
     data = _fetch_with_ratelimit_and_retry(url)
@@ -169,10 +183,26 @@ def get_cids_by_smiles(smiles: str) -> List[int] | None:
     """
     Fetches PubChem Compound IDs (CIDs) for a given SMILES string.
 
-    :param smiles: The SMILES string representing the molecule.
-    :type smiles: str
-    :return: A list of integer CIDs matching the SMILES, or ``None`` if not found.
-    :rtype: List[int] | None
+    This function searches PubChem for compounds with structures matching the
+    provided SMILES representation. May return multiple CIDs for stereoisomers
+    or different representations of the same molecule.
+
+    Args:
+        smiles: The SMILES string representing the molecule
+                (e.g., "CC(=O)OC1=CC=CC=C1C(=O)O" for aspirin)
+
+    Returns:
+        List of integer CIDs matching the SMILES, or None if not found
+
+    Examples:
+        >>> get_cids_by_smiles("CC(=O)OC1=CC=CC=C1C(=O)O")
+        [2244]
+        >>> get_cids_by_smiles("CCO")  # Ethanol
+        [702]
+
+    Note:
+        This function is used internally by get_properties() for SMILES-to-CID resolution.
+        End users should typically use get_properties() instead.
     """
     url  = f"{PUBCHEM_API_BASE}/compound/smiles/{quote(smiles)}/cids/JSON"
     data = _fetch_with_ratelimit_and_retry(url)
@@ -183,13 +213,31 @@ def get_batch_properties(cids: List[int], props: List[str]) -> Dict[int, Dict[st
     Fetches multiple properties for a batch of CIDs in a single request,
     handling API pagination automatically.
 
-    :param cids: A list of CIDs to query.
-    :type cids: List[int]
-    :param props: A list of property names to retrieve (e.g., "MolecularWeight", "XLogP").
-    :type props: List[str]
-    :return: A dictionary mapping each requested CID to its properties. If a CID
-             was not found or had no properties, it will map to an empty dict.
-    :rtype: Dict[int, Dict[str, Any]]
+    This is the core function for efficient bulk property retrieval from PubChem.
+    It automatically handles API pagination when dealing with large batches and
+    includes rate limiting and retry logic for reliable data fetching.
+
+    Args:
+        cids: List of compound IDs to query
+        props: List of property names in CamelCase format 
+               (e.g., ["MolecularWeight", "XLogP", "CanonicalSMILES"])
+               Must use exact PubChem API property names
+
+    Returns:
+        Dictionary mapping each CID to its properties. CIDs with no data
+        or failed lookups map to empty dictionaries. Properties are returned
+        using the original CamelCase names from PubChem.
+
+    Examples:
+        >>> get_batch_properties([2244, 702], ["MolecularWeight", "XLogP"])
+        {2244: {"CID": 2244, "MolecularWeight": 180.16, "XLogP": 1.2},
+         702: {"CID": 702, "MolecularWeight": 46.07, "XLogP": -0.31}}
+
+    Note:
+        - This function is used internally by get_properties()
+        - Uses PubChem's CamelCase property names, not snake_case
+        - Automatically handles pagination for requests with >1000 compounds
+        - End users should use get_properties() which provides snake_case output
     """
     if not cids or not props:
         return {}
@@ -228,22 +276,36 @@ def get_batch_properties(cids: List[int], props: List[str]) -> Dict[int, Dict[st
 
     # Organize all collected properties by CID
     res = {int(p["CID"]): p for p in all_props if "CID" in p}
-    
+
     # Ensure every originally requested CID has an entry in the final dictionary
     return {cid: res.get(cid, {}) for cid in cids}
 
 
 def get_cas_for_cid(cid: int) -> str | None:
     """
-    Fetches the primary CAS number for a single CID using the PUG-View endpoint.
+    Fetches the primary CAS Registry Number for a single CID using the PUG-View endpoint.
 
-    This function parses the detailed "Names and Identifiers" section of the
-    full data record for a compound.
+    This function accesses PubChem's detailed compound records to extract CAS numbers,
+    which are unique chemical identifiers assigned by the Chemical Abstracts Service.
+    Uses the PUG-View API to parse the "Names and Identifiers" section.
 
-    :param cid: The compound ID to look up.
-    :type cid: int
-    :return: The first found CAS number as a string, or ``None`` if none is found.
-    :rtype: str | None
+    Args:
+        cid: The PubChem compound ID to look up
+
+    Returns:
+        The first found CAS Registry Number as a string (e.g., "50-78-2"),
+        or None if no CAS number is found
+
+    Examples:
+        >>> get_cas_for_cid(2244)  # Aspirin
+        '50-78-2'
+        >>> get_cas_for_cid(702)   # Ethanol
+        '64-17-5'
+
+    Note:
+        This function is used internally by get_properties() and get_cas().
+        It may be slower than standard property queries as it accesses
+        detailed compound records rather than the property API.
     """
     url  = f"{PUG_VIEW_BASE}/compound/{cid}/JSON"
     data = _fetch_with_ratelimit_and_retry(url)
@@ -262,12 +324,28 @@ def get_cas_for_cid(cid: int) -> str | None:
 
 def get_synonyms_for_cid(cid: int) -> List[str]:
     """
-    Fetches all synonyms for a given CID.
+    Fetches all known synonyms (alternative names) for a given CID.
 
-    :param cid: The compound ID to look up.
-    :type cid: int
-    :return: A list of synonym strings. Returns an empty list if no synonyms are found.
-    :rtype: List[str]
+    This function retrieves the comprehensive list of names associated with a compound,
+    including common names, systematic names, brand names, and other identifiers
+    from PubChem's synonyms database.
+
+    Args:
+        cid: The PubChem compound ID to look up
+
+    Returns:
+        List of synonym strings in order of preference/frequency.
+        Returns empty list if no synonyms are found.
+
+    Examples:
+        >>> get_synonyms_for_cid(2244)  # Aspirin
+        ['aspirin', 'acetylsalicylic acid', '2-acetyloxybenzoic acid', ...]
+        >>> get_synonyms_for_cid(702)   # Ethanol  
+        ['ethanol', 'ethyl alcohol', 'grain alcohol', ...]
+
+    Note:
+        This function is used internally by get_properties() and get_synonyms().
+        The first synonym in the list is typically the preferred/most common name.
     """
     url  = f"{PUBCHEM_API_BASE}/compound/cid/{cid}/synonyms/JSON"
     data = _fetch_with_ratelimit_and_retry(url)

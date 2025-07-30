@@ -33,18 +33,38 @@ ChemInformant provides a suite of command-line interface (CLI) tools, designed t
 
 .. option:: --props <property_list>
 
-   A comma-separated list of properties to precisely specify which data to retrieve for each identifier. If the user does not provide this option, `chemfetch` will use a default set of properties: ``cas,molecular_weight,iupac_name``.
+   A comma-separated list of properties to precisely specify which data to retrieve for each identifier. If the user does not provide this option, `chemfetch` will use the default core property set (20+ essential properties including molecular_weight, formula, smiles, etc.).
 
-   The complete list of available properties includes:
+   .. note::
+      **Property Names Use snake_case Format**
 
-   * ``cas``: CAS Registry Number, a common chemical identifier.
+      ChemInformant uses standardized snake_case property names (e.g., ``molecular_weight``, ``h_bond_donor_count``). 
+      Both snake_case and CamelCase inputs are accepted, but output is always in snake_case for consistency.
+
+   The complete list of available properties includes **Core Properties** (default set):
+
    * ``molecular_weight``: Molecular weight, in g/mol.
-   * ``molecular_formula``: Molecular formula, indicating the number of atoms of each element in the compound.
-   * ``canonical_smiles``: Canonical SMILES string.
-   * ``isomeric_smiles``: Isomeric SMILES string.
+   * ``molecular_formula``: Molecular formula.
+   * ``canonical_smiles``, ``isomeric_smiles``: SMILES representations.
    * ``iupac_name``: The systematic name established by IUPAC.
    * ``xlogp``: Calculated octanol-water partition coefficient.
-   * ``synonyms``: A list of all known synonyms.
+   * ``tpsa``: Topological polar surface area.
+   * ``complexity``: Molecular complexity score.
+   * ``h_bond_donor_count``, ``h_bond_acceptor_count``: Hydrogen bonding properties.
+   * ``rotatable_bond_count``, ``heavy_atom_count``: Molecular structure counts.
+   * ``charge``: Formal molecular charge.
+   * ``atom_stereo_count``, ``bond_stereo_count``: Stereochemistry information.
+   * ``covalent_unit_count``: Number of covalent units.
+   * ``in_ch_i``, ``in_ch_i_key``: InChI identifiers.
+   * ``cas``: CAS Registry Number.
+   * ``synonyms``: List of all known synonyms.
+
+   **3D Properties** (available with ``--include-3d``):
+
+   * ``volume_3d``: 3D molecular volume.
+   * ``feature_count_3d``, ``feature_acceptor_count_3d``, etc.: 3D pharmacophore features.
+   * ``conformer_count_3d``: Number of conformers.
+   * And more spatial descriptors...
 
 .. option:: -f, --format <format_type>
 
@@ -54,6 +74,14 @@ ChemInformant provides a suite of command-line interface (CLI) tools, designed t
    * ``csv``: Comma-separated values.
    * ``json``: JSON array output.
    * ``sql``: Writes to a SQLite database (requires ``--output``).
+
+.. option:: --include-3d
+
+   Include 3D molecular descriptors in addition to the default core properties. This option is ignored when ``--props`` is specified. The 3D properties include volume_3d, feature_count_3d, conformer_count_3d, and other spatial descriptors.
+
+.. option:: --all-properties
+
+   Retrieve all ~40 available properties from PubChem, including core properties, 3D descriptors, and special properties like CAS and synonyms. This option is mutually exclusive with ``--props`` and ``--include-3d``.
 
 .. option:: -o, --output <file_path>
 
@@ -75,7 +103,29 @@ ChemInformant provides a suite of command-line interface (CLI) tools, designed t
       aspirin            2244     OK      50-78-2   180.16           2-(acetyloxy)benzoic acid
       caffeine           2519     OK      58-08-2   194.19           1,3,7-trimethylpurine-2,6-dione
 
-2. **Valid and Invalid Identifiers**
+2. **Get All Properties**
+
+   .. code-block:: bash
+
+      chemfetch aspirin --all-properties --format csv -o aspirin_complete.csv
+
+   This retrieves all ~40 available properties for aspirin and saves to CSV.
+
+3. **Include 3D Descriptors**
+
+   .. code-block:: bash
+
+      chemfetch aspirin --include-3d
+
+   This includes 3D molecular descriptors in addition to the core property set.
+
+4. **Custom Property Selection**
+
+   .. code-block:: bash
+
+      chemfetch aspirin caffeine --props "molecular_weight,xlogp,tpsa,h_bond_donor_count"
+
+5. **Valid and Invalid Identifiers**
 
    .. code-block:: bash
 
@@ -85,10 +135,10 @@ ChemInformant provides a suite of command-line interface (CLI) tools, designed t
 
    .. code-block:: text
 
-      input_identifier         cid   status         cas     molecular_weight  iupac_name
-      caffeine                 2519  OK             58-08-2 194.19            1,3,7-trimethylpurine-2,6-dione
-      ThisIsA_FakeCompound     <NA>  NotFoundError  <NA>    NaN               <NA>
-      999999999                <NA>  NotFoundError  <NA>    NaN               <NA>
+      input_identifier         cid   status         molecular_weight  xlogp  cas     
+      caffeine                 2519  OK             194.19            -0.07  58-08-2 
+      ThisIsA_FakeCompound     <NA>  NotFoundError  <NA>              <NA>   <NA>    
+      999999999                <NA>  NotFoundError  <NA>              <NA>   <NA>
 
 **Using `chemfetch` in Data Processing Pipelines**
 
