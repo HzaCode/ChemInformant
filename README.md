@@ -5,7 +5,6 @@
 
 [![Total Downloads](https://img.shields.io/pepy/dt/cheminformant?style=flat-square&color=306998&label=Downloads&logo=python)](https://pepy.tech/project/cheminformant)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ba35e3e2f5224858bcaeb8f9c4ee2838)](https://app.codacy.com/gh/HzaCode/ChemInformant/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
-
 <a href="https://joss.theoj.org/papers/b263ab8f865610c7c7a7f981035f78f7"><img src="https://joss.theoj.org/papers/b263ab8f865610c7c7a7f981035f78f7/status.svg"></a>
 [![PyPI version](https://img.shields.io/pypi/v/ChemInformant.svg)](https://pypi.org/project/ChemInformant/)
 [![Python Version](https://img.shields.io/badge/python-%3E%3D3.8-blue.svg)](https://pypi.org/project/ChemInformant/)
@@ -14,7 +13,8 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![PyPI - License](https://img.shields.io/pypi/l/ChemInformant.svg)](https://github.com/HzaCode/ChemInformant/blob/main/LICENSE.md)
 [![Docs](https://img.shields.io/badge/Docs-Read_Online-blue?style=flat-square&logo=book&logoColor=white)](https://hezhiang.com/ChemInformant)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16482964.svg)](https://doi.org/10.5281/zenodo.16482964)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16623785.svg)](https://doi.org/10.5281/zenodo.16623785)
+
 
 
 **ChemInformant** is a robust data acquisition engine for the [PubChem](https://pubchem.ncbi.nlm.nih.gov/) database, engineered for the modern scientific workflow. It intelligently manages network requests, performs rigorous runtime data validation, and delivers analysis-ready results, providing a dependable foundation for any computational chemistry project in Python.
