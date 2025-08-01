@@ -32,7 +32,7 @@ ChemInformant is a Python client for high-throughput, programmatic access to Pub
 
 ## Statement of Need
 
-Automated cheminformatics workflows require robust and efficient data access, but researchers face recurring challenges with existing PubChem clients. Network reliability is a primary concern. The PubChem API enforces dynamic rate limits, which can halt automated scripts [@PubChemUsagePolicy]. Many clients, like PubChemPy [@PubChemPy], lack built-in request throttling, retries, or persistent caching, forcing users to implement boilerplate code to handle network errors and redundant requests.
+Automated cheminformatics workflows require robust and efficient data access, but researchers face recurring challenges with existing PubChem clients. Network reliability is a primary concern. The PubChem API [@Kim2018PUGREST] enforces dynamic rate limits, which can halt automated scripts [@PubChemUsagePolicy]. Many clients, like PubChemPy [@PubChemPy], lack built-in request throttling, retries, or persistent caching, forcing users to implement boilerplate code to handle network errors and redundant requests.
 
 Batch processing is also often inefficient. Workflows with mixed-type identifiers (e.g., names and CIDs) require manual pre-processing. Furthermore, a single invalid identifier in a large batch can cause an entire query to fail without clear error reporting, hindering data acquisition pipelines.
 
@@ -40,8 +40,7 @@ ChemInformant addresses these gaps by natively integrating these critical featur
 
 ## State of the Field and Comparison
 
-To contextualize `ChemInformant`, its features were compared against related tools (**Table 1**). The maintenance status of some libraries is noteworthy; for instance, PubChemPy has not had a formal release since 2017. This highlights the need for a modern, actively maintained client in the Python ecosystem.
-
+To contextualize `ChemInformant`, its features were compared against related tools including PubChemPy [@PubChemPy], PubChemR [@PubChemR], webchem [@webchem], ChemSpiPy [@ChemSpiPy], and PubChem4J [@PubChem4J] (**Table 1**). The maintenance status of some libraries is noteworthy; for instance, PubChemPy has not had a formal release since 2017.
 **Table 1: Comparative analysis of key features in mainstream chemical information clients.**
 
 | Key Feature | **ChemInformant** | PubChemPy | PubChemR | webchem | ChemSpiPy | PubChem4J |
