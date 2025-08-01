@@ -16,7 +16,7 @@
 [![PyPI - License](https://img.shields.io/pypi/l/ChemInformant.svg)](https://github.com/HzaCode/ChemInformant/blob/main/LICENSE.md)
 [![Docs](https://img.shields.io/badge/Docs-Read_Online-blue?style=flat-square&logo=book&logoColor=white)](https://hezhiang.com/ChemInformant)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16623785.svg)](https://doi.org/10.5281/zenodo.16623785)
-[![Citation](https://img.shields.io/badge/citation-BibTeX-blue?logo=tex&logoColor=white)](https://doi.org/10.5281/zenodo.16623785)
+
 
 
 
