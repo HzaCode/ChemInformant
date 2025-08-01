@@ -41,6 +41,7 @@ ChemInformant addresses these gaps by natively integrating these critical featur
 ## State of the Field and Comparison
 
 To contextualize `ChemInformant`, its features were compared against related tools including PubChemPy [@PubChemPy], PubChemR [@PubChemR], webchem [@webchem], ChemSpiPy [@ChemSpiPy], and PubChem4J [@PubChem4J] (**Table 1**). The maintenance status of some libraries is noteworthy; for instance, PubChemPy has not had a formal release since 2017.
+
 **Table 1: Comparative analysis of key features in mainstream chemical information clients.**
 
 | Key Feature | **ChemInformant** | PubChemPy | PubChemR | webchem | ChemSpiPy | PubChem4J |
