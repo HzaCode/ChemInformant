@@ -28,7 +28,7 @@ license: MIT
 
 ## Summary
 
-ChemInformant is a Python client for high-throughput, programmatic access to PubChem. It streamlines automated data retrieval by converting large, mixed-type lists of chemical identifiers directly into analysis-ready Pandas DataFrames [@Pandas]. To ensure resilience, the package integrates persistent HTTP caching, automatic rate-limiting with exponential backoff retries, and runtime data validation using Pydantic [@Pydantic]. By addressing critical limitations in existing tools, such as network instability and inefficient batch processing, ChemInformant offers up to a 48-fold performance increase, providing a more reliable and efficient component for the modern Python cheminformatics ecosystem.
+ChemInformant is a Python client for high-throughput, programmatic access to PubChem. It streamlines automated data retrieval by converting large, mixed-type lists of chemical identifiers directly into analysis-ready Pandas DataFrames [@Pandas]. To ensure resilience, the package integrates persistent HTTP caching, automatic rate-limiting with exponential backoff retries, and runtime data validation using Pydantic [@Pydantic]. By addressing critical limitations in existing tools, such as network instability and inefficient batch processing, ChemInformant offers up to a 48-fold performance increase compared to the widely-used PubChemPy library, providing a more reliable and efficient component for the modern Python cheminformatics ecosystem.
 
 ## Statement of Need
 
