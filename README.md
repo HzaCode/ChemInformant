@@ -11,7 +11,7 @@
   </a>
 </p>
 
-
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.08341/status.svg)](https://doi.org/10.21105/joss.08341)
 [![PyPI version](https://img.shields.io/pypi/v/ChemInformant.svg)](https://pypi.org/project/ChemInformant/)
 [![Python Version](https://img.shields.io/badge/python-%3E%3D3.8-blue.svg)](https://pypi.org/project/ChemInformant/)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/HzaCode/ChemInformant/tests.yml?label=Build)](https://github.com/HzaCode/ChemInformant/actions/workflows/tests.yml)
@@ -19,7 +19,7 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![PyPI - License](https://img.shields.io/pypi/l/ChemInformant.svg)](https://github.com/HzaCode/ChemInformant/blob/main/LICENSE.md)
 [![Docs](https://img.shields.io/badge/Docs-Read_Online-blue?style=flat-square\&logo=book\&logoColor=white)](https://hezhiang.com/ChemInformant)[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ba35e3e2f5224858bcaeb8f9c4ee2838)](https://app.codacy.com/gh/HzaCode/ChemInformant/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16623785.svg)](https://doi.org/10.5281/zenodo.16623785)
+
 
 **ChemInformant** is a robust data acquisition engine for the [PubChem](https://pubchem.ncbi.nlm.nih.gov/) database, engineered for the modern scientific workflow. It intelligently manages network requests, performs rigorous runtime data validation, and delivers analysis-ready results, providing a dependable foundation for any computational chemistry project in Python.
 
@@ -158,14 +158,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) f
 ### 📑 Citation
 
 ```bibtex
-@software{ChemInformant,
-  title     = {ChemInformant},
-  author    = {He, Zhiang},
+@article{He2025,
+  doi       = {10.21105/joss.08341},
+  url       = {https://doi.org/10.21105/joss.08341},
   year      = {2025},
-  version   = {2.4.0},
-  publisher = {Zenodo},
-  doi       = {10.5281/zenodo.16623785},
-  url       = {https://doi.org/10.5281/zenodo.16623785},
-  note      = {Software}
+  publisher = {The Open Journal},
+  volume    = {10},
+  number    = {112},
+  pages     = {8341},
+  author    = {He, Zhiang},
+  title     = {ChemInformant: A Robust and Workflow-Centric Python Client for High-Throughput PubChem Access},
+  journal   = {Journal of Open Source Software}
 }
+
 ```
