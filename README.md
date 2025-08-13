@@ -11,7 +11,7 @@
   </a>
 </p>
 
-<a href="https://joss.theoj.org/papers/b263ab8f865610c7c7a7f981035f78f7"><img src="https://joss.theoj.org/papers/b263ab8f865610c7c7a7f981035f78f7/status.svg"></a>
+
 [![PyPI version](https://img.shields.io/pypi/v/ChemInformant.svg)](https://pypi.org/project/ChemInformant/)
 [![Python Version](https://img.shields.io/badge/python-%3E%3D3.8-blue.svg)](https://pypi.org/project/ChemInformant/)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/HzaCode/ChemInformant/tests.yml?label=Build)](https://github.com/HzaCode/ChemInformant/actions/workflows/tests.yml)
