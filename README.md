@@ -2,14 +2,7 @@
 
 # 🧪 ChemInformant <img src="https://raw.githubusercontent.com/HzaCode/ChemInformant/main/images/logo.png" align="right" width="120px" />
 
-<p style="margin:12px 0; text-align:left;">
-  <a href="https://pepy.tech/project/cheminformant">
-    <img
-      src="https://img.shields.io/pepy/dt/cheminformant?style=flat-square&color=306998&label=Downloads&logo=python"
-      alt="Total Downloads"
-      height="70">
-  </a>
-</p>
+[![Total Downloads](https://img.shields.io/pepy/dt/cheminformant?style=for-the-badge&color=306998&label=Downloads&logo=python)](https://pepy.tech/project/cheminformant)
 
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.08341/status.svg)](https://doi.org/10.21105/joss.08341)
 [![PyPI version](https://img.shields.io/pypi/v/ChemInformant.svg)](https://pypi.org/project/ChemInformant/)
