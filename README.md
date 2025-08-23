@@ -1,5 +1,3 @@
-
-
 # 🧪 ChemInformant <img src="https://raw.githubusercontent.com/HzaCode/ChemInformant/main/images/logo.png" align="right" width="120px" />
 
 [![Total Downloads](https://img.shields.io/pepy/dt/cheminformant?style=for-the-badge&color=306998&label=Downloads&logo=python)](https://pepy.tech/project/cheminformant)
@@ -20,19 +18,19 @@
 
 ### ✨ Key Features
 
-* **Analysis-Ready Pandas/SQL Output:** The core API (`get_properties`) returns either a clean Pandas DataFrame or a direct SQL output, eliminating data wrangling boilerplate and enabling immediate integration with both the Python data science ecosystem and modern database workflows.
+*   **Analysis-Ready Pandas/SQL Output:** The core API (`get_properties`) returns either a clean Pandas DataFrame or a direct SQL output, eliminating data wrangling boilerplate and enabling immediate integration with both the Python data science ecosystem and modern database workflows.
 
-* **Automated Network Reliability:** Ensures your workflows run flawlessly with built-in persistent caching, smart rate-limiting, and automatic retries. It also transparently handles API pagination (`ListKey`) for large-scale queries, delivering complete result sets without any manual intervention.
+*   **Automated Network Reliability:** Ensures your workflows run flawlessly with built-in persistent caching, smart rate-limiting, and automatic retries. It also transparently handles API pagination (`ListKey`) for large-scale queries, delivering complete result sets without any manual intervention.
 
-* **Flexible & Fault-Tolerant Input:** Natively accepts mixed lists of identifiers (names, CIDs, SMILES) and intelligently handles any invalid inputs by flagging them with a clear status in the output, ensuring a single bad entry never fails an entire batch operation.
+*   **Flexible & Fault-Tolerant Input:** Natively accepts mixed lists of identifiers (names, CIDs, SMILES) and intelligently handles any invalid inputs by flagging them with a clear status in the output, ensuring a single bad entry never fails an entire batch operation.
 
-* **A Dual API for Simplicity and Power:** Offers a clear `get_<property>()` convenience layer for quick lookups, backed by a powerful `get_properties` engine for high-performance batch operations.
+*   **A Dual API for Simplicity and Power:** Offers a clear `get_<property>()` convenience layer for quick lookups, backed by a powerful `get_properties` engine for high-performance batch operations.
 
-* **Guaranteed Data Integrity:** Employs Pydantic v2 models for rigorous, runtime data validation when using the object-based API, preventing malformed or unexpected data from corrupting your analysis pipeline.
+*   **Guaranteed Data Integrity:** Employs Pydantic v2 models for rigorous, runtime data validation when using the object-based API, preventing malformed or unexpected data from corrupting your analysis pipeline.
 
-* **Terminal-Ready CLI Tools:** Includes `chemfetch` and `chemdraw` for rapid data retrieval and 2D structure visualization directly from your terminal, perfect for quick lookups without writing a script.
+*   **Terminal-Ready CLI Tools:** Includes `chemfetch` and `chemdraw` for rapid data retrieval and 2D structure visualization directly from your terminal, perfect for quick lookups without writing a script.
 
-* **Modern and Actively Maintained:** Built on a contemporary tech stack for long-term consistency and compatibility, providing a reliable alternative to older or less frequently updated libraries.
+*   **Modern and Actively Maintained:** Built on a contemporary tech stack for long-term consistency and compatibility, providing a reliable alternative to older or less frequently updated libraries.
 
 ---
 
@@ -110,17 +108,19 @@ print(df)
 
 ChemInformant also includes handy command-line tools for quick lookups directly from your terminal:
 
-* **`chemfetch`**: Fetches properties for one or more compounds.
+*   **`chemfetch`**: Fetches properties for one or more compounds.
 
-  ```bash
-  chemfetch aspirin --props "cas,molecular_weight,iupac_name"
-  ```
+    ```bash
+    chemfetch aspirin --props "cas,molecular_weight,iupac_name"
+    ```
 
-* **`chemdraw`**: Renders the 2D structure of a compound.
+*   **`chemdraw`**: Renders the 2D structure of a compound.
 
-  ```bash
-  chemdraw aspirin
-  ```
+    ```bash
+    chemdraw aspirin
+    ```
+
+<img src="https://raw.githubusercontent.com/HzaCode/ChemInformant/main/wide-cli-demo.gif" width="100%">
 
 ---
 
@@ -128,9 +128,9 @@ ChemInformant also includes handy command-line tools for quick lookups directly 
 
 For a deep dive, please see our detailed guides:
 
-* **➡️ Online Documentation:** The **[official documentation site](https://hezhiang.com/ChemInformant)** contains complete API references, guides, and usage examples. **This is the most comprehensive resource.**
-* **➡️ Interactive User Manual:** Our [**Jupyter Notebook Tutorial**](examples/ChemInformant_User_Manual_v1.0.ipynb) provides a complete, end-to-end walkthrough. This is the best place to start for a hands-on experience.
-* **➡️ Performance Benchmarks:** You can review and run our [**Benchmark Script**](./benchmark.py) to see the performance advantages of batching and caching.
+*   **➡️ Online Documentation:** The **[official documentation site](https://hezhiang.com/ChemInformant)** contains complete API references, guides, and usage examples. **This is the most comprehensive resource.**
+*   **➡️ Interactive User Manual:** Our [**Jupyter Notebook Tutorial**](examples/ChemInformant_User_Manual_v1.0.ipynb) provides a complete, end-to-end walkthrough. This is the best place to start for a hands-on experience.
+*   **➡️ Performance Benchmarks:** You can review and run our [**Benchmark Script**](./benchmark.py) to see the performance advantages of batching and caching.
 
 ---
 
