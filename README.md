@@ -1,16 +1,49 @@
-# 🧪 ChemInformant <img src="https://raw.githubusercontent.com/HzaCode/ChemInformant/main/images/logo.png" align="right" width="120px" />
+
+<div align="center">
+
+<img src="https://raw.githubusercontent.com/HzaCode/ChemInformant/main/images/logo.png" width="200px" />
+
+# ChemInformant
+
+*A Robust Data Acquisition Engine for the Modern Scientific Workflow*
+
+<br>
 
 [![Total Downloads](https://img.shields.io/pepy/dt/cheminformant?style=for-the-badge&color=306998&label=Downloads&logo=python)](https://pepy.tech/project/cheminformant)
 
-[![DOI](https://joss.theoj.org/papers/10.21105/joss.08341/status.svg)](https://doi.org/10.21105/joss.08341)
-[![PyPI version](https://img.shields.io/pypi/v/ChemInformant.svg)](https://pypi.org/project/ChemInformant/)
-[![Python Version](https://img.shields.io/badge/python-%3E%3D3.8-blue.svg)](https://pypi.org/project/ChemInformant/)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/HzaCode/ChemInformant/tests.yml?label=Build)](https://github.com/HzaCode/ChemInformant/actions/workflows/tests.yml)
-![coverage](https://cdn.jsdelivr.net/gh/HzaCode/ChemInformant@gh-pages/coverage.svg)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![PyPI - License](https://img.shields.io/pypi/l/ChemInformant.svg)](https://github.com/HzaCode/ChemInformant/blob/main/LICENSE.md)
-[![Docs](https://img.shields.io/badge/Docs-Read_Online-blue?style=flat-square\&logo=book\&logoColor=white)](https://hezhiang.com/ChemInformant)[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ba35e3e2f5224858bcaeb8f9c4ee2838)](https://app.codacy.com/gh/HzaCode/ChemInformant/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+<p>
+    <a href="https://doi.org/10.21105/joss.08341">
+        <img src="https://joss.theoj.org/papers/10.21105/joss.08341/status.svg" alt="DOI">
+    </a>
+    <a href="https://pypi.org/project/ChemInformant/">
+        <img src="https://img.shields.io/pypi/v/ChemInformant.svg" alt="PyPI version">
+    </a>
+    <a href="https://pypi.org/project/ChemInformant/">
+        <img src="https://img.shields.io/badge/python-%3E%3D3.8-blue.svg" alt="Python Version">
+    </a>
+    <a href="https://github.com/HzaCode/ChemInformant/blob/main/LICENSE.md">
+        <img src="https://img.shields.io/pypi/l/ChemInformant.svg" alt="License">
+    </a>
+</p>
 
+<p>
+    <a href="https://github.com/HzaCode/ChemInformant/actions/workflows/tests.yml">
+        <img src="https://img.shields.io/github/actions/workflow/status/HzaCode/ChemInformant/tests.yml?label=Build" alt="Build Status">
+    </a>
+    <a href="https://cdn.jsdelivr.net/gh/HzaCode/ChemInformant@gh-pages/coverage.svg">
+        <img src="https://cdn.jsdelivr.net/gh/HzaCode/ChemInformant@gh-pages/coverage.svg" alt="coverage">
+    </a>
+    <a href="https://github.com/psf/black">
+        <img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style: black">
+    </a>
+    <a href="https://app.codacy.com/gh/HzaCode/ChemInformant/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade">
+        <img src="https://app.codacy.com/project/badge/Grade/ba35e3e2f5224858bcaeb8f9c4ee2838" alt="Codacy Badge">
+    </a>
+</p>
+
+</div>
+
+---
 
 **ChemInformant** is a robust data acquisition engine for the [PubChem](https://pubchem.ncbi.nlm.nih.gov/) database, engineered for the modern scientific workflow. It intelligently manages network requests, performs rigorous runtime data validation, and delivers analysis-ready results, providing a dependable foundation for any computational chemistry project in Python.
 
@@ -71,8 +104,6 @@ ci.df_to_sql(df, "sqlite:///chem_data.db", "results", if_exists="replace")
 
 # 5. Analyze your results!
 print(df)
-
-
 ```
 
 **Output:**
@@ -120,7 +151,9 @@ ChemInformant also includes handy command-line tools for quick lookups directly 
     chemdraw aspirin
     ```
 
-<img src="https://raw.githubusercontent.com/HzaCode/ChemInformant/main/wide-cli-demo.gif" width="100%">
+<p align="center">
+  <img src="https://raw.githubusercontent.com/HzaCode/ChemInformant/main/wide-cli-demo.gif" width="100%">
+</p>
 
 ---
 
@@ -136,7 +169,7 @@ For a deep dive, please see our detailed guides:
 
 ### 🤔 Why ChemInformant?
 
-ChemInformant's core mission is to serve as a high-performance data backbone for the Python cheminformatics ecosystem. By delivering clean, validated, and analysis-ready Pandas DataFrames, it enables researchers to effortlessly pipe PubChem data into powerful toolkits like RDKit, Scikit-learn, or custom machine learning models, transforming multi-step data acquisition and wrangling tasks into single, elegant lines of code.
+> ChemInformant's core mission is to serve as a high-performance data backbone for the Python cheminformatics ecosystem. By delivering clean, validated, and analysis-ready Pandas DataFrames, it enables researchers to effortlessly pipe PubChem data into powerful toolkits like RDKit, Scikit-learn, or custom machine learning models, transforming multi-step data acquisition and wrangling tasks into single, elegant lines of code.
 
 A detailed comparison with other existing tools is provided in our [JOSS paper](https://github.com/HzaCode/ChemInformant/blob/main/paper/paper.md).
 
@@ -164,4 +197,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) f
   journal   = {Journal of Open Source Software}
 }
 
-```
