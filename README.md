@@ -33,8 +33,8 @@
     <a href="https://cdn.jsdelivr.net/gh/HzaCode/ChemInformant@gh-pages/coverage.svg">
         <img src="https://cdn.jsdelivr.net/gh/HzaCode/ChemInformant@gh-pages/coverage.svg" alt="coverage">
     </a>
-    <a href="https://github.com/psf/black">
-        <img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style: black">
+    <a href="https://github.com/astral-sh/ruff">
+        <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff">
     </a>
     <a href="https://app.codacy.com/gh/HzaCode/ChemInformant/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade">
         <img src="https://app.codacy.com/project/badge/Grade/ba35e3e2f5224858bcaeb8f9c4ee2838" alt="Codacy Badge">

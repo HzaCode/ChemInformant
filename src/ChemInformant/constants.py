@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Centralised property lists and aliases for the get_properties() function.
 This file establishes snake_case as the canonical internal format.
@@ -25,14 +24,14 @@ def _snake_case(s: str) -> str:
     """Converts CamelCase to snake_case, handling specifics like '3D'."""
     # First handle 3D suffix specifically
     s = s.replace('3D', '_3D')
-    
+
     # Standard CamelCase to snake_case conversion
     s1 = re.sub('([a-z0-9])([A-Z])', r'\1_\2', s)
     s2 = re.sub('([A-Z])([A-Z][a-z])', r'\1_\2', s1)
-    
+
     # Convert to lowercase and clean up any double underscores
     result = s2.lower().replace('__', '_')
-    
+
     return result
 
 # --- 2. Standardized snake_case Property Lists (Canonical Internal Format) ---
@@ -59,23 +58,23 @@ THREED_PROPS_SET = {
 CORE_PROPS_SET = {
     # Basic molecular information
     "molecular_formula", "molecular_weight", "exact_mass", "monoisotopic_mass",
-    
+
     # SMILES representations
     "canonical_smiles", "isomeric_smiles",
-    
+
     # Chemical identifiers and names
     "iupac_name", "cas", "synonyms",
-    
+
     # Key molecular descriptors for drug discovery and chemical analysis
     "xlogp", "tpsa", "complexity",
-    
+
     # Hydrogen bonding and basic molecular features
     "h_bond_donor_count", "h_bond_acceptor_count", "rotatable_bond_count",
     "heavy_atom_count", "charge",
-    
+
     # Chemical structure details
     "atom_stereo_count", "bond_stereo_count", "covalent_unit_count",
-    
+
     # InChI identifiers (standard chemical identifier)
     "in_ch_i", "in_ch_i_key"
 }
@@ -83,12 +82,12 @@ CORE_PROPS_SET = {
 CORE_PROPS: list[str] = sorted([p for p in ALL_PROPS if p in CORE_PROPS_SET])
 THREED_PROPS: list[str] = sorted([p for p in ALL_PROPS if p in THREED_PROPS_SET])
 
-# All other properties not in core or 3D categories  
+# All other properties not in core or 3D categories
 OTHER_PROPS: list[str] = sorted([p for p in ALL_PROPS if p not in CORE_PROPS_SET and p not in THREED_PROPS_SET])
 
 # --- 3. Alias Map -> Maps any user input to the standardized snake_case name ---
 PROPERTY_ALIASES: dict[str, str] = {p: p for p in ALL_PROPS} # snake_case -> snake_case
-PROPERTY_ALIASES.update({camel: snake for camel, snake in CAMEL_TO_SNAKE.items()}) # CamelCase -> snake_case
+PROPERTY_ALIASES.update(dict(CAMEL_TO_SNAKE.items())) # CamelCase -> snake_case
 PROPERTY_ALIASES.update({camel.lower(): snake for camel, snake in CAMEL_TO_SNAKE.items()}) # lowercase -> snake_case
 PROPERTY_ALIASES.update({snake.replace('_', ''): snake for snake in ALL_PROPS}) # flatcase -> snake_case
 

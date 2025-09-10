@@ -1,11 +1,11 @@
 import os
-import time
 import shutil
+import time
 from pathlib import Path
 from unittest import mock
-import importlib
 
 import requests
+
 import ChemInformant as ci
 from ChemInformant import api_helpers
 

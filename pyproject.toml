@@ -8,14 +8,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ChemInformant"
-version = "2.4.1"
+version = "2.4.2"
 authors = [
   { name = "Zhiang He", email = "ang@hezhiang.com" },
 ]
 description = "A robust and high-throughput Python client for the PubChem API, designed for automated data retrieval and analysis"
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.8"
-license = { file = "LICENSE" }
+license = "MIT"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
@@ -23,7 +23,6 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering :: Chemistry",
 ]
@@ -72,7 +71,7 @@ dev = [
     "pytest>=7.0",
     "pytest-mock>=3.5",
     "pytest-cov>=2.12",
-    "black"
+    "ruff"
 ]
 
 [tool.setuptools.packages.find]
@@ -80,3 +79,39 @@ where = ["src"]
 
 [tool.coverage.run]
 source = ["ChemInformant"]
+
+# ---------------------------
+#  Ruff configuration
+# ---------------------------
+[tool.ruff]
+# Set line length to match black formatter
+line-length = 88
+target-version = "py38"
+
+[tool.ruff.lint]
+# Enabled rule sets, replacing multiple tools:
+# E, W: pycodestyle (replaces flake8)
+# F: pyflakes (replaces flake8)
+# I: isort (replaces isort)
+# N: pep8-naming
+# UP: pyupgrade
+# B: flake8-bugbear
+# C4: flake8-comprehensions
+# SIM: flake8-simplify
+select = ["E", "W", "F", "I", "N", "UP", "B", "C4", "SIM"]
+
+# Ignored rules
+ignore = [
+    "E501",  # Line length handled by formatter
+]
+
+[tool.ruff.lint.isort]
+# isort configuration
+known-first-party = ["ChemInformant"]
+
+[tool.ruff.format]
+# Format configuration, replaces black
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"

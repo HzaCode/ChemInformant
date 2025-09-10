@@ -1,11 +1,12 @@
 # tests/test_cli.py
 
+import os
+import sqlite3
 import subprocess
 import sys
-import os
-import pytest
+
 import pandas as pd
-import sqlite3
+import pytest
 import requests
 
 # --- Path Correction ---
@@ -14,10 +15,9 @@ import requests
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Now we can import the modules we need to mock and test
-from src.ChemInformant import cli as chem_cli
-from src.ChemInformant import cheminfo_api
-from src.ChemInformant import api_helpers
-from src.ChemInformant import models
+from ChemInformant import api_helpers
+from ChemInformant import cli as chem_cli
+
 
 def run_command(command: str, *args: str, timeout: int | None = None) -> subprocess.CompletedProcess:
     """Helper function to run a command as a subprocess and capture its output."""
@@ -34,7 +34,7 @@ def is_pubchem_available():
     try:
         response = requests.get('https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/water/cids/JSON', timeout=5)
         return response.status_code == 200 and 'IdentifierList' in response.text
-    except:
+    except Exception:
         return False
 
 # --- chemfetch Command Tests ---
@@ -101,12 +101,12 @@ def test_chemfetch_sql_output_success(tmp_path):
     file with the correct data.
     """
     db_file = tmp_path / "test_output.db"
-    
+
     proc = run_command("chemfetch", "caffeine", "--props", "cas,molecular_weight", "--format", "sql", "-o", str(db_file))
 
     assert proc.returncode == 0, f"Command failed with stderr: {proc.stderr}"
     assert "Writing data to table" in proc.stderr, "Success message not found in stderr."
-    
+
     assert db_file.exists(), "Database file was not created."
 
     con = sqlite3.connect(db_file)
@@ -127,9 +127,9 @@ def test_chemfetch_sql_fails_without_output_path():
     message if the --output/-o argument is not provided.
     """
     proc = run_command("chemfetch", "water", "--format", "sql")
-    
+
     assert proc.returncode != 0, "Expected a non-zero exit code for missing argument."
-    
+
     assert "--output is required" in proc.stderr, "Expected error message for missing --output not found."
 
 # --- chemdraw Command Tests ---

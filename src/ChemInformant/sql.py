@@ -1,12 +1,12 @@
 from __future__ import annotations
+
 import pandas as pd
-from sqlalchemy import create_engine, Engine
-from typing import Union
+from sqlalchemy import Engine, create_engine
 
 
 def df_to_sql(
     df: pd.DataFrame,
-    con: Union[str, Engine],
+    con: str | Engine,
     table: str,
     *,
     if_exists: str = "append",
@@ -22,7 +22,7 @@ def df_to_sql(
 
     Args:
         df: DataFrame from get_properties() or similar ChemInformant functions
-        con: Database connection string (e.g., "sqlite:///chemicals.db") 
+        con: Database connection string (e.g., "sqlite:///chemicals.db")
              or existing SQLAlchemy Engine object
         table: Name of the SQL table to create/write to
         if_exists: Action when table exists - "fail", "replace", or "append"
@@ -32,10 +32,10 @@ def df_to_sql(
     Examples:
         >>> # Get chemical data
         >>> df = get_properties(["aspirin", "caffeine"], properties=["molecular_weight", "xlogp"])
-        
+
         >>> # Save to SQLite database
         >>> df_to_sql(df, "sqlite:///my_chemicals.db", "compounds")
-        
+
         >>> # Save to PostgreSQL with specific types
         >>> df_to_sql(df, "postgresql://user:pass@localhost/db", "chemicals",
         ...           dtype={"molecular_weight": "REAL", "xlogp": "REAL"})
