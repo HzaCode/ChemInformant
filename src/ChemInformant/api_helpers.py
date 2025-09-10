@@ -10,7 +10,7 @@ from __future__ import annotations
 import random
 import sys
 import time
-from typing import List, Dict, Any
+from typing import Any
 from urllib.parse import quote
 
 import requests
@@ -91,7 +91,7 @@ def _execute_fetch(url: str) -> requests.Response:
     """
     return get_session().get(url, timeout=REQUEST_TIMEOUT)
 
-def _fetch_with_ratelimit_and_retry(url: str) -> Dict[str, Any] | List[Any] | str | None:
+def _fetch_with_ratelimit_and_retry(url: str) -> dict[str, Any] | list[Any] | str | None:
     """
     Performs a GET request with rate-limiting and exponential backoff retry logic.
 
@@ -152,7 +152,7 @@ def _fetch_with_ratelimit_and_retry(url: str) -> Dict[str, Any] | List[Any] | st
 
 # --- Public-Facing Helper Functions ---
 
-def get_cids_by_name(name: str) -> List[int] | None:
+def get_cids_by_name(name: str) -> list[int] | None:
     """
     Fetches PubChem Compound IDs (CIDs) for a given chemical name.
 
@@ -168,7 +168,7 @@ def get_cids_by_name(name: str) -> List[int] | None:
     Examples:
         >>> get_cids_by_name("aspirin")
         [2244]
-        >>> get_cids_by_name("glucose") 
+        >>> get_cids_by_name("glucose")
         [5793, 64689, ...]  # Multiple isomers/forms
 
     Note:
@@ -179,7 +179,7 @@ def get_cids_by_name(name: str) -> List[int] | None:
     data = _fetch_with_ratelimit_and_retry(url)
     return data.get("IdentifierList", {}).get("CID") if isinstance(data, dict) else None
 
-def get_cids_by_smiles(smiles: str) -> List[int] | None:
+def get_cids_by_smiles(smiles: str) -> list[int] | None:
     """
     Fetches PubChem Compound IDs (CIDs) for a given SMILES string.
 
@@ -208,7 +208,7 @@ def get_cids_by_smiles(smiles: str) -> List[int] | None:
     data = _fetch_with_ratelimit_and_retry(url)
     return data.get("IdentifierList", {}).get("CID") if isinstance(data, dict) else None
 
-def get_batch_properties(cids: List[int], props: List[str]) -> Dict[int, Dict[str, Any]]:
+def get_batch_properties(cids: list[int], props: list[str]) -> dict[int, dict[str, Any]]:
     """
     Fetches multiple properties for a batch of CIDs in a single request,
     handling API pagination automatically.
@@ -219,7 +219,7 @@ def get_batch_properties(cids: List[int], props: List[str]) -> Dict[int, Dict[st
 
     Args:
         cids: List of compound IDs to query
-        props: List of property names in CamelCase format 
+        props: List of property names in CamelCase format
                (e.g., ["MolecularWeight", "XLogP", "CanonicalSMILES"])
                Must use exact PubChem API property names
 
@@ -322,7 +322,7 @@ def get_cas_for_cid(cid: int) -> str | None:
                                         return markup[0].get("String")
     return None
 
-def get_synonyms_for_cid(cid: int) -> List[str]:
+def get_synonyms_for_cid(cid: int) -> list[str]:
     """
     Fetches all known synonyms (alternative names) for a given CID.
 
@@ -340,7 +340,7 @@ def get_synonyms_for_cid(cid: int) -> List[str]:
     Examples:
         >>> get_synonyms_for_cid(2244)  # Aspirin
         ['aspirin', 'acetylsalicylic acid', '2-acetyloxybenzoic acid', ...]
-        >>> get_synonyms_for_cid(702)   # Ethanol  
+        >>> get_synonyms_for_cid(702)   # Ethanol
         ['ethanol', 'ethyl alcohol', 'grain alcohol', ...]
 
     Note:

@@ -1,10 +1,11 @@
 from unittest import mock
-import pytest
+
 import pandas as pd
+import pytest
 
 from ChemInformant import cheminfo_api
-from ChemInformant.models import Compound, NotFoundError, AmbiguousIdentifierError
-from ChemInformant.constants import CORE_PROPS, THREED_PROPS, ALL_PROPS
+from ChemInformant.constants import ALL_PROPS, CORE_PROPS, THREED_PROPS
+from ChemInformant.models import AmbiguousIdentifierError, Compound, NotFoundError
 
 
 class TestResolveCid:
@@ -59,29 +60,29 @@ class TestResolveCid:
 class TestLooksLikeSmiles:
 
     def test_simple_smiles(self):
-        assert cheminfo_api._looks_like_smiles("C1CCCCC1") == True
-        assert cheminfo_api._looks_like_smiles("C(=O)O") == True
-        assert cheminfo_api._looks_like_smiles("CCBr") == True
+        assert cheminfo_api._looks_like_smiles("C1CCCCC1")
+        assert cheminfo_api._looks_like_smiles("C(=O)O")
+        assert cheminfo_api._looks_like_smiles("CCBr")
 
     def test_aromatic_smiles(self):
-        assert cheminfo_api._looks_like_smiles("c1ccccc1") == True
-        assert cheminfo_api._looks_like_smiles("c1ccc(O)cc1") == True
+        assert cheminfo_api._looks_like_smiles("c1ccccc1")
+        assert cheminfo_api._looks_like_smiles("c1ccc(O)cc1")
 
     def test_branched_smiles(self):
-        assert cheminfo_api._looks_like_smiles("CC(C)C") == True
-        assert cheminfo_api._looks_like_smiles("C(C)(C)C") == True
+        assert cheminfo_api._looks_like_smiles("CC(C)C")
+        assert cheminfo_api._looks_like_smiles("C(C)(C)C")
 
     def test_not_smiles(self):
-        assert cheminfo_api._looks_like_smiles("caffeine") == False
-        assert cheminfo_api._looks_like_smiles("aspirin") == False
-        assert cheminfo_api._looks_like_smiles("2519") == True
-        assert cheminfo_api._looks_like_smiles("") == False
+        assert not cheminfo_api._looks_like_smiles("caffeine")
+        assert not cheminfo_api._looks_like_smiles("aspirin")
+        assert cheminfo_api._looks_like_smiles("2519")
+        assert not cheminfo_api._looks_like_smiles("")
 
     def test_edge_cases(self):
-        assert cheminfo_api._looks_like_smiles("C") == False
-        assert cheminfo_api._looks_like_smiles("O") == False
-        assert cheminfo_api._looks_like_smiles("N") == False
-        assert cheminfo_api._looks_like_smiles("C2") == True
+        assert not cheminfo_api._looks_like_smiles("C")
+        assert not cheminfo_api._looks_like_smiles("O")
+        assert not cheminfo_api._looks_like_smiles("N")
+        assert cheminfo_api._looks_like_smiles("C2")
 
 
 class TestGetProperties:
@@ -99,12 +100,12 @@ class TestGetProperties:
 
     def test_get_properties_success(self):
         mock_batch_data = {2519: {"MolecularWeight": "194.19", "IUPACName": "caffeine"}}
-        
+
         with mock.patch.object(cheminfo_api, '_resolve_to_single_cid', return_value=2519):
             with mock.patch('ChemInformant.api_helpers.get_batch_properties', return_value=mock_batch_data):
                 with mock.patch('ChemInformant.api_helpers.get_cas_for_cid', return_value="58-08-2"):
                     result = cheminfo_api.get_properties(["caffeine"], ["molecular_weight", "iupac_name", "cas"])
-                    
+
                     assert len(result) == 1
                     assert result.iloc[0]["input_identifier"] == "caffeine"
                     assert result.iloc[0]["cid"] == "2519"
@@ -115,7 +116,7 @@ class TestGetProperties:
     def test_get_properties_with_failure(self):
         with mock.patch.object(cheminfo_api, '_resolve_to_single_cid', side_effect=NotFoundError("test")):
             result = cheminfo_api.get_properties(["unknown"], ["molecular_weight"])
-            
+
             assert len(result) == 1
             assert result.iloc[0]["input_identifier"] == "unknown"
             assert pd.isna(result.iloc[0]["cid"])
@@ -128,13 +129,13 @@ class TestGetProperties:
                 return 2519
             else:
                 raise NotFoundError(identifier)
-        
+
         mock_batch_data = {2519: {"MolecularWeight": "194.19"}}
-        
+
         with mock.patch.object(cheminfo_api, '_resolve_to_single_cid', side_effect=mock_resolve):
             with mock.patch('ChemInformant.api_helpers.get_batch_properties', return_value=mock_batch_data):
                 result = cheminfo_api.get_properties(["caffeine", "unknown"], ["molecular_weight"])
-                
+
                 assert len(result) == 2
                 assert result.iloc[0]["status"] == "OK"
                 assert result.iloc[1]["status"] == "NotFoundError"
@@ -142,11 +143,11 @@ class TestGetProperties:
     def test_get_properties_default_core_set(self):
         """Verify: When called without any property parameters, returns core property set."""
         mock_batch_data = {2244: {prop: f"value_{prop}" for prop in CORE_PROPS}}
-        
+
         with mock.patch.object(cheminfo_api, '_resolve_to_single_cid', return_value=2244):
             with mock.patch('ChemInformant.api_helpers.get_batch_properties', return_value=mock_batch_data):
                 result = cheminfo_api.get_properties([2244])
-                
+
                 # Check that core properties are included but 3D properties are not
                 for prop in CORE_PROPS:
                     assert prop in result.columns
@@ -158,11 +159,11 @@ class TestGetProperties:
         """Verify: `include_3d=True` adds 3D properties."""
         all_props_data = {prop: f"value_{prop}" for prop in CORE_PROPS + THREED_PROPS}
         mock_batch_data = {2244: all_props_data}
-        
+
         with mock.patch.object(cheminfo_api, '_resolve_to_single_cid', return_value=2244):
             with mock.patch('ChemInformant.api_helpers.get_batch_properties', return_value=mock_batch_data):
                 result = cheminfo_api.get_properties([2244], include_3d=True)
-                
+
                 for prop in CORE_PROPS:
                     assert prop in result.columns
                 for prop in THREED_PROPS:
@@ -173,11 +174,11 @@ class TestGetProperties:
         """Verify: `all_properties=True` gets complete property list."""
         all_props_data = {prop: f"value_{prop}" for prop in ALL_PROPS}
         mock_batch_data = {2244: all_props_data}
-        
+
         with mock.patch.object(cheminfo_api, '_resolve_to_single_cid', return_value=2244):
             with mock.patch('ChemInformant.api_helpers.get_batch_properties', return_value=mock_batch_data):
                 result = cheminfo_api.get_properties([2244], all_properties=True)
-                
+
                 for prop in ALL_PROPS:
                     assert prop in result.columns
                 assert len(result.columns) == len(ALL_PROPS) + 3
@@ -188,11 +189,11 @@ class TestGetProperties:
         expected_props_camel = ["TPSA", "Charge", "IsomericSMILES"]  # API return format
         expected_props_snake = ["tpsa", "charge", "isomeric_smiles"]  # DataFrame column format
         mock_batch_data = {2244: {prop: f"value_{prop}" for prop in expected_props_camel}}
-        
+
         with mock.patch.object(cheminfo_api, '_resolve_to_single_cid', return_value=2244):
             with mock.patch('ChemInformant.api_helpers.get_batch_properties', return_value=mock_batch_data):
                 result = cheminfo_api.get_properties([2244], properties=props)
-                
+
                 for prop in expected_props_snake:
                     assert prop in result.columns
                 assert list(result.columns) == ['input_identifier', 'cid', 'status'] + expected_props_snake
@@ -220,10 +221,10 @@ class TestGetCompound:
             'molecular_weight': ['194.19'],
             'cas': ['58-08-2']
         })
-        
+
         with mock.patch.object(cheminfo_api, 'get_properties', return_value=mock_df):
             result = cheminfo_api.get_compound("caffeine")
-            
+
             assert isinstance(result, Compound)
             assert result.input_identifier == "caffeine"
             assert result.cid == 2519
@@ -234,14 +235,14 @@ class TestGetCompound:
             'cid': [pd.NA],
             'status': ['NotFoundError']
         })
-        
+
         with mock.patch.object(cheminfo_api, 'get_properties', return_value=mock_df):
             with pytest.raises(RuntimeError, match="Failed to fetch compound"):
                 cheminfo_api.get_compound("unknown")
 
     def test_get_compound_empty_dataframe_raises_error(self):
         mock_df = pd.DataFrame()
-        
+
         with mock.patch.object(cheminfo_api, 'get_properties', return_value=mock_df):
             with pytest.raises(RuntimeError, match="Failed to fetch compound"):
                 cheminfo_api.get_compound("unknown")
@@ -253,9 +254,9 @@ class TestGetCompounds:
         with mock.patch.object(cheminfo_api, 'get_compound') as mock_get_compound:
             mock_compound = Compound(input_identifier="caffeine", cid="2519", status="OK")
             mock_get_compound.return_value = mock_compound
-            
+
             result = cheminfo_api.get_compounds(["caffeine"])
-            
+
             assert len(result) == 1
             assert result[0] == mock_compound
             mock_get_compound.assert_called_once_with("caffeine")
@@ -271,20 +272,20 @@ class TestDrawCompound:
                     mock_response.status_code = 200
                     mock_response.content = b"fake_png_data"
                     mock_get.return_value = mock_response
-                    
+
                     with mock.patch('io.BytesIO') as mock_bytesio:
                         mock_bytesio.return_value = mock.Mock()
-                        
+
                         with mock.patch('PIL.Image.open') as mock_image_open:
                             mock_img = mock.Mock()
                             mock_image_open.return_value = mock_img
-                            
+
                             with mock.patch('matplotlib.pyplot.show') as mock_show:
-                                with mock.patch('matplotlib.pyplot.imshow') as mock_imshow:
-                                    with mock.patch('matplotlib.pyplot.axis') as mock_axis:
-                                        with mock.patch('matplotlib.pyplot.title') as mock_title:
-                                            with mock.patch('matplotlib.pyplot.figure') as mock_figure:
-                                                with mock.patch('matplotlib.pyplot.tight_layout') as mock_layout:
+                                with mock.patch('matplotlib.pyplot.imshow'):
+                                    with mock.patch('matplotlib.pyplot.axis'):
+                                        with mock.patch('matplotlib.pyplot.title'):
+                                            with mock.patch('matplotlib.pyplot.figure'):
+                                                with mock.patch('matplotlib.pyplot.tight_layout'):
                                                     cheminfo_api.draw_compound("caffeine")
                                                     mock_show.assert_called_once()
 
@@ -296,8 +297,8 @@ class TestDrawCompound:
                     mock_response.status_code = 404
                     mock_response.content = b"not found"
                     mock_get.return_value = mock_response
-                    
+
                     with mock.patch('builtins.print') as mock_print:
                         result = cheminfo_api.draw_compound("caffeine")
                         assert result is None
-                        mock_print.assert_called() 
+                        mock_print.assert_called()

@@ -5,8 +5,9 @@ import re
 import sys
 import types
 
-import pytest
 import pandas as pd
+import pytest
+
 import ChemInformant as ci
 from ChemInformant import api_helpers as ah
 from ChemInformant import cheminfo_api as capi
@@ -85,7 +86,8 @@ def mock_plotting_libs(monkeypatch):
     fake_requests = types.SimpleNamespace(get=lambda *a, **k: types.SimpleNamespace(content=b"\x89PNG_FAKE_DATA"))
     monkeypatch.setitem(sys.modules, "requests", fake_requests)
     fake_image_module = types.SimpleNamespace(open=lambda *a, **k: "FAKE_IMAGE")
-    fake_pil_module = types.ModuleType("PIL"); fake_pil_module.Image = fake_image_module
+    fake_pil_module = types.ModuleType("PIL")
+    fake_pil_module.Image = fake_image_module
     monkeypatch.setitem(sys.modules, "PIL", fake_pil_module)
     monkeypatch.setitem(sys.modules, "PIL.Image", fake_image_module)
     fake_pyplot = types.SimpleNamespace(imshow=lambda *a, **k: None, axis=lambda *a, **k: None, title=lambda *a, **k: None, show=lambda *a, **k: None)

@@ -1,7 +1,9 @@
 import pandas as pd
 import pytest
-from sqlalchemy import create_engine, select, func, table
-import ChemInformant as ci  
+from sqlalchemy import create_engine, func, select, table
+
+import ChemInformant as ci
+
 
 @pytest.fixture(scope="session")
 def test_data():
@@ -34,7 +36,7 @@ def test_if_exists_replace(in_memory_engine, test_data):
     """
     Tests that if_exists='replace' correctly overwrites existing data.
     """
-   
+
     df_aspirin = test_data["aspirin"]
     df_others = test_data["others"]
 
@@ -56,7 +58,7 @@ def test_if_exists_append(in_memory_engine, test_data):
     df_aspirin = test_data["aspirin"]
     df_others = test_data["others"]
 
- 
+
     ci.df_to_sql(df_aspirin, in_memory_engine, TABLE_NAME, if_exists="replace")
 
     ci.df_to_sql(df_others, in_memory_engine, TABLE_NAME, if_exists="append")
@@ -72,7 +74,7 @@ def test_if_exists_fail(in_memory_engine, test_data):
     """
     df_aspirin = test_data["aspirin"]
     df_others = test_data["others"]
-    
+
 
     ci.df_to_sql(df_aspirin, in_memory_engine, TABLE_NAME)
 
@@ -87,6 +89,6 @@ def test_writing_empty_dataframe(in_memory_engine, test_data):
     """
     df_empty = test_data["empty"]
     ci.df_to_sql(df_empty, in_memory_engine, TABLE_NAME, if_exists="replace")
-    
+
     count = pd.read_sql(select(func.count()).select_from(table(TABLE_NAME)), in_memory_engine).iloc[0, 0]
     assert count == 0, "Writing an empty DataFrame did not result in an empty table"

@@ -3,8 +3,9 @@ This module defines the Pydantic data models and custom exceptions used
 by ChemInformant to structure data and handle specific error states.
 """
 
-from typing import List, Optional, Union, Any
-from pydantic import BaseModel, Field, field_validator, computed_field
+from typing import Any, List, Optional, Union
+
+from pydantic import BaseModel, Field, computed_field, field_validator
 
 # --- Custom Exceptions ---
 

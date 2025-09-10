@@ -1,11 +1,8 @@
-import io
-import sys
 import tempfile
-from pathlib import Path
 from unittest import mock
-import argparse
-import pytest
+
 import pandas as pd
+import pytest
 
 from ChemInformant import cli
 from ChemInformant.models import NotFoundError
@@ -21,7 +18,7 @@ class TestMainFetch:
             'cas': ['58-08-2'],
             'molecular_weight': ['194.19']
         })
-        
+
         with mock.patch('sys.argv', ['chemfetch', 'caffeine', '--props', 'cas,molecular_weight']):
             with mock.patch('ChemInformant.cli.get_properties', return_value=test_data):
                 with mock.patch('builtins.print') as mock_print:
@@ -35,7 +32,7 @@ class TestMainFetch:
             'status': ['OK'],
             'cas': ['58-08-2']
         })
-        
+
         with mock.patch('sys.argv', ['chemfetch', 'caffeine', '--format', 'csv']):
             with mock.patch('ChemInformant.cli.get_properties', return_value=test_data):
                 with mock.patch('builtins.print') as mock_print:
@@ -50,7 +47,7 @@ class TestMainFetch:
             'cid': ['2519'],
             'status': ['OK']
         })
-        
+
         with mock.patch('sys.argv', ['chemfetch', 'caffeine', '--format', 'json']):
             with mock.patch('ChemInformant.cli.get_properties', return_value=test_data):
                 with mock.patch('builtins.print') as mock_print:
@@ -63,10 +60,10 @@ class TestMainFetch:
             'cid': ['2519'],
             'status': ['OK']
         })
-        
+
         with tempfile.NamedTemporaryFile(suffix='.db', delete=False) as tmp_file:
             tmp_path = tmp_file.name
-        
+
         with mock.patch('sys.argv', ['chemfetch', 'caffeine', '--format', 'sql', '-o', tmp_path]):
             with mock.patch('ChemInformant.cli.get_properties', return_value=test_data):
                 with mock.patch('ChemInformant.cli.df_to_sql') as mock_df_to_sql:
@@ -82,7 +79,7 @@ class TestMainFetch:
 
     def test_main_fetch_empty_dataframe(self):
         empty_df = pd.DataFrame()
-        
+
         with mock.patch('sys.argv', ['chemfetch', 'caffeine']):
             with mock.patch('ChemInformant.cli.get_properties', return_value=empty_df):
                 with mock.patch('builtins.print') as mock_print:
@@ -113,7 +110,7 @@ class TestMainFetch:
             'cid': ['2519', '2244'],
             'status': ['OK', 'OK']
         })
-        
+
         with mock.patch('sys.argv', ['chemfetch', 'caffeine', 'aspirin']):
             with mock.patch('ChemInformant.cli.get_properties', return_value=test_data):
                 with mock.patch('builtins.print') as mock_print:
@@ -128,7 +125,7 @@ class TestMainFetch:
             'molecular_formula': ['C8H10N4O2'],
             'xlogp': ['1.23']
         })
-        
+
         with mock.patch('sys.argv', ['chemfetch', 'caffeine', '--props', 'molecular_formula,xlogp']):
             with mock.patch('ChemInformant.cli.get_properties', return_value=test_data):
                 with mock.patch('builtins.print') as mock_print:
@@ -141,11 +138,11 @@ class TestMainDraw:
     def test_main_draw_basic(self):
         with mock.patch('sys.argv', ['chemdraw', 'caffeine']):
             with mock.patch('ChemInformant.cli.draw_compound') as mock_draw:
-                with mock.patch('builtins.print') as mock_print:
+                with mock.patch('builtins.print'):
                     cli.main_draw()
                     mock_draw.assert_called_once_with('caffeine')
 
-    def test_main_draw_with_output_file(self):        
+    def test_main_draw_with_output_file(self):
         with mock.patch('sys.argv', ['chemdraw', 'caffeine']):
             with mock.patch('ChemInformant.cli.draw_compound') as mock_draw:
                 cli.main_draw()
@@ -182,4 +179,4 @@ class TestArgumentParsing:
         with mock.patch('sys.argv', ['chemdraw', '--help']):
             with pytest.raises(SystemExit) as exc_info:
                 cli.main_draw()
-            assert exc_info.value.code == 0 
+            assert exc_info.value.code == 0

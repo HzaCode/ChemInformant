@@ -11,9 +11,13 @@ Output:
 """
 
 
-import uuid, time, statistics
-import ChemInformant as ci
+import statistics
+import time
+import uuid
+
 import pubchempy as pcp
+
+import ChemInformant as ci
 
 # ---------------- 1. 285 unique drug names ----------------
 DRUGS = sorted({
@@ -115,7 +119,7 @@ pcp_time = time.perf_counter() - t0
 # ---------------- 5. report ----------------------------------------
 def rate(s): return len(good_cids) / s
 
-print("\nNetwork-only timings ({} CIDs × 6 props)".format(len(good_cids)))
+print(f"\nNetwork-only timings ({len(good_cids)} CIDs × 6 props)")
 print(f"{'Method':26}{'Time (s)':>10}{'Throughput':>15}")
 print(f"{'PubChemPy bulk':26}{pcp_time:10.2f}{rate(pcp_time):15.0f}")
 print(f"{'CI cold batch':26}{ci_cold:10.2f}{rate(ci_cold):15.0f}")
