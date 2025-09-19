@@ -24,6 +24,8 @@
     <a href="https://github.com/HzaCode/ChemInformant/blob/main/LICENSE.md">
         <img src="https://img.shields.io/pypi/l/ChemInformant.svg" alt="License">
     </a>
+
+
 </p>
 
 <p>
@@ -38,6 +40,9 @@
     </a>
     <a href="https://app.codacy.com/gh/HzaCode/ChemInformant/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade">
         <img src="https://app.codacy.com/project/badge/Grade/ba35e3e2f5224858bcaeb8f9c4ee2838" alt="Codacy Badge">
+    </a>
+    <a href="https://github.com/pyOpenSci/software-submission/issues/254">
+        <img src="https://img.shields.io/badge/pyOpenSci-First%20JOSS%20Track-blueviolet" alt="pyOpenSci First JOSS Track Review">
     </a>
 </p>
 
