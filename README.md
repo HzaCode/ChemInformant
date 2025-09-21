@@ -42,7 +42,7 @@
         <img src="https://img.shields.io/badge/pyOpenSci-First%20JOSS%20Track-blueviolet" alt="pyOpenSci First JOSS Track Review">
     </a>
     <a href="https://github.com/lmmentel/awesome-python-chemistry">
-        <img src="https://awesome.re/badge-flat2.svg" alt="Awesome Python Chemistry">
+        <img src="https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg" alt="Awesome Python Chemistry">
     </a>
 </p>
 
