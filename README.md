@@ -1,4 +1,3 @@
-
 <div align="center">
 
 <img src="https://raw.githubusercontent.com/HzaCode/ChemInformant/main/images/logo.png" width="200px" />
@@ -24,8 +23,6 @@
     <a href="https://github.com/HzaCode/ChemInformant/blob/main/LICENSE.md">
         <img src="https://img.shields.io/pypi/l/ChemInformant.svg" alt="License">
     </a>
-
-
 </p>
 
 <p>
@@ -44,9 +41,14 @@
     <a href="https://github.com/pyOpenSci/software-submission/issues/254">
         <img src="https://img.shields.io/badge/pyOpenSci-First%20JOSS%20Track-blueviolet" alt="pyOpenSci First JOSS Track Review">
     </a>
+    <a href="https://github.com/lmmentel/awesome-python-chemistry">
+        <img src="https://awesome.re/badge-flat2.svg" alt="Awesome Python Chemistry">
+    </a>
 </p>
 
 </div>
+
+
 
 ---
 
