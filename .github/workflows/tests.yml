@@ -37,6 +37,14 @@ jobs:
           print("matplotlib", matplotlib.__version__)
           PY
 
+      - name: Run linting with ruff
+        run: |
+          ruff check src/ tests/
+          ruff format --check src/ tests/
+
+      - name: Run type checking with mypy
+        run: mypy src/ChemInformant --ignore-missing-imports
+
       - name: Run tests with coverage
         env:
           PYTHONPATH: ${{ github.workspace }}/src
