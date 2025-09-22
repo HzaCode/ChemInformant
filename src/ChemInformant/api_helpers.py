@@ -356,7 +356,11 @@ def get_cas_for_cid(cid: int) -> str | None:
                                     )
                                     if markup and isinstance(markup, list) and markup:
                                         string_val = markup[0].get("String")
-                                        return string_val if isinstance(string_val, str) else None
+                                        return (
+                                            string_val
+                                            if isinstance(string_val, str)
+                                            else None
+                                        )
     return None
 
 
