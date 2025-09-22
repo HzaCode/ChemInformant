@@ -5,6 +5,7 @@ and provides low-level functions that wrap specific PubChem PUG-REST endpoints.
 These functions are not intended for direct use by end-users, but are consumed
 by the main API interface.
 """
+
 from __future__ import annotations
 
 import random
@@ -18,8 +19,8 @@ import requests_cache
 
 # --- Module Constants ---
 PUBCHEM_API_BASE = "https://pubchem.ncbi.nlm.nih.gov/rest/pug"
-PUG_VIEW_BASE    = "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data"
-REQUEST_TIMEOUT  = 15
+PUG_VIEW_BASE = "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data"
+REQUEST_TIMEOUT = 15
 
 MAX_RETRIES, INITIAL_BACKOFF, MAX_BACKOFF = 5, 1, 16
 REQUEST_RATE_LIMIT = 5  # Requests per second
@@ -31,6 +32,7 @@ _session: requests_cache.CachedSession | None = None
 
 
 # --- Session & Caching ---
+
 
 def setup_cache(
     cache_name: str = "pubchem_cache",
@@ -56,12 +58,17 @@ def setup_cache(
     """
     global _session
     _session = requests_cache.CachedSession(
-        cache_name     = cache_name,
-        backend        = backend,
-        expire_after   = expire_after,
-        allowable_codes= [200, 404, 503],  # Cache "not found" and "server busy" responses
+        cache_name=cache_name,
+        backend=backend,
+        expire_after=expire_after,
+        allowable_codes=[
+            200,
+            404,
+            503,
+        ],  # Cache "not found" and "server busy" responses
         **kw,
     )
+
 
 def get_session() -> requests_cache.CachedSession:
     """
@@ -75,10 +82,12 @@ def get_session() -> requests_cache.CachedSession:
     global _session
     if _session is None:
         setup_cache()
+    assert _session is not None  # Type narrowing for mypy
     return _session
 
 
 # --- Core Fetching Logic ---
+
 
 def _execute_fetch(url: str) -> requests.Response:
     """
@@ -91,7 +100,10 @@ def _execute_fetch(url: str) -> requests.Response:
     """
     return get_session().get(url, timeout=REQUEST_TIMEOUT)
 
-def _fetch_with_ratelimit_and_retry(url: str) -> dict[str, Any] | list[Any] | str | None:
+
+def _fetch_with_ratelimit_and_retry(
+    url: str,
+) -> dict[str, Any] | list[Any] | str | None:
     """
     Performs a GET request with rate-limiting and exponential backoff retry logic.
 
@@ -114,7 +126,8 @@ def _fetch_with_ratelimit_and_retry(url: str) -> dict[str, Any] | list[Any] | st
         time.sleep(MIN_REQUEST_INTERVAL - elapsed)
     last_api_call_time = time.time()
 
-    retries, backoff = 0, INITIAL_BACKOFF
+    retries = 0
+    backoff = float(INITIAL_BACKOFF)
     while retries < MAX_RETRIES:
         try:
             resp = _execute_fetch(url)
@@ -122,10 +135,11 @@ def _fetch_with_ratelimit_and_retry(url: str) -> dict[str, Any] | list[Any] | st
             # Bust cache for stale 503 errors. If a "server busy" response
             # came from the cache, delete it and try a live request.
             if getattr(resp, "from_cache", False) and resp.status_code == 503:
-                key = get_session().cache.create_key(resp.request)
-                get_session().cache.delete(key)
-                with get_session().cache.disabled():
-                    resp = _execute_fetch(url)
+                session = get_session()
+                key = session.cache.create_key(resp.request)
+                session.cache.delete(key)
+                # Directly fetch without cache
+                resp = session.get(url, timeout=REQUEST_TIMEOUT)
 
             if resp.status_code == 200:
                 ctype = resp.headers.get("Content-Type", "").lower()
@@ -135,22 +149,35 @@ def _fetch_with_ratelimit_and_retry(url: str) -> dict[str, Any] | list[Any] | st
                 return None  # Resource not found is a valid, final state.
 
             if resp.status_code == 503:
-                print(f"[ChemInformant] 503 Server Busy -> retry in {backoff:.1f}s", file=sys.stderr)
+                print(
+                    f"[ChemInformant] 503 Server Busy -> retry in {backoff:.1f}s",
+                    file=sys.stderr,
+                )
             else:
                 resp.raise_for_status()  # Trigger for other 4xx/5xx errors
 
         except requests.exceptions.RequestException as e:
-            print(f"[ChemInformant] Network error {e} -> retry in {backoff:.1f}s", file=sys.stderr)
+            print(
+                f"[ChemInformant] Network error {e} -> retry in {backoff:.1f}s",
+                file=sys.stderr,
+            )
 
         time.sleep(backoff)
-        backoff = min(MAX_BACKOFF, backoff * 2) + random.uniform(0, 1) # Exponential backoff with jitter
+        # Note: random.uniform is safe here as it's only used for jitter in retry delays
+        backoff = min(MAX_BACKOFF, backoff * 2) + random.uniform(
+            0.0, 1.0
+        )  # Exponential backoff with jitter
         retries += 1
 
-    print(f"[ChemInformant] Giving up after {MAX_RETRIES} retries for URL: {url}", file=sys.stderr)
+    print(
+        f"[ChemInformant] Giving up after {MAX_RETRIES} retries for URL: {url}",
+        file=sys.stderr,
+    )
     return None
 
 
 # --- Public-Facing Helper Functions ---
+
 
 def get_cids_by_name(name: str) -> list[int] | None:
     """
@@ -175,9 +202,13 @@ def get_cids_by_name(name: str) -> list[int] | None:
         This function is used internally by get_properties() for name-to-CID resolution.
         End users should typically use get_properties() instead.
     """
-    url  = f"{PUBCHEM_API_BASE}/compound/name/{quote(name)}/cids/JSON"
+    url = f"{PUBCHEM_API_BASE}/compound/name/{quote(name)}/cids/JSON"
     data = _fetch_with_ratelimit_and_retry(url)
-    return data.get("IdentifierList", {}).get("CID") if isinstance(data, dict) else None
+    if isinstance(data, dict):
+        cid_list = data.get("IdentifierList", {}).get("CID")
+        return cid_list if isinstance(cid_list, list) else None
+    return None
+
 
 def get_cids_by_smiles(smiles: str) -> list[int] | None:
     """
@@ -204,11 +235,17 @@ def get_cids_by_smiles(smiles: str) -> list[int] | None:
         This function is used internally by get_properties() for SMILES-to-CID resolution.
         End users should typically use get_properties() instead.
     """
-    url  = f"{PUBCHEM_API_BASE}/compound/smiles/{quote(smiles)}/cids/JSON"
+    url = f"{PUBCHEM_API_BASE}/compound/smiles/{quote(smiles)}/cids/JSON"
     data = _fetch_with_ratelimit_and_retry(url)
-    return data.get("IdentifierList", {}).get("CID") if isinstance(data, dict) else None
+    if isinstance(data, dict):
+        cid_list = data.get("IdentifierList", {}).get("CID")
+        return cid_list if isinstance(cid_list, list) else None
+    return None
 
-def get_batch_properties(cids: list[int], props: list[str]) -> dict[int, dict[str, Any]]:
+
+def get_batch_properties(
+    cids: list[int], props: list[str]
+) -> dict[int, dict[str, Any]]:
     """
     Fetches multiple properties for a batch of CIDs in a single request,
     handling API pagination automatically.
@@ -258,7 +295,10 @@ def get_batch_properties(cids: list[int], props: list[str]) -> dict[int, dict[st
 
     # Loop as long as the API provides a ListKey for the next page
     while list_key:
-        print(f"[ChemInformant] Pagination detected, fetching next page with ListKey: {list_key}", file=sys.stderr)
+        print(
+            f"[ChemInformant] Pagination detected, fetching next page with ListKey: {list_key}",
+            file=sys.stderr,
+        )
         paginated_url = (
             f"{PUBCHEM_API_BASE}/compound/listkey/{list_key}"
             f"/property/{','.join(props)}/JSON"
@@ -307,7 +347,7 @@ def get_cas_for_cid(cid: int) -> str | None:
         It may be slower than standard property queries as it accesses
         detailed compound records rather than the property API.
     """
-    url  = f"{PUG_VIEW_BASE}/compound/{cid}/JSON"
+    url = f"{PUG_VIEW_BASE}/compound/{cid}/JSON"
     data = _fetch_with_ratelimit_and_retry(url)
     if isinstance(data, dict):
         for sec in data.get("Record", {}).get("Section", []):
@@ -317,10 +357,18 @@ def get_cas_for_cid(cid: int) -> str | None:
                         for cas_sec in sub.get("Section", []):
                             if cas_sec.get("TOCHeading") == "CAS":
                                 for info in cas_sec.get("Information", []):
-                                    markup = info.get("Value", {}).get("StringWithMarkup")
+                                    markup = info.get("Value", {}).get(
+                                        "StringWithMarkup"
+                                    )
                                     if markup and isinstance(markup, list) and markup:
-                                        return markup[0].get("String")
+                                        string_val = markup[0].get("String")
+                                        return (
+                                            string_val
+                                            if isinstance(string_val, str)
+                                            else None
+                                        )
     return None
+
 
 def get_synonyms_for_cid(cid: int) -> list[str]:
     """
@@ -347,10 +395,11 @@ def get_synonyms_for_cid(cid: int) -> list[str]:
         This function is used internally by get_properties() and get_synonyms().
         The first synonym in the list is typically the preferred/most common name.
     """
-    url  = f"{PUBCHEM_API_BASE}/compound/cid/{cid}/synonyms/JSON"
+    url = f"{PUBCHEM_API_BASE}/compound/cid/{cid}/synonyms/JSON"
     data = _fetch_with_ratelimit_and_retry(url)
     if isinstance(data, dict):
         info_list = data.get("InformationList", {}).get("Information", [])
         if info_list and isinstance(info_list[0].get("Synonym"), list):
-            return info_list[0]["Synonym"]
+            synonyms = info_list[0]["Synonym"]
+            return synonyms if isinstance(synonyms, list) else []
     return []

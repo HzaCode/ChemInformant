@@ -1,5 +1,6 @@
 sphinx
 sphinx-rtd-theme
+sphinx-copybutton
 
-# myst-parser
-# sphinx-copybutton
+# Required for consistent syntax highlighting
+pygments>=2.17.0

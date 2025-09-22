@@ -3,7 +3,7 @@ This module defines the Pydantic data models and custom exceptions used
 by ChemInformant to structure data and handle specific error states.
 """
 
-from typing import Any, List, Optional, Union
+from typing import Any, Optional, Union
 
 from pydantic import BaseModel, Field, computed_field, field_validator
 
@@ -20,7 +20,7 @@ class NotFoundError(Exception):
 class AmbiguousIdentifierError(Exception):
     """Raised when a name or SMILES string maps to multiple PubChem CIDs."""
 
-    def __init__(self, identifier: str, cids: List[int]):
+    def __init__(self, identifier: str, cids: list[int]):
         msg = f"Identifier '{identifier}' maps to multiple CIDs: {cids}."
         super().__init__(msg)
 
@@ -62,7 +62,7 @@ class Compound(BaseModel):
 
     cas: Optional[str] = None
     description: Optional[str] = None
-    synonyms: List[str] = Field(default_factory=list)
+    synonyms: list[str] = Field(default_factory=list)
 
     @computed_field
     def pubchem_url(self) -> str:
@@ -71,7 +71,7 @@ class Compound(BaseModel):
 
     @field_validator("molecular_weight", "xlogp", mode="before")
     @classmethod
-    def to_float(cls, v: Any):
+    def to_float(cls, v: Any) -> Optional[float]:
         """Validator to safely convert string values to float."""
         if v is None or v == "":
             return None
