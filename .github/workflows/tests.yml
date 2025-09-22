@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install ".[dev,plot]" pytest-cov coverage-badge
+          pip install ".[dev,plot]" pytest-cov coverage-badge mypy types-requests
 
       - name: Verify plotting libraries
         run: |
@@ -36,6 +36,14 @@ jobs:
           print("Pillow", PILVER)
           print("matplotlib", matplotlib.__version__)
           PY
+
+      - name: Run linting with ruff
+        run: |
+          ruff check src/ tests/
+          ruff format --check src/ tests/
+
+      - name: Run type checking with mypy
+        run: mypy src/ChemInformant --ignore-missing-imports --allow-untyped-defs --allow-incomplete-defs --no-strict-optional
 
       - name: Run tests with coverage
         env:

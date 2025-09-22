@@ -14,15 +14,15 @@ authors = [
 ]
 description = "A robust and high-throughput Python client for the PubChem API, designed for automated data retrieval and analysis"
 readme = { file = "README.md", content-type = "text/markdown" }
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 license = "MIT"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering :: Chemistry",
 ]
@@ -71,7 +71,9 @@ dev = [
     "pytest>=7.0",
     "pytest-mock>=3.5",
     "pytest-cov>=2.12",
-    "ruff"
+    "pytest-benchmark>=4.0",
+    "ruff",
+    "mypy"
 ]
 
 [tool.setuptools.packages.find]
@@ -86,7 +88,7 @@ source = ["ChemInformant"]
 [tool.ruff]
 # Set line length to match black formatter
 line-length = 88
-target-version = "py38"
+target-version = "py39"
 
 [tool.ruff.lint]
 # Enabled rule sets, replacing multiple tools:
@@ -103,6 +105,9 @@ select = ["E", "W", "F", "I", "N", "UP", "B", "C4", "SIM"]
 # Ignored rules
 ignore = [
     "E501",  # Line length handled by formatter
+    "N999",  # Invalid module name (ChemInformant is a valid name)
+    "N813",  # Camelcase imported as lowercase (common for packages)
+    "SIM117", # Multiple context managers (sometimes clearer as nested)
 ]
 
 [tool.ruff.lint.isort]
@@ -115,3 +120,32 @@ quote-style = "double"
 indent-style = "space"
 skip-magic-trailing-comma = false
 line-ending = "auto"
+
+# ---------------------------
+#  MyPy configuration
+# ---------------------------
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    "requests_cache.*",
+    "pubchempy.*",
+    "matplotlib.*",
+    "seaborn.*",
+    "sklearn.*",
+    "PIL.*"
+]
+ignore_missing_imports = true

@@ -2,12 +2,14 @@
 This module contains the high-level, user-facing API for ChemInformant.
 It now operates exclusively on a snake_case standard for all property names.
 """
+
 from __future__ import annotations
 
 import logging
 import re
 import sys
-from typing import Any, Iterable
+from collections.abc import Iterable
+from typing import Any
 
 import pandas as pd
 
@@ -24,8 +26,10 @@ from .models import AmbiguousIdentifierError, Compound, NotFoundError
 _SMILES_TOKENS = re.compile(r"[=#\[\]\(\)]|\d|Br|Cl|Si", re.I)
 _SPECIAL_PROPS = {"cas", "synonyms"}
 
+
 def _looks_like_smiles(s: str) -> bool:
     return bool(_SMILES_TOKENS.search(s))
+
 
 def _resolve_to_single_cid(identifier: str | int) -> int:
     # This function remains robust as is.
@@ -48,6 +52,7 @@ def _resolve_to_single_cid(identifier: str | int) -> int:
                 return cids[0]
             raise AmbiguousIdentifierError(identifier, cids)
     raise NotFoundError(identifier)
+
 
 def get_properties(
     identifiers: int | str | list[int] | list[str],
@@ -143,7 +148,9 @@ def get_properties(
     """
     # --- Parameter validation ---
     if all_properties and (properties is not None or include_3d):
-        raise ValueError("`all_properties=True` is mutually exclusive with `properties` and `include_3d`.")
+        raise ValueError(
+            "`all_properties=True` is mutually exclusive with `properties` and `include_3d`."
+        )
     if properties is not None and include_3d:
         logging.warning("When `properties` is specified, `include_3d` is ignored.")
 
@@ -155,7 +162,7 @@ def get_properties(
         original_props_order = resolved_props
     elif properties is not None:
         if isinstance(properties, str):
-            properties = [p.strip() for p in properties.split(',')]
+            properties = [p.strip() for p in properties.split(",")]
         original_props_order = list(properties)
         resolved_props = []
         unsupported_props = []
@@ -168,7 +175,7 @@ def get_properties(
 
         if unsupported_props:
             raise ValueError(f"Unsupported properties: {unsupported_props}")
-    else: # Default behavior when properties is None
+    else:  # Default behavior when properties is None
         resolved_props = CORE_PROPS[:]
         if include_3d:
             resolved_props.extend(THREED_PROPS)
@@ -189,7 +196,9 @@ def get_properties(
             meta[ident] = {"status": "OK", "cid": str(cid)}
         except Exception as exc:
             meta[ident] = {"status": type(exc).__name__, "cid": pd.NA}
-    df = pd.DataFrame([{"input_identifier": ident, **meta[ident]} for ident in identifiers])
+    df = pd.DataFrame(
+        [{"input_identifier": ident, **meta[ident]} for ident in identifiers]
+    )
 
     # --- Early return for empty inputs ---
     if df.empty:
@@ -199,17 +208,27 @@ def get_properties(
     standard_props_snake = [p for p in resolved_props if p not in _SPECIAL_PROPS]
     if standard_props_snake:
         # Define internal fallback mappings (these are not exposed as separate properties)
-        FALLBACK_MAP_SNAKE = {"canonical_smiles": "connectivity_smiles", "isomeric_smiles": "fallback_smiles"}
-        INTERNAL_FALLBACK_TO_CAMEL = {"connectivity_smiles": "ConnectivitySMILES", "fallback_smiles": "SMILES"}
+        fallback_map_snake = {
+            "canonical_smiles": "connectivity_smiles",
+            "isomeric_smiles": "fallback_smiles",
+        }
+        internal_fallback_to_camel = {
+            "connectivity_smiles": "ConnectivitySMILES",
+            "fallback_smiles": "SMILES",
+        }
 
         api_tags_camel = {SNAKE_TO_CAMEL[p] for p in standard_props_snake}
         for prop_snake in standard_props_snake:
-            if prop_snake in FALLBACK_MAP_SNAKE:
-                fallback_prop = FALLBACK_MAP_SNAKE[prop_snake]
-                api_tags_camel.add(INTERNAL_FALLBACK_TO_CAMEL[fallback_prop])
+            if prop_snake in fallback_map_snake:
+                fallback_prop = fallback_map_snake[prop_snake]
+                api_tags_camel.add(internal_fallback_to_camel[fallback_prop])
 
-        cids_needed = [int(cid) for cid in df['cid'] if pd.notna(cid)]
-        fetched_data = api_helpers.get_batch_properties(cids_needed, list(api_tags_camel)) if cids_needed else {}
+        cids_needed = [int(cid) for cid in df["cid"] if pd.notna(cid)]
+        fetched_data = (
+            api_helpers.get_batch_properties(cids_needed, list(api_tags_camel))
+            if cids_needed
+            else {}
+        )
 
         for prop_snake in standard_props_snake:
             prop_camel = SNAKE_TO_CAMEL[prop_snake]
@@ -220,9 +239,9 @@ def get_properties(
                 if row["status"] == "OK" and cid:
                     api_row = fetched_data.get(cid, {})
                     val = api_row.get(prop_camel)
-                    if not val and prop_snake in FALLBACK_MAP_SNAKE:
-                        fallback_prop = FALLBACK_MAP_SNAKE[prop_snake]
-                        fallback_camel = INTERNAL_FALLBACK_TO_CAMEL[fallback_prop]
+                    if not val and prop_snake in fallback_map_snake:
+                        fallback_prop = fallback_map_snake[prop_snake]
+                        fallback_camel = internal_fallback_to_camel[fallback_prop]
                         val = api_row.get(fallback_camel)
                 values.append(val)
             df[prop_snake] = values
@@ -231,9 +250,16 @@ def get_properties(
     special_props_snake = [p for p in resolved_props if p in _SPECIAL_PROPS]
     if special_props_snake:
         for prop_snake in special_props_snake:
-            fetch_func = api_helpers.get_cas_for_cid if prop_snake == 'cas' else api_helpers.get_synonyms_for_cid
-            fail_value = None if prop_snake == 'cas' else []
-            prop_data = [fetch_func(int(cid)) if pd.notna(cid) and status == 'OK' else fail_value for cid, status in zip(df['cid'], df['status'])]
+            fetch_func = (
+                api_helpers.get_cas_for_cid
+                if prop_snake == "cas"
+                else api_helpers.get_synonyms_for_cid
+            )
+            fail_value = None if prop_snake == "cas" else []
+            prop_data = [
+                fetch_func(int(cid)) if pd.notna(cid) and status == "OK" else fail_value
+                for cid, status in zip(df["cid"], df["status"])
+            ]
             df[prop_snake] = prop_data
 
     # --- Step 5: Finalize and order DataFrame ---
@@ -251,7 +277,9 @@ def get_properties(
             final_col_order.append(col)
     return df[final_col_order]
 
+
 # --- Convenience Functions (now simple and consistent) ---
+
 
 def _fetch_scalar(id_, prop_snake):
     """Internal helper for single-value convenience functions."""
@@ -263,11 +291,19 @@ def _fetch_scalar(id_, prop_snake):
             raise ValueError(f"Unknown property: {prop_snake}")
 
         # Define internal fallback mappings for convenience functions
-        fallback_map = {"canonical_smiles": "connectivity_smiles", "isomeric_smiles": "fallback_smiles"}
-        internal_fallback_to_camel = {"connectivity_smiles": "ConnectivitySMILES", "fallback_smiles": "SMILES"}
+        fallback_map = {
+            "canonical_smiles": "connectivity_smiles",
+            "isomeric_smiles": "fallback_smiles",
+        }
+        internal_fallback_to_camel = {
+            "connectivity_smiles": "ConnectivitySMILES",
+            "fallback_smiles": "SMILES",
+        }
 
         fallback_snake = fallback_map.get(prop_snake)
-        fallback_camel = internal_fallback_to_camel.get(fallback_snake) if fallback_snake else None
+        fallback_camel = (
+            internal_fallback_to_camel.get(fallback_snake) if fallback_snake else None
+        )
 
         props_to_fetch = [prop_camel]
         if fallback_camel:
@@ -276,9 +312,12 @@ def _fetch_scalar(id_, prop_snake):
         props = api_helpers.get_batch_properties([cid], props_to_fetch)
         data = props.get(cid, {})
 
-        return data.get(prop_camel) or (data.get(fallback_camel) if fallback_camel else None)
+        return data.get(prop_camel) or (
+            data.get(fallback_camel) if fallback_camel else None
+        )
     except (NotFoundError, AmbiguousIdentifierError):
         return None
+
 
 def get_weight(id_: str | int) -> float | None:
     """
@@ -298,6 +337,7 @@ def get_weight(id_: str | int) -> float | None:
     """
     return _fetch_scalar(id_, "molecular_weight")
 
+
 def get_formula(id_: str | int) -> str | None:
     """
     Get the molecular formula of a compound.
@@ -315,6 +355,7 @@ def get_formula(id_: str | int) -> str | None:
         'H2O'
     """
     return _fetch_scalar(id_, "molecular_formula")
+
 
 def get_canonical_smiles(id_: str | int) -> str | None:
     """
@@ -337,6 +378,7 @@ def get_canonical_smiles(id_: str | int) -> str | None:
     """
     return _fetch_scalar(id_, "canonical_smiles")
 
+
 def get_isomeric_smiles(id_: str | int) -> str | None:
     """
     Get the isomeric SMILES representation of a compound.
@@ -356,6 +398,7 @@ def get_isomeric_smiles(id_: str | int) -> str | None:
     """
     return _fetch_scalar(id_, "isomeric_smiles")
 
+
 def get_iupac_name(id_: str | int) -> str | None:
     """
     Get the IUPAC (systematic) name of a compound.
@@ -373,6 +416,7 @@ def get_iupac_name(id_: str | int) -> str | None:
         'oxidane'
     """
     return _fetch_scalar(id_, "iupac_name")
+
 
 def get_xlogp(id_: str | int) -> float | None:
     """
@@ -394,6 +438,7 @@ def get_xlogp(id_: str | int) -> float | None:
         -0.7
     """
     return _fetch_scalar(id_, "xlogp")
+
 
 def get_cas(id_: str | int) -> str | None:
     """
@@ -420,6 +465,7 @@ def get_cas(id_: str | int) -> str | None:
     except (NotFoundError, AmbiguousIdentifierError):
         return None
 
+
 def get_synonyms(id_: str | int) -> list[str]:
     """
     Get all known synonyms (alternative names) for a compound.
@@ -444,6 +490,7 @@ def get_synonyms(id_: str | int) -> list[str]:
     except (NotFoundError, AmbiguousIdentifierError):
         return []
 
+
 def get_exact_mass(id_: str | int) -> float | None:
     """
     Get the exact mass of a compound.
@@ -463,6 +510,7 @@ def get_exact_mass(id_: str | int) -> float | None:
     """
     return _fetch_scalar(id_, "exact_mass")
 
+
 def get_monoisotopic_mass(id_: str | int) -> float | None:
     """
     Get the monoisotopic mass of a compound.
@@ -481,6 +529,7 @@ def get_monoisotopic_mass(id_: str | int) -> float | None:
         180.04225873
     """
     return _fetch_scalar(id_, "monoisotopic_mass")
+
 
 def get_tpsa(id_: str | int) -> float | None:
     """
@@ -502,6 +551,7 @@ def get_tpsa(id_: str | int) -> float | None:
     """
     return _fetch_scalar(id_, "tpsa")
 
+
 def get_complexity(id_: str | int) -> float | None:
     """
     Get the molecular complexity score of a compound.
@@ -520,6 +570,7 @@ def get_complexity(id_: str | int) -> float | None:
         212
     """
     return _fetch_scalar(id_, "complexity")
+
 
 def get_h_bond_donor_count(id_: str | int) -> int | None:
     """
@@ -540,6 +591,7 @@ def get_h_bond_donor_count(id_: str | int) -> int | None:
     """
     return _fetch_scalar(id_, "h_bond_donor_count")
 
+
 def get_h_bond_acceptor_count(id_: str | int) -> int | None:
     """
     Get the number of hydrogen bond acceptors in a compound.
@@ -558,6 +610,7 @@ def get_h_bond_acceptor_count(id_: str | int) -> int | None:
         4
     """
     return _fetch_scalar(id_, "h_bond_acceptor_count")
+
 
 def get_rotatable_bond_count(id_: str | int) -> int | None:
     """
@@ -578,6 +631,7 @@ def get_rotatable_bond_count(id_: str | int) -> int | None:
     """
     return _fetch_scalar(id_, "rotatable_bond_count")
 
+
 def get_heavy_atom_count(id_: str | int) -> int | None:
     """
     Get the number of heavy atoms (non-hydrogen atoms) in a compound.
@@ -596,6 +650,7 @@ def get_heavy_atom_count(id_: str | int) -> int | None:
         13
     """
     return _fetch_scalar(id_, "heavy_atom_count")
+
 
 def get_charge(id_: str | int) -> int | None:
     """
@@ -616,6 +671,7 @@ def get_charge(id_: str | int) -> int | None:
     """
     return _fetch_scalar(id_, "charge")
 
+
 def get_atom_stereo_count(id_: str | int) -> int | None:
     """
     Get the number of stereocenters (chiral centers) in a compound.
@@ -634,6 +690,7 @@ def get_atom_stereo_count(id_: str | int) -> int | None:
         4
     """
     return _fetch_scalar(id_, "atom_stereo_count")
+
 
 def get_bond_stereo_count(id_: str | int) -> int | None:
     """
@@ -654,6 +711,7 @@ def get_bond_stereo_count(id_: str | int) -> int | None:
     """
     return _fetch_scalar(id_, "bond_stereo_count")
 
+
 def get_covalent_unit_count(id_: str | int) -> int | None:
     """
     Get the number of covalently bonded units in a compound.
@@ -672,6 +730,7 @@ def get_covalent_unit_count(id_: str | int) -> int | None:
         1
     """
     return _fetch_scalar(id_, "covalent_unit_count")
+
 
 def get_inchi(id_: str | int) -> str | None:
     """
@@ -692,6 +751,7 @@ def get_inchi(id_: str | int) -> str | None:
     """
     return _fetch_scalar(id_, "in_ch_i")
 
+
 def get_inchi_key(id_: str | int) -> str | None:
     """
     Get the InChI Key (hashed version of InChI) of a compound.
@@ -710,6 +770,7 @@ def get_inchi_key(id_: str | int) -> str | None:
         'BSYNRYMUTXBXSQ-UHFFFAOYSA-N'
     """
     return _fetch_scalar(id_, "in_ch_i_key")
+
 
 def get_compound(identifier: str | int) -> Compound:
     """
@@ -749,6 +810,7 @@ def get_compound(identifier: str | int) -> Compound:
     df_renamed = df.rename(columns=SNAKE_TO_CAMEL)
     return Compound(**df_renamed.iloc[0].to_dict())
 
+
 def get_compounds(identifiers: Iterable[str | int]) -> list[Compound]:
     """
     Retrieve multiple Compound objects for a list of identifiers.
@@ -780,6 +842,7 @@ def get_compounds(identifiers: Iterable[str | int]) -> list[Compound]:
     """
     return [get_compound(x) for x in identifiers]
 
+
 def draw_compound(identifier: str | int):
     """
     Draw the 2D chemical structure of a compound.
@@ -802,7 +865,10 @@ def draw_compound(identifier: str | int):
         from PIL import Image
     except ImportError as e:
         missing_lib = str(e).split("'")[1] if "'" in str(e) else str(e)
-        print(f"Cannot render structure: missing dependency '{missing_lib}'", file=sys.stderr)
+        print(
+            f"Cannot render structure: missing dependency '{missing_lib}'",
+            file=sys.stderr,
+        )
         print("Please install with: pip install ChemInformant[plot]", file=sys.stderr)
         return
 
@@ -830,7 +896,7 @@ def draw_compound(identifier: str | int):
 
         plt.figure(figsize=(8, 6))
         plt.imshow(image)
-        plt.axis('off')
+        plt.axis("off")
         plt.title(title, fontsize=14, pad=20)
         plt.tight_layout()
         plt.show()
