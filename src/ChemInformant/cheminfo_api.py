@@ -241,7 +241,7 @@ def get_properties(
                 cid = int(cid_val) if pd.notna(cid_val) else None
                 val = None
                 if row["status"] == "OK" and cid:
-                    api_row = fetched_data.get(cid, {})  # type: ignore
+                    api_row = fetched_data.get(cid, {})
                     val = api_row.get(prop_camel)
                     if not val and prop_snake in fallback_map_snake:
                         fallback_prop = fallback_map_snake[prop_snake]
