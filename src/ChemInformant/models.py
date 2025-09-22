@@ -71,7 +71,7 @@ class Compound(BaseModel):
 
     @field_validator("molecular_weight", "xlogp", mode="before")
     @classmethod
-    def to_float(cls, v: Any):
+    def to_float(cls, v: Any) -> Optional[float]:
         """Validator to safely convert string values to float."""
         if v is None or v == "":
             return None

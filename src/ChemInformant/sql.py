@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any, Literal
+
 import pandas as pd
 from sqlalchemy import Engine, create_engine
 
@@ -9,9 +11,9 @@ def df_to_sql(
     con: str | Engine,
     table: str,
     *,
-    if_exists: str = "append",
-    dtype: dict | None = None,
-    **engine_kwargs,
+    if_exists: Literal["fail", "replace", "append"] = "append",
+    dtype: Any = None,
+    **engine_kwargs: Any,
 ) -> None:
     """
     Persists a ChemInformant DataFrame to an SQL database table.

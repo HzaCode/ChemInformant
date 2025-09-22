@@ -61,7 +61,7 @@ def get_properties(
     namespace: str = "cid",
     include_3d: bool = False,
     all_properties: bool = False,
-    **kwargs,
+    **kwargs: Any,
 ) -> pd.DataFrame:
     """
     Retrieve chemical properties for one or more compounds from PubChem.
@@ -185,19 +185,22 @@ def get_properties(
     if properties is not None and len(resolved_props) == 0:
         return pd.DataFrame()
 
+    identifiers_list: list[int | str]
     if not isinstance(identifiers, list):
-        identifiers = [identifiers]
+        identifiers_list = [identifiers]
+    else:
+        identifiers_list = list(identifiers)  # Type-safe conversion
 
     # --- Step 2: Create base DataFrame with resolved CIDs ---
     meta: dict[Any, dict[str, Any]] = {}
-    for ident in identifiers:
+    for ident in identifiers_list:
         try:
             cid = _resolve_to_single_cid(ident)
             meta[ident] = {"status": "OK", "cid": str(cid)}
         except Exception as exc:
             meta[ident] = {"status": type(exc).__name__, "cid": pd.NA}
     df = pd.DataFrame(
-        [{"input_identifier": ident, **meta[ident]} for ident in identifiers]
+        [{"input_identifier": ident, **meta[ident]} for ident in identifiers_list]
     )
 
     # --- Early return for empty inputs ---
@@ -232,9 +235,10 @@ def get_properties(
 
         for prop_snake in standard_props_snake:
             prop_camel = SNAKE_TO_CAMEL[prop_snake]
-            values = []
+            values: list[Any] = []
             for _, row in df.iterrows():
-                cid = int(row["cid"]) if pd.notna(row["cid"]) else None
+                cid_val = row["cid"]
+                cid = int(cid_val) if pd.notna(cid_val) else None
                 val = None
                 if row["status"] == "OK" and cid:
                     api_row = fetched_data.get(cid, {})
@@ -255,7 +259,7 @@ def get_properties(
                 if prop_snake == "cas"
                 else api_helpers.get_synonyms_for_cid
             )
-            fail_value = None if prop_snake == "cas" else []
+            fail_value: Any = None if prop_snake == "cas" else []
             prop_data = [
                 fetch_func(int(cid)) if pd.notna(cid) and status == "OK" else fail_value
                 for cid, status in zip(df["cid"], df["status"])
@@ -281,7 +285,7 @@ def get_properties(
 # --- Convenience Functions (now simple and consistent) ---
 
 
-def _fetch_scalar(id_, prop_snake):
+def _fetch_scalar(id_: str | int, prop_snake: str) -> float | int | str | None:
     """Internal helper for single-value convenience functions."""
     try:
         cid = _resolve_to_single_cid(id_)
@@ -312,9 +316,13 @@ def _fetch_scalar(id_, prop_snake):
         props = api_helpers.get_batch_properties([cid], props_to_fetch)
         data = props.get(cid, {})
 
-        return data.get(prop_camel) or (
+        result = data.get(prop_camel) or (
             data.get(fallback_camel) if fallback_camel else None
         )
+        # Ensure we return the correct type
+        if result is not None and not isinstance(result, (int, float, str)):
+            return None
+        return result
     except (NotFoundError, AmbiguousIdentifierError):
         return None
 
@@ -335,7 +343,8 @@ def get_weight(id_: str | int) -> float | None:
         >>> get_weight(2244)  # Same as above using CID
         180.16
     """
-    return _fetch_scalar(id_, "molecular_weight")
+    result = _fetch_scalar(id_, "molecular_weight")
+    return float(result) if isinstance(result, (int, float)) else None
 
 
 def get_formula(id_: str | int) -> str | None:
@@ -354,7 +363,8 @@ def get_formula(id_: str | int) -> str | None:
         >>> get_formula("water")
         'H2O'
     """
-    return _fetch_scalar(id_, "molecular_formula")
+    result = _fetch_scalar(id_, "molecular_formula")
+    return str(result) if result is not None else None
 
 
 def get_canonical_smiles(id_: str | int) -> str | None:
@@ -376,7 +386,8 @@ def get_canonical_smiles(id_: str | int) -> str | None:
         >>> get_canonical_smiles(2244)
         'CC(=O)OC1=CC=CC=C1C(=O)O'
     """
-    return _fetch_scalar(id_, "canonical_smiles")
+    result = _fetch_scalar(id_, "canonical_smiles")
+    return str(result) if result is not None else None
 
 
 def get_isomeric_smiles(id_: str | int) -> str | None:
@@ -396,7 +407,8 @@ def get_isomeric_smiles(id_: str | int) -> str | None:
         >>> get_isomeric_smiles("glucose")
         'C([C@@H]1[C@H]([C@@H]([C@H]([C@H](O1)O)O)O)O)O'
     """
-    return _fetch_scalar(id_, "isomeric_smiles")
+    result = _fetch_scalar(id_, "isomeric_smiles")
+    return str(result) if result is not None else None
 
 
 def get_iupac_name(id_: str | int) -> str | None:
@@ -415,7 +427,8 @@ def get_iupac_name(id_: str | int) -> str | None:
         >>> get_iupac_name("water")
         'oxidane'
     """
-    return _fetch_scalar(id_, "iupac_name")
+    result = _fetch_scalar(id_, "iupac_name")
+    return str(result) if result is not None else None
 
 
 def get_xlogp(id_: str | int) -> float | None:
@@ -437,7 +450,8 @@ def get_xlogp(id_: str | int) -> float | None:
         >>> get_xlogp("water")
         -0.7
     """
-    return _fetch_scalar(id_, "xlogp")
+    result = _fetch_scalar(id_, "xlogp")
+    return float(result) if isinstance(result, (int, float)) else None
 
 
 def get_cas(id_: str | int) -> str | None:
@@ -508,7 +522,8 @@ def get_exact_mass(id_: str | int) -> float | None:
         >>> get_exact_mass("aspirin")
         180.04225873
     """
-    return _fetch_scalar(id_, "exact_mass")
+    result = _fetch_scalar(id_, "exact_mass")
+    return float(result) if isinstance(result, (int, float)) else None
 
 
 def get_monoisotopic_mass(id_: str | int) -> float | None:
@@ -528,7 +543,8 @@ def get_monoisotopic_mass(id_: str | int) -> float | None:
         >>> get_monoisotopic_mass("aspirin")
         180.04225873
     """
-    return _fetch_scalar(id_, "monoisotopic_mass")
+    result = _fetch_scalar(id_, "monoisotopic_mass")
+    return float(result) if isinstance(result, (int, float)) else None
 
 
 def get_tpsa(id_: str | int) -> float | None:
@@ -549,7 +565,8 @@ def get_tpsa(id_: str | int) -> float | None:
         >>> get_tpsa("aspirin")
         63.6
     """
-    return _fetch_scalar(id_, "tpsa")
+    result = _fetch_scalar(id_, "tpsa")
+    return float(result) if isinstance(result, (int, float)) else None
 
 
 def get_complexity(id_: str | int) -> float | None:
@@ -569,7 +586,8 @@ def get_complexity(id_: str | int) -> float | None:
         >>> get_complexity("aspirin")
         212
     """
-    return _fetch_scalar(id_, "complexity")
+    result = _fetch_scalar(id_, "complexity")
+    return float(result) if isinstance(result, (int, float)) else None
 
 
 def get_h_bond_donor_count(id_: str | int) -> int | None:
@@ -589,7 +607,8 @@ def get_h_bond_donor_count(id_: str | int) -> int | None:
         >>> get_h_bond_donor_count("aspirin")
         1
     """
-    return _fetch_scalar(id_, "h_bond_donor_count")
+    result = _fetch_scalar(id_, "h_bond_donor_count")
+    return int(result) if isinstance(result, (int, float)) else None
 
 
 def get_h_bond_acceptor_count(id_: str | int) -> int | None:
@@ -609,7 +628,8 @@ def get_h_bond_acceptor_count(id_: str | int) -> int | None:
         >>> get_h_bond_acceptor_count("aspirin")
         4
     """
-    return _fetch_scalar(id_, "h_bond_acceptor_count")
+    result = _fetch_scalar(id_, "h_bond_acceptor_count")
+    return int(result) if isinstance(result, (int, float)) else None
 
 
 def get_rotatable_bond_count(id_: str | int) -> int | None:
@@ -629,7 +649,8 @@ def get_rotatable_bond_count(id_: str | int) -> int | None:
         >>> get_rotatable_bond_count("aspirin")
         3
     """
-    return _fetch_scalar(id_, "rotatable_bond_count")
+    result = _fetch_scalar(id_, "rotatable_bond_count")
+    return int(result) if isinstance(result, (int, float)) else None
 
 
 def get_heavy_atom_count(id_: str | int) -> int | None:
@@ -649,7 +670,8 @@ def get_heavy_atom_count(id_: str | int) -> int | None:
         >>> get_heavy_atom_count("aspirin")
         13
     """
-    return _fetch_scalar(id_, "heavy_atom_count")
+    result = _fetch_scalar(id_, "heavy_atom_count")
+    return int(result) if isinstance(result, (int, float)) else None
 
 
 def get_charge(id_: str | int) -> int | None:
@@ -669,7 +691,8 @@ def get_charge(id_: str | int) -> int | None:
         >>> get_charge("aspirin")
         0
     """
-    return _fetch_scalar(id_, "charge")
+    result = _fetch_scalar(id_, "charge")
+    return int(result) if isinstance(result, (int, float)) else None
 
 
 def get_atom_stereo_count(id_: str | int) -> int | None:
@@ -689,7 +712,8 @@ def get_atom_stereo_count(id_: str | int) -> int | None:
         >>> get_atom_stereo_count("glucose")
         4
     """
-    return _fetch_scalar(id_, "atom_stereo_count")
+    result = _fetch_scalar(id_, "atom_stereo_count")
+    return int(result) if isinstance(result, (int, float)) else None
 
 
 def get_bond_stereo_count(id_: str | int) -> int | None:
@@ -709,7 +733,8 @@ def get_bond_stereo_count(id_: str | int) -> int | None:
         >>> get_bond_stereo_count("retinol")
         4
     """
-    return _fetch_scalar(id_, "bond_stereo_count")
+    result = _fetch_scalar(id_, "bond_stereo_count")
+    return int(result) if isinstance(result, (int, float)) else None
 
 
 def get_covalent_unit_count(id_: str | int) -> int | None:
@@ -729,7 +754,8 @@ def get_covalent_unit_count(id_: str | int) -> int | None:
         >>> get_covalent_unit_count("aspirin")
         1
     """
-    return _fetch_scalar(id_, "covalent_unit_count")
+    result = _fetch_scalar(id_, "covalent_unit_count")
+    return int(result) if isinstance(result, (int, float)) else None
 
 
 def get_inchi(id_: str | int) -> str | None:
@@ -749,7 +775,8 @@ def get_inchi(id_: str | int) -> str | None:
         >>> get_inchi("aspirin")
         'InChI=1S/C9H8O4/c1-6(10)13-8-5-3-2-4-7(8)9(11)12/h2-5H,1H3,(H,11,12)'
     """
-    return _fetch_scalar(id_, "in_ch_i")
+    result = _fetch_scalar(id_, "in_ch_i")
+    return str(result) if result is not None else None
 
 
 def get_inchi_key(id_: str | int) -> str | None:
@@ -769,7 +796,8 @@ def get_inchi_key(id_: str | int) -> str | None:
         >>> get_inchi_key("aspirin")
         'BSYNRYMUTXBXSQ-UHFFFAOYSA-N'
     """
-    return _fetch_scalar(id_, "in_ch_i_key")
+    result = _fetch_scalar(id_, "in_ch_i_key")
+    return str(result) if result is not None else None
 
 
 def get_compound(identifier: str | int) -> Compound:
@@ -802,7 +830,7 @@ def get_compound(identifier: str | int) -> Compound:
         This function uses CamelCase property names to match the Compound model.
         For DataFrame output with snake_case names, use get_properties() instead.
     """
-    df = get_properties([identifier], all_properties=True)
+    df = get_properties(identifier, all_properties=True)
     if df.empty or df["status"].iat[0] != "OK":
         raise RuntimeError(f"Failed to fetch compound for {identifier!r}")
 
@@ -843,7 +871,7 @@ def get_compounds(identifiers: Iterable[str | int]) -> list[Compound]:
     return [get_compound(x) for x in identifiers]
 
 
-def draw_compound(identifier: str | int):
+def draw_compound(identifier: str | int) -> None:
     """
     Draw the 2D chemical structure of a compound.
 

@@ -19,7 +19,7 @@ from .sql import df_to_sql
 # ----------------------------------------------------
 
 
-def main_fetch():
+def main_fetch() -> None:
     """
     Main entry point for the chemfetch command-line tool.
 
@@ -150,7 +150,7 @@ def main_fetch():
         sys.exit(1)
 
 
-def main_draw():
+def main_draw() -> None:
     """
     Main entry point for the chemdraw command-line tool.
 

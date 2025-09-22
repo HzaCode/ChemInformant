@@ -82,6 +82,7 @@ def get_session() -> requests_cache.CachedSession:
     global _session
     if _session is None:
         setup_cache()
+    assert _session is not None  # Type narrowing for mypy
     return _session
 
 
@@ -125,7 +126,8 @@ def _fetch_with_ratelimit_and_retry(
         time.sleep(MIN_REQUEST_INTERVAL - elapsed)
     last_api_call_time = time.time()
 
-    retries, backoff = 0, INITIAL_BACKOFF
+    retries = 0
+    backoff = float(INITIAL_BACKOFF)
     while retries < MAX_RETRIES:
         try:
             resp = _execute_fetch(url)
@@ -133,10 +135,11 @@ def _fetch_with_ratelimit_and_retry(
             # Bust cache for stale 503 errors. If a "server busy" response
             # came from the cache, delete it and try a live request.
             if getattr(resp, "from_cache", False) and resp.status_code == 503:
-                key = get_session().cache.create_key(resp.request)
-                get_session().cache.delete(key)
-                with get_session().cache.disabled():
-                    resp = _execute_fetch(url)
+                session = get_session()
+                key = session.cache.create_key(resp.request)
+                session.cache.delete(key)
+                # Directly fetch without cache
+                resp = session.get(url, timeout=REQUEST_TIMEOUT)
 
             if resp.status_code == 200:
                 ctype = resp.headers.get("Content-Type", "").lower()
@@ -162,7 +165,7 @@ def _fetch_with_ratelimit_and_retry(
         time.sleep(backoff)
         # Note: random.uniform is safe here as it's only used for jitter in retry delays
         backoff = min(MAX_BACKOFF, backoff * 2) + random.uniform(
-            0, 1
+            0.0, 1.0
         )  # Exponential backoff with jitter
         retries += 1
 
@@ -201,7 +204,10 @@ def get_cids_by_name(name: str) -> list[int] | None:
     """
     url = f"{PUBCHEM_API_BASE}/compound/name/{quote(name)}/cids/JSON"
     data = _fetch_with_ratelimit_and_retry(url)
-    return data.get("IdentifierList", {}).get("CID") if isinstance(data, dict) else None
+    if isinstance(data, dict):
+        cid_list = data.get("IdentifierList", {}).get("CID")
+        return cid_list if isinstance(cid_list, list) else None
+    return None
 
 
 def get_cids_by_smiles(smiles: str) -> list[int] | None:
@@ -231,7 +237,10 @@ def get_cids_by_smiles(smiles: str) -> list[int] | None:
     """
     url = f"{PUBCHEM_API_BASE}/compound/smiles/{quote(smiles)}/cids/JSON"
     data = _fetch_with_ratelimit_and_retry(url)
-    return data.get("IdentifierList", {}).get("CID") if isinstance(data, dict) else None
+    if isinstance(data, dict):
+        cid_list = data.get("IdentifierList", {}).get("CID")
+        return cid_list if isinstance(cid_list, list) else None
+    return None
 
 
 def get_batch_properties(
@@ -352,7 +361,12 @@ def get_cas_for_cid(cid: int) -> str | None:
                                         "StringWithMarkup"
                                     )
                                     if markup and isinstance(markup, list) and markup:
-                                        return markup[0].get("String")
+                                        string_val = markup[0].get("String")
+                                        return (
+                                            string_val
+                                            if isinstance(string_val, str)
+                                            else None
+                                        )
     return None
 
 
@@ -386,5 +400,6 @@ def get_synonyms_for_cid(cid: int) -> list[str]:
     if isinstance(data, dict):
         info_list = data.get("InformationList", {}).get("Information", [])
         if info_list and isinstance(info_list[0].get("Synonym"), list):
-            return info_list[0]["Synonym"]
+            synonyms = info_list[0]["Synonym"]
+            return synonyms if isinstance(synonyms, list) else []
     return []
