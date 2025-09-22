@@ -181,7 +181,7 @@ For a deep dive, please see our detailed guides:
 *   **[Advanced Usage Guide](https://hezhiang.com/ChemInformant/advanced_usage.html)** - Complex workflows and batch processing
 *   **[Caching Guide](https://hezhiang.com/ChemInformant/caching_guide.html)** - Optimize performance with intelligent caching
 *   **[CLI Tools Documentation](https://hezhiang.com/ChemInformant/cli.html)** - Complete reference for `chemfetch` and `chemdraw`
-*   **[API Reference](https://hezhiang.com/ChemInformant/api/)** - Full function documentation with examples
+*   **[API Reference](https://hezhiang.com/ChemInformant/api/cheminfo_api.html)** - Full function documentation with examples
 
 ---
 
