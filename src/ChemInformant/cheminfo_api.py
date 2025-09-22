@@ -7,7 +7,8 @@ from __future__ import annotations
 import logging
 import re
 import sys
-from typing import Any, Iterable
+from collections.abc import Iterable
+from typing import Any
 
 import pandas as pd
 
@@ -198,15 +199,15 @@ def get_properties(
     # --- Step 3: Fetch standard properties ---
     standard_props_snake = [p for p in resolved_props if p not in _SPECIAL_PROPS]
     if standard_props_snake:
-        # Define internal fallback mappings (these are not exposed as separate properties)
-        FALLBACK_MAP_SNAKE = {"canonical_smiles": "connectivity_smiles", "isomeric_smiles": "fallback_smiles"}
-        INTERNAL_FALLBACK_TO_CAMEL = {"connectivity_smiles": "ConnectivitySMILES", "fallback_smiles": "SMILES"}
+        # Define internal fallback mappings (these are not exposed as separate properties)                                                                
+        fallback_map_snake = {"canonical_smiles": "connectivity_smiles", "isomeric_smiles": "fallback_smiles"}                                            
+        internal_fallback_to_camel = {"connectivity_smiles": "ConnectivitySMILES", "fallback_smiles": "SMILES"}
 
         api_tags_camel = {SNAKE_TO_CAMEL[p] for p in standard_props_snake}
         for prop_snake in standard_props_snake:
-            if prop_snake in FALLBACK_MAP_SNAKE:
-                fallback_prop = FALLBACK_MAP_SNAKE[prop_snake]
-                api_tags_camel.add(INTERNAL_FALLBACK_TO_CAMEL[fallback_prop])
+            if prop_snake in fallback_map_snake:
+                fallback_prop = fallback_map_snake[prop_snake]
+                api_tags_camel.add(internal_fallback_to_camel[fallback_prop])
 
         cids_needed = [int(cid) for cid in df['cid'] if pd.notna(cid)]
         fetched_data = api_helpers.get_batch_properties(cids_needed, list(api_tags_camel)) if cids_needed else {}
@@ -220,9 +221,9 @@ def get_properties(
                 if row["status"] == "OK" and cid:
                     api_row = fetched_data.get(cid, {})
                     val = api_row.get(prop_camel)
-                    if not val and prop_snake in FALLBACK_MAP_SNAKE:
-                        fallback_prop = FALLBACK_MAP_SNAKE[prop_snake]
-                        fallback_camel = INTERNAL_FALLBACK_TO_CAMEL[fallback_prop]
+                    if not val and prop_snake in fallback_map_snake:
+                        fallback_prop = fallback_map_snake[prop_snake]
+                        fallback_camel = internal_fallback_to_camel[fallback_prop]
                         val = api_row.get(fallback_camel)
                 values.append(val)
             df[prop_snake] = values
