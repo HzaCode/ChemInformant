@@ -26,17 +26,21 @@ extensions = [
 templates_path   = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 source_suffix    = ".rst"
-pygments_style   = "default"
+pygments_style   = "github-dark"
 
 # -- Syntax highlighting configuration ----------------------------------------
 # Ensure consistent syntax highlighting across all code blocks
 highlight_language = "python"
 highlight_options = {
-    'default': {'stripall': False},
-    'python': {'stripall': False},
-    'bash': {'stripall': False},
-    'text': {'stripall': False},
+    'default': {'stripnl': True, 'stripall': True},
+    'python': {'stripnl': True, 'stripall': True},
+    'bash': {'stripnl': True, 'stripall': True},
+    'text': {'stripnl': False, 'stripall': False},
+    'json': {'stripnl': True, 'stripall': True},
 }
+
+# Enable dark theme support for better contrast
+pygments_dark_style = "github-dark"
 
 # -- Copy button configuration -----------------------------------------------
 # Configure sphinx-copybutton to skip prompts and output
@@ -48,6 +52,12 @@ copybutton_remove_prompts = True
 # -- HTML output --------------------------------------------------------------
 html_theme       = "sphinx_rtd_theme"
 html_static_path = ["_static"]
+
+# Include custom CSS files for enhanced syntax highlighting
+html_css_files = [
+    'custom.css',
+    'syntax_highlighting.css',
+]
 
 html_theme_options = {
     "collapse_navigation": True,
