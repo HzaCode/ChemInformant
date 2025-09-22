@@ -11,6 +11,7 @@ from ChemInformant import api_helpers
 
 TMP_HOME = Path(__file__).parent / "_tmp_cache_test"
 
+
 def cleanup():
     """Clean up any cached state and remove temp directory."""
     if hasattr(api_helpers, "_session") and api_helpers._session:
@@ -37,47 +38,54 @@ def mock_pubchem_responses(url: str, **kwargs) -> requests.Response:
     """Simulate responses for known PubChem endpoints."""
     mock_resp = mock.Mock(spec=requests.Response)
     mock_resp.status_code = 200
-    mock_resp.headers = {'Content-Type': 'application/json'}
+    mock_resp.headers = {"Content-Type": "application/json"}
     mock_resp.from_cache = False
 
-    if 'compound/name/caffeine/cids' in url:
-        mock_resp.json.return_value = {'IdentifierList': {'CID': [2519]}}
-    elif 'compound/cid/2519/property' in url:
+    if "compound/name/caffeine/cids" in url:
+        mock_resp.json.return_value = {"IdentifierList": {"CID": [2519]}}
+    elif "compound/cid/2519/property" in url:
         mock_resp.json.return_value = {
             "PropertyTable": {
-                "Properties": [{
-                    "CID": 2519,
-                    "MolecularWeight": "194.19",
-                    "IUPACName": "1,3,7-trimethylpurine-2,6-dione"
-                }]
+                "Properties": [
+                    {
+                        "CID": 2519,
+                        "MolecularWeight": "194.19",
+                        "IUPACName": "1,3,7-trimethylpurine-2,6-dione",
+                    }
+                ]
             }
         }
-    elif 'compound/cid/2519/synonyms' in url:
+    elif "compound/cid/2519/synonyms" in url:
         mock_resp.json.return_value = {
-            "InformationList": {
-                "Information": [{
-                    "CID": 2519,
-                    "Synonym": ["Caffeine"]
-                }]
-            }
+            "InformationList": {"Information": [{"CID": 2519, "Synonym": ["Caffeine"]}]}
         }
-    elif 'pug_view/data/compound/2519' in url:
+    elif "pug_view/data/compound/2519" in url:
         mock_resp.json.return_value = {
             "Record": {
-                "Section": [{
-                    "TOCHeading": "Names and Identifiers",
-                    "Section": [{
-                        "TOCHeading": "Other Identifiers",
-                        "Section": [{
-                            "TOCHeading": "CAS",
-                            "Information": [{
-                                "Value": {
-                                    "StringWithMarkup": [{"String": "58-08-2"}]
-                                }
-                            }]
-                        }]
-                    }]
-                }]
+                "Section": [
+                    {
+                        "TOCHeading": "Names and Identifiers",
+                        "Section": [
+                            {
+                                "TOCHeading": "Other Identifiers",
+                                "Section": [
+                                    {
+                                        "TOCHeading": "CAS",
+                                        "Information": [
+                                            {
+                                                "Value": {
+                                                    "StringWithMarkup": [
+                                                        {"String": "58-08-2"}
+                                                    ]
+                                                }
+                                            }
+                                        ],
+                                    }
+                                ],
+                            }
+                        ],
+                    }
+                ]
             }
         }
     else:
@@ -88,7 +96,9 @@ def mock_pubchem_responses(url: str, **kwargs) -> requests.Response:
 
 def test_cache_expires():
     """Test that cache expiration works correctly."""
-    with mock.patch('ChemInformant.api_helpers._execute_fetch', side_effect=mock_pubchem_responses):
+    with mock.patch(
+        "ChemInformant.api_helpers._execute_fetch", side_effect=mock_pubchem_responses
+    ):
         setup_test_environment(expire_after=0.2)
 
         # First call should trigger mock network responses

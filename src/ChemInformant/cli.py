@@ -66,21 +66,22 @@ def main_fetch():
     )
 
     parser.add_argument(
-        "--props", "-p",
+        "--props",
+        "-p",
         type=str,
         default=None,
-        help="Comma-separated list of properties (e.g., 'molecular_weight,xlogp'). If not provided, returns default core property set."
+        help="Comma-separated list of properties (e.g., 'molecular_weight,xlogp'). If not provided, returns default core property set.",
     )
     # Add new command line arguments
     parser.add_argument(
         "--include-3d",
         action="store_true",
-        help="Include 3D properties in addition to the default core set."
+        help="Include 3D properties in addition to the default core set.",
     )
     parser.add_argument(
         "--all-properties",
         action="store_true",
-        help="Retrieve all ~40 available standard properties from PubChem."
+        help="Retrieve all ~40 available standard properties from PubChem.",
     )
 
     parser.add_argument(

@@ -14,16 +14,56 @@ import ChemInformant as ci
 
 # Sample drug names for benchmarking
 SAMPLE_DRUGS = [
-    "aspirin", "caffeine", "acetaminophen", "ibuprofen", "naproxen",
-    "diclofenac", "celecoxib", "meloxicam", "indomethacin", "piroxicam",
-    "amoxicillin", "azithromycin", "ciprofloxacin", "doxycycline", "penicillin",
-    "atorvastatin", "simvastatin", "rosuvastatin", "pravastatin", "lovastatin",
-    "metformin", "insulin", "glipizide", "glyburide", "pioglitazone",
-    "lisinopril", "enalapril", "losartan", "valsartan", "amlodipine",
-    "metoprolol", "atenolol", "propranolol", "carvedilol", "bisoprolol",
-    "warfarin", "heparin", "clopidogrel", "aspirin", "rivaroxaban",
-    "omeprazole", "lansoprazole", "pantoprazole", "esomeprazole", "ranitidine",
-    "fluoxetine", "sertraline", "paroxetine", "citalopram", "escitalopram",
+    "aspirin",
+    "caffeine",
+    "acetaminophen",
+    "ibuprofen",
+    "naproxen",
+    "diclofenac",
+    "celecoxib",
+    "meloxicam",
+    "indomethacin",
+    "piroxicam",
+    "amoxicillin",
+    "azithromycin",
+    "ciprofloxacin",
+    "doxycycline",
+    "penicillin",
+    "atorvastatin",
+    "simvastatin",
+    "rosuvastatin",
+    "pravastatin",
+    "lovastatin",
+    "metformin",
+    "insulin",
+    "glipizide",
+    "glyburide",
+    "pioglitazone",
+    "lisinopril",
+    "enalapril",
+    "losartan",
+    "valsartan",
+    "amlodipine",
+    "metoprolol",
+    "atenolol",
+    "propranolol",
+    "carvedilol",
+    "bisoprolol",
+    "warfarin",
+    "heparin",
+    "clopidogrel",
+    "aspirin",
+    "rivaroxaban",
+    "omeprazole",
+    "lansoprazole",
+    "pantoprazole",
+    "esomeprazole",
+    "ranitidine",
+    "fluoxetine",
+    "sertraline",
+    "paroxetine",
+    "citalopram",
+    "escitalopram",
 ]
 
 BENCHMARK_PROPERTIES = [
@@ -32,7 +72,7 @@ BENCHMARK_PROPERTIES = [
     "cas",
     "iupac_name",
     "canonical_smiles",
-    "molecular_formula"
+    "molecular_formula",
 ]
 
 
@@ -42,6 +82,7 @@ class TestPerformanceBenchmarks:
     @pytest.mark.benchmark(group="single_compound")
     def test_single_compound_lookup(self, benchmark):
         """Benchmark single compound property lookup."""
+
         def single_lookup():
             return ci.get_properties(["aspirin"], ["molecular_weight", "xlogp"])
 
@@ -99,6 +140,7 @@ class TestPerformanceBenchmarks:
     @pytest.mark.benchmark(group="convenience_api")
     def test_convenience_functions(self, benchmark):
         """Benchmark convenience function performance."""
+
         def convenience_lookup():
             results = []
             for compound in SAMPLE_DRUGS[:10]:
@@ -118,10 +160,10 @@ class TestPerformanceBenchmarks:
         """Benchmark handling of mixed identifier types."""
         mixed_identifiers = [
             "aspirin",  # name
-            2244,       # CID
+            2244,  # CID
             "CC(=O)OC1=CC=CC=C1C(=O)O",  # SMILES
-            "caffeine", # name
-            2519,       # CID
+            "caffeine",  # name
+            2519,  # CID
         ]
 
         def mixed_lookup():
@@ -138,7 +180,7 @@ class TestPerformanceBenchmarks:
             "another_fake_compound",
             "aspirin",  # valid one
             999999999,  # invalid CID
-            "caffeine", # valid one
+            "caffeine",  # valid one
         ]
 
         def error_handling_lookup():
@@ -190,7 +232,9 @@ def analyze_benchmark_results(benchmark_results):
         "max_time": max(benchmark_results),
         "mean_time": statistics.mean(benchmark_results),
         "median_time": statistics.median(benchmark_results),
-        "std_dev": statistics.stdev(benchmark_results) if len(benchmark_results) > 1 else 0,
+        "std_dev": statistics.stdev(benchmark_results)
+        if len(benchmark_results) > 1
+        else 0,
     }
 
 
@@ -207,8 +251,8 @@ def fresh_cache():
 # Performance thresholds (can be adjusted based on system performance)
 PERFORMANCE_THRESHOLDS = {
     "single_compound_max_time": 5.0,  # seconds
-    "batch_10_max_time": 10.0,        # seconds
-    "cache_hit_max_time": 1.0,        # seconds
+    "batch_10_max_time": 10.0,  # seconds
+    "cache_hit_max_time": 1.0,  # seconds
 }
 
 
@@ -220,8 +264,9 @@ def test_performance_thresholds():
     end_time = time.time()
 
     elapsed = end_time - start_time
-    assert elapsed < PERFORMANCE_THRESHOLDS["single_compound_max_time"], \
+    assert elapsed < PERFORMANCE_THRESHOLDS["single_compound_max_time"], (
         f"Single compound lookup took {elapsed:.2f}s, exceeds threshold"
+    )
 
     assert len(result) == 1
     assert result.iloc[0]["status"] == "OK"
