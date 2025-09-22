@@ -2,5 +2,5 @@ sphinx
 sphinx-rtd-theme
 sphinx-copybutton
 
-# Optional extensions for better syntax highlighting
-pygments>=2.0
+# Required for consistent syntax highlighting
+pygments>=2.17.0

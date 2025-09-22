@@ -20,12 +20,30 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
+    "sphinx_copybutton",
 ]
 
 templates_path   = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 source_suffix    = ".rst"
-pygments_style   = "sphinx"
+pygments_style   = "default"
+
+# -- Syntax highlighting configuration ----------------------------------------
+# Ensure consistent syntax highlighting across all code blocks
+highlight_language = "python"
+highlight_options = {
+    'default': {'stripall': False},
+    'python': {'stripall': False},
+    'bash': {'stripall': False},
+    'text': {'stripall': False},
+}
+
+# -- Copy button configuration -----------------------------------------------
+# Configure sphinx-copybutton to skip prompts and output
+copybutton_prompt_text = r">>> |\.\.\. |\$ |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: "
+copybutton_prompt_is_regexp = True
+copybutton_only_copy_prompt_lines = False
+copybutton_remove_prompts = True
 
 # -- HTML output --------------------------------------------------------------
 html_theme       = "sphinx_rtd_theme"

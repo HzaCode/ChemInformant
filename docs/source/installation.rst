@@ -53,7 +53,7 @@ If you wish to get the latest, unreleased development version, or if you plan to
     *   **To set up a complete environment for development contribution:**
         This command will install all dependencies, including the core library, plotting functionality, and development tools for testing and code checking (like `pytest`, `black`). This is the recommended command for contributors.
 
-        .. code-tally-block:: bash
+        .. code-block:: bash
 
            pip install -e .[all]
 
