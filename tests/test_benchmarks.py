@@ -148,7 +148,8 @@ class TestPerformanceBenchmarks:
                     weight = ci.get_weight(compound)
                     if weight is not None:
                         results.append(weight)
-                except Exception:
+                except (ValueError, KeyError, RuntimeError):
+                    # Skip compounds that fail - expected in benchmarks
                     continue
             return results
 

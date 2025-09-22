@@ -160,6 +160,7 @@ def _fetch_with_ratelimit_and_retry(
             )
 
         time.sleep(backoff)
+        # Note: random.uniform is safe here as it's only used for jitter in retry delays
         backoff = min(MAX_BACKOFF, backoff * 2) + random.uniform(
             0, 1
         )  # Exponential backoff with jitter
