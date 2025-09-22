@@ -199,8 +199,8 @@ def get_properties(
     # --- Step 3: Fetch standard properties ---
     standard_props_snake = [p for p in resolved_props if p not in _SPECIAL_PROPS]
     if standard_props_snake:
-        # Define internal fallback mappings (these are not exposed as separate properties)                                                                
-        fallback_map_snake = {"canonical_smiles": "connectivity_smiles", "isomeric_smiles": "fallback_smiles"}                                            
+        # Define internal fallback mappings (these are not exposed as separate properties)
+        fallback_map_snake = {"canonical_smiles": "connectivity_smiles", "isomeric_smiles": "fallback_smiles"}
         internal_fallback_to_camel = {"connectivity_smiles": "ConnectivitySMILES", "fallback_smiles": "SMILES"}
 
         api_tags_camel = {SNAKE_TO_CAMEL[p] for p in standard_props_snake}

@@ -105,6 +105,9 @@ select = ["E", "W", "F", "I", "N", "UP", "B", "C4", "SIM"]
 # Ignored rules
 ignore = [
     "E501",  # Line length handled by formatter
+    "N999",  # Invalid module name (ChemInformant is a valid name)
+    "N813",  # Camelcase imported as lowercase (common for packages)
+    "SIM117", # Multiple context managers (sometimes clearer as nested)
 ]
 
 [tool.ruff.lint.isort]
