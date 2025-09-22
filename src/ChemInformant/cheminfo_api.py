@@ -319,6 +319,9 @@ def _fetch_scalar(id_: str | int, prop_snake: str) -> float | int | str | None:
         result = data.get(prop_camel) or (
             data.get(fallback_camel) if fallback_camel else None
         )
+        # Ensure we return the correct type
+        if result is not None and not isinstance(result, (int, float, str)):
+            return None
         return result
     except (NotFoundError, AmbiguousIdentifierError):
         return None

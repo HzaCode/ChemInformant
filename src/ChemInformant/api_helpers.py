@@ -204,7 +204,10 @@ def get_cids_by_name(name: str) -> list[int] | None:
     """
     url = f"{PUBCHEM_API_BASE}/compound/name/{quote(name)}/cids/JSON"
     data = _fetch_with_ratelimit_and_retry(url)
-    return data.get("IdentifierList", {}).get("CID") if isinstance(data, dict) else None
+    if isinstance(data, dict):
+        cid_list = data.get("IdentifierList", {}).get("CID")
+        return cid_list if isinstance(cid_list, list) else None
+    return None
 
 
 def get_cids_by_smiles(smiles: str) -> list[int] | None:
@@ -234,7 +237,10 @@ def get_cids_by_smiles(smiles: str) -> list[int] | None:
     """
     url = f"{PUBCHEM_API_BASE}/compound/smiles/{quote(smiles)}/cids/JSON"
     data = _fetch_with_ratelimit_and_retry(url)
-    return data.get("IdentifierList", {}).get("CID") if isinstance(data, dict) else None
+    if isinstance(data, dict):
+        cid_list = data.get("IdentifierList", {}).get("CID")
+        return cid_list if isinstance(cid_list, list) else None
+    return None
 
 
 def get_batch_properties(
