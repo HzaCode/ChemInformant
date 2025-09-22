@@ -18,7 +18,7 @@
         <img src="https://img.shields.io/pypi/v/ChemInformant.svg" alt="PyPI version">
     </a>
     <a href="https://pypi.org/project/ChemInformant/">
-        <img src="https://img.shields.io/badge/python-%3E%3D3.8-blue.svg" alt="Python Version">
+        <img src="https://img.shields.io/badge/python-%3E%3D3.9-blue.svg" alt="Python Version">
     </a>
     <a href="https://github.com/HzaCode/ChemInformant/blob/main/LICENSE.md">
         <img src="https://img.shields.io/pypi/l/ChemInformant.svg" alt="License">
@@ -27,7 +27,10 @@
 
 <p>
     <a href="https://github.com/HzaCode/ChemInformant/actions/workflows/tests.yml">
-        <img src="https://img.shields.io/github/actions/workflow/status/HzaCode/ChemInformant/tests.yml?label=Build" alt="Build Status">
+        <img src="https://img.shields.io/github/actions/workflow/status/HzaCode/ChemInformant/tests.yml?label=Tests" alt="Tests Status">
+    </a>
+    <a href="https://github.com/HzaCode/ChemInformant/actions/workflows/docs-deploy.yml">
+        <img src="https://img.shields.io/github/actions/workflow/status/HzaCode/ChemInformant/docs-deploy.yml?label=Docs" alt="Docs Build Status">
     </a>
     <a href="https://cdn.jsdelivr.net/gh/HzaCode/ChemInformant@gh-pages/coverage.svg">
         <img src="https://cdn.jsdelivr.net/gh/HzaCode/ChemInformant@gh-pages/coverage.svg" alt="coverage">
@@ -170,7 +173,15 @@ For a deep dive, please see our detailed guides:
 
 *   **➡️ Online Documentation:** The **[official documentation site](https://hezhiang.com/ChemInformant)** contains complete API references, guides, and usage examples. **This is the most comprehensive resource.**
 *   **➡️ Interactive User Manual:** Our [**Jupyter Notebook Tutorial**](examples/ChemInformant_User_Manual_v1.0.ipynb) provides a complete, end-to-end walkthrough. This is the best place to start for a hands-on experience.
-*   **➡️ Performance Benchmarks:** You can review and run our [**Benchmark Script**](./benchmark.py) to see the performance advantages of batching and caching.
+*   **➡️ Performance Benchmarks:** Run integrated benchmarks with `pytest tests/test_benchmarks.py --benchmark-only` to see the performance advantages of batching and caching.
+
+#### 📖 Additional Resources & Use Cases
+
+*   **[Basic Usage Guide](https://hezhiang.com/ChemInformant/basic_usage.html)** - Quick start examples for common tasks
+*   **[Advanced Usage Guide](https://hezhiang.com/ChemInformant/advanced_usage.html)** - Complex workflows and batch processing
+*   **[Caching Guide](https://hezhiang.com/ChemInformant/caching_guide.html)** - Optimize performance with intelligent caching
+*   **[CLI Tools Documentation](https://hezhiang.com/ChemInformant/cli.html)** - Complete reference for `chemfetch` and `chemdraw`
+*   **[API Reference](https://hezhiang.com/ChemInformant/api/)** - Full function documentation with examples
 
 ---
 
