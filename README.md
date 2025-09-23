@@ -8,12 +8,21 @@
 
 <br>
 
+
 [![Total Downloads](https://img.shields.io/pepy/dt/cheminformant?style=for-the-badge&color=306998&label=Downloads&logo=python)](https://pepy.tech/project/cheminformant)
+
 
 <p>
     <a href="https://doi.org/10.21105/joss.08341">
         <img src="https://joss.theoj.org/papers/10.21105/joss.08341/status.svg" alt="DOI">
     </a>
+    <a href="https://github.com/pyOpenSci/software-submission/issues/254">
+        <img src="https://img.shields.io/badge/pyOpenSci-First%20JOSS%20Track-blueviolet" alt="pyOpenSci First JOSS Track Review">
+    </a>
+</p>
+
+
+<p>
     <a href="https://pypi.org/project/ChemInformant/">
         <img src="https://img.shields.io/pypi/v/ChemInformant.svg" alt="PyPI version">
     </a>
@@ -23,9 +32,6 @@
     <a href="https://github.com/HzaCode/ChemInformant/blob/main/LICENSE.md">
         <img src="https://img.shields.io/pypi/l/ChemInformant.svg" alt="License">
     </a>
-</p>
-
-<p>
     <a href="https://github.com/HzaCode/ChemInformant/actions/workflows/tests.yml">
         <img src="https://img.shields.io/github/actions/workflow/status/HzaCode/ChemInformant/tests.yml?label=Tests" alt="Tests Status">
     </a>
@@ -40,9 +46,6 @@
     </a>
     <a href="https://app.codacy.com/gh/HzaCode/ChemInformant/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade">
         <img src="https://app.codacy.com/project/badge/Grade/ba35e3e2f5224858bcaeb8f9c4ee2838" alt="Codacy Badge">
-    </a>
-    <a href="https://github.com/pyOpenSci/software-submission/issues/254">
-        <img src="https://img.shields.io/badge/pyOpenSci-First%20JOSS%20Track-blueviolet" alt="pyOpenSci First JOSS Track Review">
     </a>
     <a href="https://github.com/lmmentel/awesome-python-chemistry">
         <img src="https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg" alt="Awesome Python Chemistry">
