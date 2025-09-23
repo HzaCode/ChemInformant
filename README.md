@@ -8,10 +8,10 @@
 
 <br>
 
-
+<!-- 第一排：下载量 -->
 [![Total Downloads](https://img.shields.io/pepy/dt/cheminformant?style=for-the-badge&color=306998&label=Downloads&logo=python)](https://pepy.tech/project/cheminformant)
 
-
+<!-- 第二排：JOSS + pyOpenSci -->
 <p>
     <a href="https://doi.org/10.21105/joss.08341">
         <img src="https://joss.theoj.org/papers/10.21105/joss.08341/status.svg" alt="DOI">
@@ -21,7 +21,7 @@
     </a>
 </p>
 
-
+<!-- 第三排：其他 -->
 <p>
     <a href="https://pypi.org/project/ChemInformant/">
         <img src="https://img.shields.io/pypi/v/ChemInformant.svg" alt="PyPI version">
@@ -41,9 +41,11 @@
     <a href="https://cdn.jsdelivr.net/gh/HzaCode/ChemInformant@gh-pages/coverage.svg">
         <img src="https://cdn.jsdelivr.net/gh/HzaCode/ChemInformant@gh-pages/coverage.svg" alt="coverage">
     </a>
+    <!--
     <a href="https://github.com/astral-sh/ruff">
         <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff">
     </a>
+    -->
     <a href="https://app.codacy.com/gh/HzaCode/ChemInformant/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade">
         <img src="https://app.codacy.com/project/badge/Grade/ba35e3e2f5224858bcaeb8f9c4ee2838" alt="Codacy Badge">
     </a>
@@ -53,6 +55,7 @@
 </p>
 
 </div>
+
 
 
 
