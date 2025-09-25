@@ -29,6 +29,8 @@ See documentation for detailed usage examples and API reference.
 
 from __future__ import annotations
 
+__version__ = "2.4.3"
+
 from . import api_helpers
 
 # Cache setup

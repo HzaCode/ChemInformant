@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ChemInformant"
-version = "2.4.2"
+version = "2.4.3"
 authors = [
   { name = "Zhiang He", email = "ang@hezhiang.com" },
 ]
