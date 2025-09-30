@@ -11,16 +11,12 @@
 <!-- 第一排：下载量 -->
 [![Total Downloads](https://img.shields.io/pepy/dt/cheminformant?style=for-the-badge&color=306998&label=Downloads&logo=python)](https://pepy.tech/project/cheminformant)
 
-<!-- 第二排：JOSS + pyOpenSci -->
-<p>
-    <a href="https://doi.org/10.21105/joss.08341">
-        <img src="https://joss.theoj.org/papers/10.21105/joss.08341/status.svg" alt="DOI">
-    </a>
-    <a href="https://github.com/pyOpenSci/software-submission/issues/254">
-        <img src="https://img.shields.io/badge/pyOpenSci-First%20JOSS%20Track-blueviolet" alt="pyOpenSci First JOSS Track Review">
-    </a>
-</p>
-
+<a href="https://doi.org/10.21105/joss.08341">
+    <img src="https://joss.theoj.org/papers/10.21105/joss.08341/status.svg" alt="DOI">
+</a>
+<a href="https://github.com/pyOpenSci/software-review/issues/254">
+    <img src="https://pyopensci.org/badges/peer-reviewed.svg" alt="pyOpenSci Peer-Reviewed"><img src="https://img.shields.io/badge/丨First%20JOSS%20Track-32CD32?style=flat" alt="First JOSS Track">
+</a>
 <!-- 第三排：其他 -->
 <p>
     <a href="https://pypi.org/project/ChemInformant/">
