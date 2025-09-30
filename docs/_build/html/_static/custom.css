@@ -1,0 +1,10 @@
+
+.bd-sidebar-secondary,
+.bd-toc,
+.section-nav {            /* older theme class */
+  display: none !important;
+}
+
+.bd-main {
+  margin-left: 0 !important;
+}
