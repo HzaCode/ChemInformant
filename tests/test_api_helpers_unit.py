@@ -205,6 +205,26 @@ class TestAPIHelperFunctions:
             result = api_helpers.get_batch_properties([1, 2], ["MolecularWeight"])
             assert result == {1: {}, 2: {}}
 
+    def test_get_batch_properties_pagination_fails_on_second_request(self):
+        """Test that pagination stops when a subsequent request fails."""
+        first_response = {
+            "PropertyTable": {"Properties": [{"CID": 1, "MolecularWeight": "100.0"}]},
+            "ListKey": "test_key_123",
+        }
+
+        # Second request returns invalid data (simulating a failure)
+        second_response = "invalid"
+
+        with mock.patch.object(
+            api_helpers,
+            "_fetch_with_ratelimit_and_retry",
+            side_effect=[first_response, second_response],
+        ):
+            result = api_helpers.get_batch_properties([1, 2], ["MolecularWeight"])
+            # Should only have data from first page since second page failed
+            assert 1 in result
+            assert result[1]["MolecularWeight"] == "100.0"
+
     def test_get_cas_for_cid_success(self):
         mock_response = {
             "Record": {
