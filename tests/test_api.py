@@ -282,6 +282,41 @@ def test_convenience_functions():
     assert ci.get_cas("caffeine") is None
 
 
+def test_convenience_functions_return_none_on_not_found():
+    """Tests that convenience functions return None when compound is not found."""
+    assert ci.get_weight("nonexistent") is None
+    assert ci.get_formula("nonexistent") is None
+    assert ci.get_canonical_smiles("nonexistent") is None
+    assert ci.get_isomeric_smiles("nonexistent") is None
+    assert ci.get_iupac_name("nonexistent") is None
+    assert ci.get_xlogp("nonexistent") is None
+    assert ci.get_cas("nonexistent") is None
+    assert ci.get_exact_mass("nonexistent") is None
+    assert ci.get_monoisotopic_mass("nonexistent") is None
+    assert ci.get_tpsa("nonexistent") is None
+    assert ci.get_complexity("nonexistent") is None
+    assert ci.get_h_bond_donor_count("nonexistent") is None
+    assert ci.get_h_bond_acceptor_count("nonexistent") is None
+    assert ci.get_rotatable_bond_count("nonexistent") is None
+    assert ci.get_heavy_atom_count("nonexistent") is None
+    assert ci.get_charge("nonexistent") is None
+    assert ci.get_atom_stereo_count("nonexistent") is None
+    assert ci.get_bond_stereo_count("nonexistent") is None
+    assert ci.get_covalent_unit_count("nonexistent") is None
+    assert ci.get_inchi("nonexistent") is None
+    assert ci.get_inchi_key("nonexistent") is None
+
+
+def test_convenience_functions_return_none_on_ambiguous():
+    """Tests that convenience functions return None when identifier is ambiguous."""
+    assert ci.get_weight("ambiguous") is None
+    assert ci.get_formula("ambiguous") is None
+    assert ci.get_canonical_smiles("ambiguous") is None
+    assert ci.get_isomeric_smiles("ambiguous") is None
+    assert ci.get_iupac_name("ambiguous") is None
+    assert ci.get_xlogp("ambiguous") is None
+
+
 def test_get_compound_and_compounds():
     """Tests the Compound object retrieval functions."""
     cmpd = ci.get_compound("aspirin")

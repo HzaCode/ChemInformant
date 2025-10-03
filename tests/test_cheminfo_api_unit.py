@@ -392,3 +392,72 @@ class TestDrawCompound:
                         result = cheminfo_api.draw_compound("caffeine")
                         assert result is None
                         mock_print.assert_called()
+
+
+class TestFetchScalar:
+    def test_property_with_invalid_type_returns_none(self):
+        """Test that properties with invalid types return None."""
+        with mock.patch.object(
+            cheminfo_api, "_resolve_to_single_cid", return_value=2519
+        ):
+            with mock.patch(
+                "ChemInformant.api_helpers.get_batch_properties",
+                return_value={2519: {"MolecularWeight": ["invalid", "list"]}},
+            ):
+                result = cheminfo_api._fetch_scalar(2519, "molecular_weight")
+                assert result is None
+
+
+class TestGetSynonyms:
+    def test_get_synonyms_returns_empty_list_on_not_found(self):
+        """Test that get_synonyms returns empty list when compound not found."""
+        result = cheminfo_api.get_synonyms("nonexistent")
+        assert result == []
+
+    def test_get_synonyms_returns_empty_list_on_ambiguous(self):
+        """Test that get_synonyms returns empty list when identifier is ambiguous."""
+        result = cheminfo_api.get_synonyms("ambiguous")
+        assert result == []
+
+
+class TestCompoundModel:
+    def test_safe_float_handles_invalid_types(self):
+        """Test that _safe_float returns None for invalid values."""
+        # Test with valid values
+        compound = Compound(
+            input_identifier="test",
+            cid="123",
+            status="OK",
+            molecular_weight=100.5,
+        )
+        assert compound.molecular_weight == 100.5
+
+        # Test with None
+        compound = Compound(
+            input_identifier="test", cid="123", status="OK", molecular_weight=None
+        )
+        assert compound.molecular_weight is None
+
+        # Test with empty string
+        compound = Compound(
+            input_identifier="test", cid="123", status="OK", molecular_weight=""
+        )
+        assert compound.molecular_weight is None
+
+        # Test with invalid string (ValueError)
+        compound = Compound(
+            input_identifier="test",
+            cid="123",
+            status="OK",
+            molecular_weight="not_a_number",
+        )
+        assert compound.molecular_weight is None
+
+        # Test with invalid type (TypeError) - using a complex object
+        compound = Compound(
+            input_identifier="test",
+            cid="123",
+            status="OK",
+            molecular_weight={"key": "value"},
+        )
+        assert compound.molecular_weight is None
