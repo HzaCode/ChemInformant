@@ -455,6 +455,9 @@ class TestCompoundModel:
 
         # Test with invalid type (TypeError) - using a complex object
         compound = Compound(
-            input_identifier="test", cid="123", status="OK", molecular_weight={"key": "value"}
+            input_identifier="test",
+            cid="123",
+            status="OK",
+            molecular_weight={"key": "value"},
         )
         assert compound.molecular_weight is None
