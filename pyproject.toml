@@ -12,7 +12,7 @@ version = "2.4.3"
 authors = [
   { name = "Zhiang He", email = "ang@hezhiang.com" },
 ]
-description = "A robust and high-throughput Python client for the PubChem API, designed for automated data retrieval and analysis"
+description = "A robust, AI-optimized Python client for the PubChem API, designed for automated data retrieval, machine learning workflows, and chemical informatics analysis"
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.9"
 license = "MIT"
@@ -30,7 +30,10 @@ keywords = [
     "chemistry", "cheminformatics", "pubchem", "api", "compound", "drug",
     "cache", "pydantic", "batch", "smiles", "sql", "data-science",
     "molecular-properties", "scientific-computing", "api-client",
-    "chemical-data", "drug-discovery", "computational-chemistry"
+    "chemical-data", "drug-discovery", "computational-chemistry",
+    "machine-learning", "ai", "artificial-intelligence", "ml", "deep-learning",
+    "chemical-ai", "drug-ai", "molecular-ai", "cheminformatics-ai",
+    "automated-discovery", "ai-chemistry", "chemical-ml", "drug-ml"
 ]
 
 # ---------------------------
