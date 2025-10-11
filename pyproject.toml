@@ -28,7 +28,9 @@ classifiers = [
 ]
 keywords = [
     "chemistry", "cheminformatics", "pubchem", "api", "compound", "drug",
-    "cache", "pydantic", "batch", "smiles", "sql"
+    "cache", "pydantic", "batch", "smiles", "sql", "data-science",
+    "molecular-properties", "scientific-computing", "api-client",
+    "chemical-data", "drug-discovery", "computational-chemistry"
 ]
 
 # ---------------------------
