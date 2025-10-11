@@ -52,12 +52,14 @@ copybutton_remove_prompts = True
 # -- HTML output --------------------------------------------------------------
 html_theme       = "sphinx_rtd_theme"
 html_static_path = ["_static"]
+html_extra_path  = ["_templates"]
 
 # Include custom CSS files for enhanced syntax highlighting
 html_css_files = [
     'custom.css',
     'syntax_highlighting.css',
 ]
+
 
 html_theme_options = {
     "collapse_navigation": True,
