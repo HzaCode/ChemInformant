@@ -300,7 +300,8 @@ For a deep dive, please see our detailed guides:
 
 > ChemInformant's core mission is to serve as a high-performance data backbone for the Python cheminformatics ecosystem. As a software package that has undergone rigorous peer review by both the [Journal of Open Source Software (JOSS)](https://doi.org/10.21105/joss.08341) and [pyOpenSci](https://github.com/pyOpenSci/software-submission/issues/254), it delivers clean, validated, and analysis-ready Pandas DataFrames. This enables researchers to effortlessly pipe PubChem data into powerful toolkits like RDKit, Scikit-learn, or custom machine learning models, transforming multi-step data acquisition and wrangling tasks into single, elegant lines of code.
 >
-> A detailed comparison with other existing tools is provided in our [JOSS paper](https://github.com/HzaCode/ChemInformant/blob/main/paper/paper.md). Also, see a blog post about ChemInformant on the [official pyOpenSci website](https://www.pyopensci.org/).
+> A detailed comparison with other existing tools is provided in our [JOSS paper](https://github.com/HzaCode/ChemInformant/blob/main/paper/paper.md). For the story and the "why" behind the code, we've shared our thoughts in a post on the [official pyOpenSci website](https://www.pyopensci.org/).
+
 
 <!--
 COMPARISON_AND_ADVANTAGES:
