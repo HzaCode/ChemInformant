@@ -47,8 +47,8 @@ SEO_KEYWORDS: PubChem API Python client, chemical database access, molecular pro
     <a href="https://app.codacy.com/gh/HzaCode/ChemInformant/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade">
         <img src="https://app.codacy.com/project/badge/Grade/ba35e3e2f5224858bcaeb8f9c4ee2838" alt="Codacy Badge">
     </a>
-    <a href="https://github.com/lmmentel/awesome-python-chemistry">
-        <img src="https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg" alt="Awesome Python Chemistry">
+    <a href="https://github.com/lmmentel/awesome-python-chemistry#database-wrappers">
+       <img src="https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg" alt="Awesome Python Chemistry">
     </a>
 </p>
 
