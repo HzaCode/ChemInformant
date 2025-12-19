@@ -18,7 +18,7 @@ SEO_KEYWORDS: PubChem API Python client, chemical database access, molecular pro
     <img src="https://joss.theoj.org/papers/10.21105/joss.08341/status.svg" alt="JOSS Journal Publication DOI 10.21105/joss.08341">
 </a>
 <a href="https://github.com/pyOpenSci/software-review/issues/254">
-    <img src="https://pyopensci.org/badges/peer-reviewed.svg" alt="pyOpenSci Peer-Reviewed"><img src="https://img.shields.io/badge/丨First%20JOSS%20Track-32CD32?style=flat" alt="First JOSS Track">
+    <img src="https://pyopensci.org/badges/peer-reviewed.svg" alt="pyOpenSci Peer-Reviewed">
 </a>
 <p>
     <a href="https://pypi.org/project/ChemInformant/">
