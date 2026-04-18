@@ -4,6 +4,7 @@ import os
 import sqlite3
 import subprocess
 import sys
+from typing import Optional
 
 import pandas as pd
 import pytest
@@ -20,7 +21,7 @@ from ChemInformant import cli as chem_cli
 
 
 def run_command(
-    command: str, *args: str, timeout: int | None = None
+    command: str, *args: str, timeout: Optional[int] = None
 ) -> subprocess.CompletedProcess:
     """Helper function to run a command as a subprocess and capture its output."""
     return subprocess.run(

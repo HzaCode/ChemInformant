@@ -179,9 +179,7 @@ def _fake_execute_fetch(url: str) -> _Resp:
         )
     # Structure PNG endpoint used by draw_compound
     if url.endswith("/PNG"):
-        return _Resp(
-            status=200, ctype="image/png", content=b"\x89PNG_FAKE_DATA"
-        )
+        return _Resp(status=200, ctype="image/png", content=b"\x89PNG_FAKE_DATA")
     # Default: 503 to exercise retry path
     return _Resp(status=503, from_cache=True)
 
