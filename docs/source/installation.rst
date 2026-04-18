@@ -2,7 +2,7 @@
 Installation
 ============
 
-This guide will walk you through the installation of ChemInformant. We recommend using Python 3.8 or higher.
+This guide will walk you through the installation of ChemInformant. Python **3.9 or higher** is required (matching the ``requires-python`` declared in ``pyproject.toml``).
 
 --------------------------------------
 Installation via PyPI (Recommended)
@@ -51,11 +51,11 @@ If you wish to get the latest, unreleased development version, or if you plan to
 3.  Finally, use `pip` for a local installation. We strongly recommend using **editable mode** (`-e`), so that any changes you make to the source code will take effect immediately without needing to reinstall.
 
     *   **To set up a complete environment for development contribution:**
-        This command will install all dependencies, including the core library, plotting functionality, and development tools for testing and code checking (like `pytest`, `black`). This is the recommended command for contributors.
+        This command will install the core library, plotting functionality, and development tools for testing, linting and type-checking (``pytest``, ``ruff``, ``mypy``). This is the recommended command for contributors.
 
         .. code-block:: bash
 
-           pip install -e .[all]
+           pip install -e ".[dev,plot]"
 
     *   **To install only the core package from source:**
         If you just want to install a basic version from the source code for general use.

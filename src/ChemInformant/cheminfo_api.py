@@ -7,8 +7,7 @@ from __future__ import annotations
 
 import logging
 import re
-import sys
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from typing import Any
 
 import pandas as pd
@@ -55,13 +54,11 @@ def _resolve_to_single_cid(identifier: str | int) -> int:
 
 
 def get_properties(
-    identifiers: int | str | list[int] | list[str],
+    identifiers: int | str | Sequence[int | str],
     properties: str | list[str] | None = None,
     *,
-    namespace: str = "cid",
     include_3d: bool = False,
     all_properties: bool = False,
-    **kwargs: Any,
 ) -> pd.DataFrame:
     """
     Retrieve chemical properties for one or more compounds from PubChem.
@@ -73,8 +70,8 @@ def get_properties(
     Args:
         identifiers: Chemical identifier(s) to look up. Can be:
             - Single identifier: string name, CID number, or SMILES
-            - List of identifiers: mixed types allowed
-            Examples: "aspirin", 2244, "CC(=O)OC1=CC=CC=C1C(=O)O"
+            - Sequence of identifiers: mixed names/CIDs/SMILES in one call
+            Examples: "aspirin", 2244, ["aspirin", "caffeine", 1983]
 
         properties: Specific properties to retrieve. Can be:
             - None: Returns core property set (default)
@@ -82,15 +79,11 @@ def get_properties(
             - List: Multiple property names
             Supports both snake_case ("molecular_weight") and CamelCase ("MolecularWeight")
 
-        namespace: Input identifier namespace (currently only "cid" supported)
-
         include_3d: If True and properties=None, includes 3D molecular descriptors
             in addition to core properties. Ignored when properties is specified.
 
         all_properties: If True, retrieves all ~40 available properties from PubChem.
             Mutually exclusive with properties and include_3d parameters.
-
-        **kwargs: Additional keyword arguments (for future compatibility)
 
     Returns:
         pd.DataFrame: Results with columns:
@@ -186,10 +179,10 @@ def get_properties(
         return pd.DataFrame()
 
     identifiers_list: list[int | str]
-    if not isinstance(identifiers, list):
+    if isinstance(identifiers, (str, int)):
         identifiers_list = [identifiers]
     else:
-        identifiers_list = list(identifiers)  # Type-safe conversion
+        identifiers_list = list(identifiers)
 
     # --- Step 2: Create base DataFrame with resolved CIDs ---
     meta: dict[Any, dict[str, Any]] = {}
@@ -285,8 +278,15 @@ def get_properties(
 # --- Convenience Functions (now simple and consistent) ---
 
 
+_MISSING: Any = object()
+
+
 def _fetch_scalar(id_: str | int, prop_snake: str) -> float | int | str | None:
-    """Internal helper for single-value convenience functions."""
+    """Internal helper for single-value convenience functions.
+
+    Distinguishes a missing value from a legitimate falsy value (``0``, ``0.0``,
+    ``""``) by using a sentinel instead of Python's ``or`` truthiness fallback.
+    """
     try:
         cid = _resolve_to_single_cid(id_)
         prop_camel = SNAKE_TO_CAMEL.get(prop_snake)
@@ -316,9 +316,12 @@ def _fetch_scalar(id_: str | int, prop_snake: str) -> float | int | str | None:
         props = api_helpers.get_batch_properties([cid], props_to_fetch)
         data = props.get(cid, {})
 
-        result = data.get(prop_camel) or (
-            data.get(fallback_camel) if fallback_camel else None
-        )
+        # Only fall back when the primary value is actually missing/empty,
+        # not when it is a legitimate falsy value such as 0, 0.0, or False.
+        result = data.get(prop_camel, _MISSING)
+        if result is _MISSING or result is None or result == "":
+            result = data.get(fallback_camel) if fallback_camel else None
+
         # Ensure we return the correct type
         if result is not None and not isinstance(result, (int, float, str)):
             return None
@@ -802,71 +805,73 @@ def get_inchi_key(id_: str | int) -> str | None:
 
 def get_compound(identifier: str | int) -> Compound:
     """
-    Retrieve a complete Compound object with all available properties.
+    Retrieve a validated :class:`Compound` object for a single identifier.
 
-    This function fetches all properties for a single compound and returns
-    a structured Compound object with type validation and convenient access
-    to all molecular data.
+    The returned object is a curated wrapper around the most commonly used
+    fields (molecular formula, molecular weight, SMILES, IUPAC name, XLogP,
+    CAS, synonyms). For the full set of ~40 PubChem properties as a
+    DataFrame, use :func:`get_properties` with ``all_properties=True``.
 
     Args:
         identifier: Chemical identifier (name, CID, or SMILES)
 
     Returns:
-        Compound object with all available properties as attributes
+        A :class:`Compound` object. Attributes use snake_case
+        (e.g. ``compound.molecular_weight``, ``compound.canonical_smiles``);
+        CamelCase aliases are accepted as input only.
 
     Raises:
-        RuntimeError: If the compound cannot be found or data retrieval fails
-        NotFoundError: If the identifier cannot be resolved
-        AmbiguousIdentifierError: If the identifier matches multiple compounds
+        NotFoundError: If the identifier cannot be resolved to any CID.
+        AmbiguousIdentifierError: If the identifier maps to multiple CIDs.
+        RuntimeError: If data retrieval itself fails for a resolved CID.
 
     Examples:
         >>> compound = get_compound("aspirin")
-        >>> print(compound.MolecularWeight)
+        >>> print(compound.molecular_weight)
         180.16
-        >>> print(compound.CanonicalSMILES)
+        >>> print(compound.canonical_smiles)
         'CC(=O)OC1=CC=CC=C1C(=O)O'
-
-    Note:
-        This function uses CamelCase property names to match the Compound model.
-        For DataFrame output with snake_case names, use get_properties() instead.
     """
-    df = get_properties(identifier, all_properties=True)
+    # Resolve up-front so typed exceptions (NotFoundError / AmbiguousIdentifierError)
+    # bubble up instead of being flattened into the DataFrame's `status` string.
+    cid = _resolve_to_single_cid(identifier)
+    df = get_properties([cid], all_properties=True)
     if df.empty or df["status"].iat[0] != "OK":
         raise RuntimeError(f"Failed to fetch compound for {identifier!r}")
 
-    # Rename snake_case columns to CamelCase for Pydantic model validation
-    df_renamed = df.rename(columns=SNAKE_TO_CAMEL)
-    return Compound(**df_renamed.iloc[0].to_dict())
+    # Rename snake_case columns to CamelCase so Pydantic aliases populate fields.
+    row = df.rename(columns=SNAKE_TO_CAMEL).iloc[0].to_dict()
+    # Preserve the user-facing identifier rather than the resolved CID string.
+    row["input_identifier"] = identifier
+    return Compound(**row)
 
 
 def get_compounds(identifiers: Iterable[str | int]) -> list[Compound]:
     """
-    Retrieve multiple Compound objects for a list of identifiers.
-
-    This function processes multiple chemical identifiers and returns
-    a list of Compound objects. Failed lookups will raise exceptions.
+    Retrieve a list of :class:`Compound` objects, one per identifier.
 
     Args:
-        identifiers: Iterable of chemical identifiers (names, CIDs, or SMILES)
+        identifiers: Iterable of chemical identifiers (names, CIDs, or SMILES).
 
     Returns:
-        List of Compound objects in the same order as input identifiers
+        A list of :class:`Compound` objects in input order.
 
     Raises:
-        RuntimeError: If any compound cannot be found or data retrieval fails
-        NotFoundError: If any identifier cannot be resolved
-        AmbiguousIdentifierError: If any identifier matches multiple compounds
+        NotFoundError: If any identifier cannot be resolved.
+        AmbiguousIdentifierError: If any identifier maps to multiple CIDs.
+        RuntimeError: If data retrieval fails for any resolved CID.
 
     Examples:
         >>> compounds = get_compounds(["aspirin", "caffeine"])
         >>> for comp in compounds:
-        ...     print(f"{comp.InputIdentifier}: {comp.MolecularWeight}")
+        ...     print(f"{comp.input_identifier}: {comp.molecular_weight}")
         aspirin: 180.16
         caffeine: 194.19
 
     Note:
-        For batch processing with error handling, consider using get_properties()
-        which returns a DataFrame with status information for failed lookups.
+        For batch processing that tolerates failures, use :func:`get_properties`
+        which returns a DataFrame with per-row ``status`` information instead
+        of raising on the first failure.
     """
     return [get_compound(x) for x in identifiers]
 
@@ -875,61 +880,60 @@ def draw_compound(identifier: str | int) -> None:
     """
     Draw the 2D chemical structure of a compound.
 
-    This function fetches the chemical structure image from PubChem and displays it
-    using matplotlib. Requires matplotlib and PIL to be installed.
+    Fetches the structure image from PubChem through the shared cached
+    session (so caching, rate-limiting and retries all apply) and displays
+    it with matplotlib.
 
     Args:
-        identifier: A compound identifier (name, CID, or SMILES)
+        identifier: A compound identifier (name, CID, or SMILES).
 
     Raises:
-        NotFoundError: If the identifier cannot be resolved to a valid compound
-        ImportError: If required dependencies (matplotlib, PIL) are not installed
+        NotFoundError: If the identifier cannot be resolved to a valid compound.
+        AmbiguousIdentifierError: If the identifier maps to multiple CIDs.
+        ImportError: If the optional plotting dependencies (``matplotlib``,
+            ``Pillow``) are not installed.
+        RuntimeError: If the PubChem structure endpoint returns a non-success
+            status after retries.
     """
     try:
         from io import BytesIO
 
         import matplotlib.pyplot as plt
-        import requests
         from PIL import Image
     except ImportError as e:
         missing_lib = str(e).split("'")[1] if "'" in str(e) else str(e)
-        print(
-            f"Cannot render structure: missing dependency '{missing_lib}'",
-            file=sys.stderr,
-        )
-        print("Please install with: pip install ChemInformant[plot]", file=sys.stderr)
-        return
+        raise ImportError(
+            f"Cannot render structure: missing dependency '{missing_lib}'. "
+            f"Install the plotting extras with: pip install ChemInformant[plot]"
+        ) from e
 
+    # Resolve identifier to CID (may raise NotFoundError / AmbiguousIdentifierError).
+    cid = _resolve_to_single_cid(identifier)
+
+    # Best-effort title lookup; never let it mask the real drawing error.
     try:
-        # Resolve identifier to CID
-        cid = _resolve_to_single_cid(identifier)
+        synonyms = api_helpers.get_synonyms_for_cid(cid)
+        title = synonyms[0] if synonyms else f"CID {cid}"
+    except Exception:
+        title = f"CID {cid}"
 
-        # Get compound name for title
-        try:
-            synonyms = api_helpers.get_synonyms_for_cid(cid)
-            title = synonyms[0] if synonyms else f"CID {cid}"
-        except Exception:
-            title = f"CID {cid}"
+    # Fetch structure image from PubChem through the shared session so caching,
+    # rate-limiting and retry logic all apply consistently with the other calls.
+    image_url = f"{api_helpers.PUBCHEM_API_BASE}/compound/cid/{cid}/PNG"
+    response = api_helpers.get_session().get(
+        image_url, timeout=api_helpers.REQUEST_TIMEOUT
+    )
+    if response.status_code != 200:
+        raise RuntimeError(
+            f"Failed to fetch structure image for CID {cid}: "
+            f"HTTP {response.status_code}"
+        )
 
-        # Fetch structure image from PubChem
-        image_url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{cid}/PNG"
-        response = requests.get(image_url, timeout=10)
+    image = Image.open(BytesIO(response.content))
 
-        if response.status_code != 200:
-            print(f"Failed to fetch structure image for CID {cid}", file=sys.stderr)
-            return
-
-        # Open and display the image
-        image = Image.open(BytesIO(response.content))
-
-        plt.figure(figsize=(8, 6))
-        plt.imshow(image)
-        plt.axis("off")
-        plt.title(title, fontsize=14, pad=20)
-        plt.tight_layout()
-        plt.show()
-
-    except (NotFoundError, AmbiguousIdentifierError) as e:
-        raise e
-    except Exception as e:
-        print(f"Error drawing compound: {e}", file=sys.stderr)
+    plt.figure(figsize=(8, 6))
+    plt.imshow(image)
+    plt.axis("off")
+    plt.title(title, fontsize=14, pad=20)
+    plt.tight_layout()
+    plt.show()

@@ -30,10 +30,13 @@ class AmbiguousIdentifierError(Exception):
 
 class Compound(BaseModel):
     """
-    A Pydantic model representing a chemical compound from PubChem.
+    A Pydantic model representing a curated view of a PubChem compound.
 
-    This class serves as a structured data container for the information
-    retrieved from the API, providing type hints and validation.
+    This container holds the most commonly used fields for a single compound
+    with runtime type validation. It is intentionally a subset of the full
+    PubChem property catalog; for the complete ~40 properties use
+    :func:`ChemInformant.get_properties` with ``all_properties=True`` which
+    returns a DataFrame.
 
     Attributes:
         cid: The unique PubChem Compound ID.
@@ -61,7 +64,6 @@ class Compound(BaseModel):
     xlogp: Optional[float] = Field(None, alias="XLogP")
 
     cas: Optional[str] = None
-    description: Optional[str] = None
     synonyms: list[str] = Field(default_factory=list)
 
     @computed_field
