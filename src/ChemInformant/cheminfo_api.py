@@ -182,7 +182,7 @@ def get_properties(
     if isinstance(identifiers, (str, int)):
         identifiers_list = [identifiers]
     else:
-        identifiers_list = list(identifiers)  # type: ignore[arg-type]
+        identifiers_list = list(identifiers)
 
     # --- Step 2: Create base DataFrame with resolved CIDs ---
     meta: dict[Any, dict[str, Any]] = {}
