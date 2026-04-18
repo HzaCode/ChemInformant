@@ -1,0 +1,345 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contributing Guide &mdash; ChemInformant 2.4.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=720ed60b" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e3526950" />
+      <link rel="stylesheet" type="text/css" href="_static/syntax_highlighting.css?v=d29a27db" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=20623aea"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=7a06b15b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Internal API Helpers (api_helpers)" href="api/api_helpers.html" />
+     
+    
+    <!-- Schema.org JSON-LD for SoftwareSourceCode -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareSourceCode",
+      "name": "ChemInformant",
+      "description": "A robust and high-throughput Python client for the PubChem API, designed for automated data retrieval and analysis",
+      "programmingLanguage": "Python",
+      "applicationCategory": "Cheminformatics",
+      "keywords": [
+        "chemistry",
+        "cheminformatics", 
+        "pubchem",
+        "api",
+        "compound",
+        "drug",
+        "cache",
+        "pydantic",
+        "batch",
+        "smiles",
+        "sql",
+        "data-science",
+        "molecular-properties",
+        "scientific-computing",
+        "api-client",
+        "chemical-data",
+        "drug-discovery",
+        "computational-chemistry"
+      ],
+      "codeRepository": "https://github.com/HzaCode/ChemInformant",
+      "license": "https://opensource.org/licenses/MIT",
+      "softwareRequirements": [
+        "Python>=3.9",
+        "requests>=2.25.0",
+        "requests-cache>=1.2.0", 
+        "pydantic>=2.0",
+        "pandas>=1.5.0",
+        "sqlalchemy>=1.4",
+        "pystow>=0.7"
+      ],
+      "author": {
+        "@type": "Person",
+        "name": "Zhiang He",
+        "email": "ang@hezhiang.com"
+      },
+      "version": "2.4.3",
+      "dateCreated": "2023",
+      "dateModified": "2025",
+      "url": "https://hezhiang.com/ChemInformant",
+      "downloadUrl": "https://pypi.org/project/ChemInformant/",
+      "runtimePlatform": "Python",
+      "operatingSystem": "OS Independent",
+      "softwareHelp": "https://hezhiang.com/ChemInformant",
+      "documentation": "https://hezhiang.com/ChemInformant",
+      "issueTracker": "https://github.com/HzaCode/ChemInformant/issues",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://hezhiang.com/ChemInformant"
+      }
+    }
+    </script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ChemInformant
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">🧭 User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Application in Real-World Scientific Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="caching_guide.html">Caching Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🎓 Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Interactive Tutorial</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🔬 API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/cheminfo_api.html">Main API Interface (<cite>cheminfo_api</cite>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/models.html">Data Models and Exceptions (<cite>models</cite>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_helpers.html">Internal API Helpers (<cite>api_helpers</cite>)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🛠️ Project Information</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-contribute">How to Contribute</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#seeking-support-or-asking-questions">Seeking Support or Asking Questions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reporting-bugs">Reporting Bugs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#suggesting-enhancements">Suggesting Enhancements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#code-contribution-process">Code Contribution Process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#code-of-conduct">Code of Conduct</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ChemInformant</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Contributing Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/contributing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="contributing-guide">
+<h1>Contributing Guide<a class="headerlink" href="#contributing-guide" title="Link to this heading"></a></h1>
+<p>First of all, thank you for considering contributing to ChemInformant! We welcome and value the participation of every contributor. Whether it’s reporting bugs, suggesting feature enhancements, seeking support, or writing code, your help is crucial.</p>
+<p>This document provides guidelines for contributing, aiming to make the entire process as smooth as possible for everyone involved.</p>
+<nav class="contents local" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#how-to-contribute" id="id1">How to Contribute</a></p></li>
+<li><p><a class="reference internal" href="#seeking-support-or-asking-questions" id="id2">Seeking Support or Asking Questions</a></p></li>
+<li><p><a class="reference internal" href="#reporting-bugs" id="id3">Reporting Bugs</a></p></li>
+<li><p><a class="reference internal" href="#suggesting-enhancements" id="id4">Suggesting Enhancements</a></p></li>
+<li><p><a class="reference internal" href="#code-contribution-process" id="id5">Code Contribution Process</a></p>
+<ul>
+<li><p><a class="reference internal" href="#development-environment-setup" id="id6">Development Environment Setup</a></p></li>
+<li><p><a class="reference internal" href="#code-style" id="id7">Code Style</a></p></li>
+<li><p><a class="reference internal" href="#running-tests" id="id8">Running Tests</a></p></li>
+<li><p><a class="reference internal" href="#submitting-a-pull-request" id="id9">Submitting a Pull Request</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#code-of-conduct" id="id10">Code of Conduct</a></p></li>
+</ul>
+</nav>
+<section id="how-to-contribute">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">How to Contribute</a><a class="headerlink" href="#how-to-contribute" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Getting Help:</strong> If you have questions about how to use the project, feel free to <a class="reference external" href="https://github.com/HzaCode/ChemInformant/issues">create an issue</a>.</p></li>
+<li><p><strong>Reporting Bugs:</strong> If you find a bug, please report it via <a class="reference external" href="https://github.com/HzaCode/ChemInformant/issues">GitHub Issues</a>.</p></li>
+<li><p><strong>Suggesting Enhancements:</strong> Have ideas for new features or improvements? Please <a class="reference external" href="https://github.com/HzaCode/ChemInformant/issues">create an issue</a> to discuss them.</p></li>
+<li><p><strong>Submitting Pull Requests:</strong> Contribute code to fix bugs or add new features.</p></li>
+</ul>
+</section>
+<section id="seeking-support-or-asking-questions">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Seeking Support or Asking Questions</a><a class="headerlink" href="#seeking-support-or-asking-questions" title="Link to this heading"></a></h2>
+<p>If you have questions about how to use ChemInformant, or if you’re not sure whether you’ve encountered a bug, the best place to ask is the <a class="reference external" href="https://github.com/HzaCode/ChemInformant/issues">GitHub Issues page</a>.</p>
+<p>When creating an issue for support, please ensure that you:</p>
+<ol class="arabic simple">
+<li><p><strong>First, search existing issues</strong> to see if your question has already been answered.</p></li>
+<li><p>Provide a clear and descriptive title.</p></li>
+<li><p>Explain what you are trying to achieve and the problem you are facing.</p></li>
+<li><p>If possible, include a small, self-contained code snippet to illustrate your problem.</p></li>
+</ol>
+</section>
+<section id="reporting-bugs">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Reporting Bugs</a><a class="headerlink" href="#reporting-bugs" title="Link to this heading"></a></h2>
+<p>Before submitting a bug report, please check the existing <a class="reference external" href="https://github.com/HzaCode/ChemInformant/issues">GitHub Issues</a> to confirm that the bug has not already been reported.</p>
+<p>If it has not been reported, please create a new issue and include the following information:</p>
+<ul class="simple">
+<li><p><strong>ChemInformant Version:</strong> (e.g., obtained via <code class="docutils literal notranslate"><span class="pre">ChemInformant.__version__</span></code>)</p></li>
+<li><p><strong>Python Version:</strong></p></li>
+<li><p><strong>Operating System:</strong></p></li>
+<li><p><strong>Description of the Bug:</strong> A clear description of the problem.</p></li>
+<li><p><strong>Steps to Reproduce:</strong> Provide a minimal, complete, and verifiable code example to trigger the bug.</p></li>
+<li><p><strong>Expected Behavior:</strong> What you expected to happen.</p></li>
+<li><p><strong>Actual Behavior:</strong> What actually happened (including any error messages or stack traces).</p></li>
+</ul>
+</section>
+<section id="suggesting-enhancements">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Suggesting Enhancements</a><a class="headerlink" href="#suggesting-enhancements" title="Link to this heading"></a></h2>
+<p>We are open to suggestions for new features or improvements. Before submitting an enhancement suggestion:</p>
+<ul class="simple">
+<li><p>Please check the existing <a class="reference external" href="https://github.com/HzaCode/ChemInformant/issues">GitHub Issues</a> to see if a similar idea has already been discussed.</p></li>
+<li><p>Create a new issue.</p></li>
+<li><p>Clearly describe your proposed enhancement and its <strong>motivation</strong> (what problem does it solve?).</p></li>
+<li><p>If possible, provide examples of how the feature might be used.</p></li>
+</ul>
+</section>
+<section id="code-contribution-process">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Code Contribution Process</a><a class="headerlink" href="#code-contribution-process" title="Link to this heading"></a></h2>
+<p>Ready to contribute code? Here’s how to set up <code class="docutils literal notranslate"><span class="pre">ChemInformant</span></code> for local development and submit your changes.</p>
+<section id="development-environment-setup">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Development Environment Setup</a><a class="headerlink" href="#development-environment-setup" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p><strong>Fork the repository:</strong> Click the “Fork” button on the <a class="reference external" href="https://github.com/HzaCode/ChemInformant">ChemInformant GitHub page</a>.</p></li>
+<li><p><strong>Clone your fork:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/YOUR_USERNAME/ChemInformant.git
+<span class="nb">cd</span><span class="w"> </span>ChemInformant
+</pre></div>
+</div>
+</li>
+<li><p><strong>Create a virtual environment:</strong> It is highly recommended to use a virtual environment (e.g., <code class="docutils literal notranslate"><span class="pre">venv</span></code>, <code class="docutils literal notranslate"><span class="pre">conda</span></code>).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using venv</span>
+python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate<span class="w">  </span><span class="c1"># On Windows, use `.venv\Scripts\activate`</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Install dependencies:</strong> Install the package in editable mode along with its development dependencies (like <code class="docutils literal notranslate"><span class="pre">pytest</span></code>, <code class="docutils literal notranslate"><span class="pre">black</span></code>).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="o">[</span>dev<span class="o">]</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Create a branch:</strong> Create a new branch for your changes.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>your-feature-or-bugfix-branch
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="code-style">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Code Style</a><a class="headerlink" href="#code-style" title="Link to this heading"></a></h3>
+<ul>
+<li><p>ChemInformant follows the <strong>PEP 8</strong> style guide.</p></li>
+<li><p>We use <strong>Black</strong> for automatic code formatting. Before committing your changes, please run Black to format your code:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>black<span class="w"> </span>.
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="running-tests">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Running Tests</a><a class="headerlink" href="#running-tests" title="Link to this heading"></a></h3>
+<ul>
+<li><p>We use <code class="docutils literal notranslate"><span class="pre">pytest</span></code> for testing. Please ensure all tests pass before submitting a pull request.</p></li>
+<li><p>Add new test cases for any new features or bug fixes you introduce. We aim to maintain high test coverage.</p></li>
+<li><p>Run the tests from the root directory of the repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>tests/
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="submitting-a-pull-request">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">Submitting a Pull Request</a><a class="headerlink" href="#submitting-a-pull-request" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Make your code changes, write tests, and format your code with Black.</p></li>
+<li><p>Commit your changes with a clear and descriptive commit message.</p></li>
+<li><p>Push your branch to your fork on GitHub:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>your-feature-or-bugfix-branch
+</pre></div>
+</div>
+</li>
+<li><p>Create a Pull Request on the ChemInformant GitHub repository.</p></li>
+<li><p>Set the target branch to the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch of the original repository.</p></li>
+<li><p>Provide a clear title and description for your PR. Explain the “why” and “what” of your changes.</p></li>
+<li><p>Link to any relevant GitHub Issues (e.g., “Closes #123”).</p></li>
+<li><p>Wait for the automated checks (like CI tests) to pass.</p></li>
+<li><p>Be prepared to respond to any feedback or review comments.</p></li>
+</ol>
+</section>
+</section>
+<section id="code-of-conduct">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">Code of Conduct</a><a class="headerlink" href="#code-of-conduct" title="Link to this heading"></a></h2>
+<p>Please note that this project is governed by the Contributor Code of Conduct. By participating in this project, you agree to abide by its terms. All participants are expected to uphold the Code of Conduct in all project spaces, including Issues, Pull Requests, and other communication channels. For details, please see the <code class="docutils literal notranslate"><span class="pre">CODE_OF_CONDUCT.md</span></code> file in the project’s root directory.</p>
+<p>Thank you again for your contribution!```</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="api/api_helpers.html" class="btn btn-neutral float-left" title="Internal API Helpers (api_helpers)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Ang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

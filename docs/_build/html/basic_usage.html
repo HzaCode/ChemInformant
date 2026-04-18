@@ -1,0 +1,334 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Basic Usage &mdash; ChemInformant 2.4.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=720ed60b" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e3526950" />
+      <link rel="stylesheet" type="text/css" href="_static/syntax_highlighting.css?v=d29a27db" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=20623aea"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=7a06b15b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Application in Real-World Scientific Workflows" href="advanced_usage.html" />
+    <link rel="prev" title="Installation" href="installation.html" />
+     
+    
+    <!-- Schema.org JSON-LD for SoftwareSourceCode -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareSourceCode",
+      "name": "ChemInformant",
+      "description": "A robust and high-throughput Python client for the PubChem API, designed for automated data retrieval and analysis",
+      "programmingLanguage": "Python",
+      "applicationCategory": "Cheminformatics",
+      "keywords": [
+        "chemistry",
+        "cheminformatics", 
+        "pubchem",
+        "api",
+        "compound",
+        "drug",
+        "cache",
+        "pydantic",
+        "batch",
+        "smiles",
+        "sql",
+        "data-science",
+        "molecular-properties",
+        "scientific-computing",
+        "api-client",
+        "chemical-data",
+        "drug-discovery",
+        "computational-chemistry"
+      ],
+      "codeRepository": "https://github.com/HzaCode/ChemInformant",
+      "license": "https://opensource.org/licenses/MIT",
+      "softwareRequirements": [
+        "Python>=3.9",
+        "requests>=2.25.0",
+        "requests-cache>=1.2.0", 
+        "pydantic>=2.0",
+        "pandas>=1.5.0",
+        "sqlalchemy>=1.4",
+        "pystow>=0.7"
+      ],
+      "author": {
+        "@type": "Person",
+        "name": "Zhiang He",
+        "email": "ang@hezhiang.com"
+      },
+      "version": "2.4.3",
+      "dateCreated": "2023",
+      "dateModified": "2025",
+      "url": "https://hezhiang.com/ChemInformant",
+      "downloadUrl": "https://pypi.org/project/ChemInformant/",
+      "runtimePlatform": "Python",
+      "operatingSystem": "OS Independent",
+      "softwareHelp": "https://hezhiang.com/ChemInformant",
+      "documentation": "https://hezhiang.com/ChemInformant",
+      "issueTracker": "https://github.com/HzaCode/ChemInformant/issues",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://hezhiang.com/ChemInformant"
+      }
+    }
+    </script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ChemInformant
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">🧭 User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Basic Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#core-functionality-bulk-fetching-of-multiple-properties">Core Functionality: Bulk Fetching of Multiple Properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-all-properties-or-including-3d-descriptors">Getting All Properties or Including 3D Descriptors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-complete-information-for-a-single-compound">Getting Complete Information for a Single Compound</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#convenient-shortcut-functions">Convenient Shortcut Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#visualizing-compound-structures">Visualizing Compound Structures</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Application in Real-World Scientific Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="caching_guide.html">Caching Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🎓 Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Interactive Tutorial</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🔬 API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/cheminfo_api.html">Main API Interface (<cite>cheminfo_api</cite>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/models.html">Data Models and Exceptions (<cite>models</cite>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_helpers.html">Internal API Helpers (<cite>api_helpers</cite>)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🛠️ Project Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ChemInformant</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Basic Usage</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/basic_usage.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="basic-usage">
+<h1>Basic Usage<a class="headerlink" href="#basic-usage" title="Link to this heading"></a></h1>
+<p>This guide covers the fundamental features of the ChemInformant library, designed to help users quickly get started with common chemical information query tasks.</p>
+<nav class="contents local" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#core-functionality-bulk-fetching-of-multiple-properties" id="id1">Core Functionality: Bulk Fetching of Multiple Properties</a></p></li>
+<li><p><a class="reference internal" href="#getting-all-properties-or-including-3d-descriptors" id="id2">Getting All Properties or Including 3D Descriptors</a></p></li>
+<li><p><a class="reference internal" href="#getting-complete-information-for-a-single-compound" id="id3">Getting Complete Information for a Single Compound</a></p></li>
+<li><p><a class="reference internal" href="#convenient-shortcut-functions" id="id4">Convenient Shortcut Functions</a></p></li>
+<li><p><a class="reference internal" href="#visualizing-compound-structures" id="id5">Visualizing Compound Structures</a></p></li>
+</ul>
+</nav>
+<section id="core-functionality-bulk-fetching-of-multiple-properties">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Core Functionality: Bulk Fetching of Multiple Properties</a><a class="headerlink" href="#core-functionality-bulk-fetching-of-multiple-properties" title="Link to this heading"></a></h2>
+<p>The most central feature of ChemInformant is <code class="xref py py-func docutils literal notranslate"><span class="pre">get_properties()</span></code>. This function is designed for batch processing, allowing users to query multiple chemical properties for a group of compounds in a single call. This approach is significantly more efficient than querying each compound individually in a loop because it effectively consolidates network requests.</p>
+<p>The function accepts a list of various identifiers (such as common names, PubChem CIDs, or SMILES strings) and returns a structured Pandas DataFrame with <strong>standardized snake_case column names</strong>, ready for direct use in subsequent data analysis.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Snake_case Property Names</strong>: ChemInformant uses consistent snake_case naming (e.g., <code class="docutils literal notranslate"><span class="pre">molecular_weight</span></code>, <code class="docutils literal notranslate"><span class="pre">h_bond_donor_count</span></code>) for all returned data. Both snake_case and CamelCase inputs are accepted, but output is always standardized.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">ChemInformant</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ci</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="c1"># 1. Define a list containing different types of identifiers</span>
+<span class="c1">#    (Aspirin, Caffeine, Acetaminophen)</span>
+<span class="n">identifiers</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;aspirin&#39;</span><span class="p">,</span> <span class="s1">&#39;caffeine&#39;</span><span class="p">,</span> <span class="mi">1983</span><span class="p">]</span>
+
+<span class="c1"># 2. Specify the properties you want to fetch (using snake_case names)</span>
+<span class="n">properties_to_fetch</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;molecular_weight&#39;</span><span class="p">,</span> <span class="s1">&#39;xlogp&#39;</span><span class="p">,</span> <span class="s1">&#39;cas&#39;</span><span class="p">,</span> <span class="s1">&#39;iupac_name&#39;</span><span class="p">]</span>
+
+<span class="c1"># 3. Call the core function to perform the query</span>
+<span class="n">data_frame</span> <span class="o">=</span> <span class="n">ci</span><span class="o">.</span><span class="n">get_properties</span><span class="p">(</span><span class="n">identifiers</span><span class="p">,</span> <span class="n">properties_to_fetch</span><span class="p">)</span>
+
+<span class="c1"># 4. View the resulting DataFrame</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_frame</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>input_identifier    cid    status  molecular_weight  xlogp     cas        iupac_name
+------------------  -----  ------  ----------------  -----     -------    ---------------------------------
+aspirin             2244.0   OK    180.16            1.20      50-78-2    2-(acetyloxy)benzoic acid
+caffeine            2519.0   OK    194.19            -0.07     58-08-2    1,3,7-trimethylpurine-2,6-dione
+1983                1983.0   OK    151.16            0.51      103-90-2   N-(4-hydroxyphenyl)acetamide
+</pre></div>
+</div>
+</section>
+<section id="getting-all-properties-or-including-3d-descriptors">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Getting All Properties or Including 3D Descriptors</a><a class="headerlink" href="#getting-all-properties-or-including-3d-descriptors" title="Link to this heading"></a></h2>
+<p>ChemInformant offers convenient options to retrieve comprehensive data sets:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get all ~40 available properties for a compound</span>
+<span class="n">complete_data</span> <span class="o">=</span> <span class="n">ci</span><span class="o">.</span><span class="n">get_properties</span><span class="p">([</span><span class="s1">&#39;aspirin&#39;</span><span class="p">],</span> <span class="n">all_properties</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Retrieved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">complete_data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2"> columns of data&quot;</span><span class="p">)</span>
+
+<span class="c1"># Get core properties plus 3D molecular descriptors</span>
+<span class="n">data_with_3d</span> <span class="o">=</span> <span class="n">ci</span><span class="o">.</span><span class="n">get_properties</span><span class="p">([</span><span class="s1">&#39;aspirin&#39;</span><span class="p">],</span> <span class="n">include_3d</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Both approaches are much more efficient than multiple API calls</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">all_properties=True</span></code> option retrieves every available property from PubChem, including core properties, 3D descriptors, and special properties like CAS numbers and synonyms. The <code class="docutils literal notranslate"><span class="pre">include_3d=True</span></code> option adds 3D molecular descriptors to the default core property set.</p>
+</section>
+<section id="getting-complete-information-for-a-single-compound">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Getting Complete Information for a Single Compound</a><a class="headerlink" href="#getting-complete-information-for-a-single-compound" title="Link to this heading"></a></h2>
+<p>When you need to retrieve all available information for a single compound, use the <code class="xref py py-func docutils literal notranslate"><span class="pre">get_compound()</span></code> function. It returns a <code class="xref py py-class docutils literal notranslate"><span class="pre">Compound</span></code> data object, which neatly encapsulates all properties. Specific information can be conveniently accessed via attribute access (dot notation).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">ChemInformant</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ci</span>
+
+<span class="c1"># Get complete information for caffeine using its name</span>
+<span class="n">caffeine</span> <span class="o">=</span> <span class="n">ci</span><span class="o">.</span><span class="n">get_compound</span><span class="p">(</span><span class="s1">&#39;caffeine&#39;</span><span class="p">)</span>
+
+<span class="c1"># Access the object&#39;s various attributes using dot notation</span>
+<span class="k">if</span> <span class="n">caffeine</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Query Identifier: </span><span class="si">{</span><span class="n">caffeine</span><span class="o">.</span><span class="n">input_identifier</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PubChem CID: </span><span class="si">{</span><span class="n">caffeine</span><span class="o">.</span><span class="n">cid</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;IUPAC Name: </span><span class="si">{</span><span class="n">caffeine</span><span class="o">.</span><span class="n">iupac_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Molecular Formula: </span><span class="si">{</span><span class="n">caffeine</span><span class="o">.</span><span class="n">molecular_formula</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Molecular Weight: </span><span class="si">{</span><span class="n">caffeine</span><span class="o">.</span><span class="n">molecular_weight</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># The object also contains automatically calculated properties, such as the PubChem link</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PubChem Link: </span><span class="si">{</span><span class="n">caffeine</span><span class="o">.</span><span class="n">pubchem_url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Query Identifier: caffeine
+PubChem CID: 2519
+IUPAC Name: 1,3,7-trimethylpurine-2,6-dione
+Molecular Formula: C8H10N4O2
+Molecular Weight: 194.19
+PubChem Link: https://pubchem.ncbi.nlm.nih.gov/compound/2519
+</pre></div>
+</div>
+</section>
+<section id="convenient-shortcut-functions">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Convenient Shortcut Functions</a><a class="headerlink" href="#convenient-shortcut-functions" title="Link to this heading"></a></h2>
+<p>To simplify queries for a single property, ChemInformant provides a series of shortcut functions, such as <code class="xref py py-func docutils literal notranslate"><span class="pre">get_weight()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">get_cas()</span></code>. These functions are lightweight wrappers around <code class="xref py py-func docutils literal notranslate"><span class="pre">get_properties()</span></code>, making the code more concise when only a single data point is needed.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">ChemInformant</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ci</span>
+
+<span class="c1"># Get the molecular weight of aspirin</span>
+<span class="n">aspirin_weight</span> <span class="o">=</span> <span class="n">ci</span><span class="o">.</span><span class="n">get_weight</span><span class="p">(</span><span class="s1">&#39;aspirin&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Molecular weight of aspirin: </span><span class="si">{</span><span class="n">aspirin_weight</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Get the CAS number for water</span>
+<span class="n">water_cas</span> <span class="o">=</span> <span class="n">ci</span><span class="o">.</span><span class="n">get_cas</span><span class="p">(</span><span class="s1">&#39;water&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CAS number for water: </span><span class="si">{</span><span class="n">water_cas</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Get the molecular formula for ethanol (using a SMILES identifier)</span>
+<span class="n">ethanol_formula</span> <span class="o">=</span> <span class="n">ci</span><span class="o">.</span><span class="n">get_formula</span><span class="p">(</span><span class="s1">&#39;CCO&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Molecular formula of ethanol: </span><span class="si">{</span><span class="n">ethanol_formula</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Molecular weight of aspirin: 180.16
+CAS number for water: 7732-18-5
+Molecular formula of ethanol: C2H6O
+</pre></div>
+</div>
+<p>ChemInformant provides <strong>22 convenience functions</strong> for individual properties, covering molecular descriptors, structural features, mass properties, and identifiers. All functions return None for compounds that cannot be found, making error handling straightforward.</p>
+</section>
+<section id="visualizing-compound-structures">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Visualizing Compound Structures</a><a class="headerlink" href="#visualizing-compound-structures" title="Link to this heading"></a></h2>
+<p>The library also provides the <code class="xref py py-func docutils literal notranslate"><span class="pre">draw_compound()</span></code> function for drawing 2D structural diagrams of compounds. This feature requires the installation of an optional plotting dependency.</p>
+<p>The function calls PubChem’s imaging service and uses Matplotlib to display it.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">ChemInformant</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ci</span>
+
+<span class="c1"># Draw the structure of Vanillin</span>
+<span class="c1"># After executing the code, a new window will pop up to display the image</span>
+<span class="n">ci</span><span class="o">.</span><span class="n">draw_compound</span><span class="p">(</span><span class="s1">&#39;Vanillin&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When executed, an image window containing the chemical structure of Vanillin will be displayed.</p>
+<a class="reference internal image-reference" href="_images/2025-07-22-103832.jpg"><img alt="Chemical structure diagram of Vanillin" class="align-center" src="_images/2025-07-22-103832.jpg" style="width: 500px;" />
+</a>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="advanced_usage.html" class="btn btn-neutral float-right" title="Application in Real-World Scientific Workflows" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Ang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

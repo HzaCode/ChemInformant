@@ -1,0 +1,67 @@
+{% extends "!layout.html" %}
+
+{% block extrahead %}
+    {{ super() }}
+    
+    <!-- Schema.org JSON-LD for SoftwareSourceCode -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareSourceCode",
+      "name": "ChemInformant",
+      "description": "A robust and high-throughput Python client for the PubChem API, designed for automated data retrieval and analysis",
+      "programmingLanguage": "Python",
+      "applicationCategory": "Cheminformatics",
+      "keywords": [
+        "chemistry",
+        "cheminformatics", 
+        "pubchem",
+        "api",
+        "compound",
+        "drug",
+        "cache",
+        "pydantic",
+        "batch",
+        "smiles",
+        "sql",
+        "data-science",
+        "molecular-properties",
+        "scientific-computing",
+        "api-client",
+        "chemical-data",
+        "drug-discovery",
+        "computational-chemistry"
+      ],
+      "codeRepository": "https://github.com/HzaCode/ChemInformant",
+      "license": "https://opensource.org/licenses/MIT",
+      "softwareRequirements": [
+        "Python>=3.9",
+        "requests>=2.25.0",
+        "requests-cache>=1.2.0", 
+        "pydantic>=2.0",
+        "pandas>=1.5.0",
+        "sqlalchemy>=1.4",
+        "pystow>=0.7"
+      ],
+      "author": {
+        "@type": "Person",
+        "name": "Zhiang He",
+        "email": "ang@hezhiang.com"
+      },
+      "version": "2.4.3",
+      "dateCreated": "2023",
+      "dateModified": "2025",
+      "url": "https://hezhiang.com/ChemInformant",
+      "downloadUrl": "https://pypi.org/project/ChemInformant/",
+      "runtimePlatform": "Python",
+      "operatingSystem": "OS Independent",
+      "softwareHelp": "https://hezhiang.com/ChemInformant",
+      "documentation": "https://hezhiang.com/ChemInformant",
+      "issueTracker": "https://github.com/HzaCode/ChemInformant/issues",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://hezhiang.com/ChemInformant"
+      }
+    }
+    </script>
+{% endblock %}

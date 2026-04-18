@@ -4,6 +4,13 @@ from sqlalchemy import create_engine, func, select, table
 
 import ChemInformant as ci
 
+# These tests fetch data from live PubChem and are intentionally marked as
+# integration tests. They are excluded from the default `pytest -m "not
+# integration"` CI run so a transient PubChem hiccup does not break the
+# main build. Run them locally or via the dedicated `integration` job with
+# `pytest -m integration tests/`.
+pytestmark = pytest.mark.integration
+
 
 @pytest.fixture(scope="session")
 def test_data():

@@ -53,6 +53,7 @@ class _Resp:
         data: dict | None = None,
         from_cache=False,
         ctype="application/json",
+        content: bytes | None = None,
     ):
         self.status_code, self.from_cache, self.headers, self.request, self._data = (
             status,
@@ -61,6 +62,7 @@ class _Resp:
             object(),
             data or {},
         )
+        self.content = content if content is not None else b""
 
     def json(self):
         return self._data
@@ -99,7 +101,9 @@ def _fake_execute_fetch(url: str) -> _Resp:
                     }
                 }
             )
-        # First page
+        # First page. The 0 / 0.0 entries are deliberate: they cover the
+        # regression for issue #1 (truthiness fallback eating legitimate
+        # zero values in _fetch_scalar).
         return _Resp(
             data={
                 "PropertyTable": {
@@ -112,12 +116,19 @@ def _fake_execute_fetch(url: str) -> _Resp:
                             "IsomericSMILES": "CC(=O)Oc1ccccc1C(=O)O",
                             "IUPACName": "2-(acetyloxy)benzoic acid",
                             "XLogP": 1.2,
+                            "Charge": 0,
+                            "AtomStereoCount": 0,
+                            "BondStereoCount": 0,
+                            "CovalentUnitCount": 1,
                         },
                         {
                             "CID": 999,
                             "MolecularWeight": 46.07,
                             "MolecularFormula": "C3H6",
                             "CanonicalSMILES": "C1CC1",
+                            "Charge": 0,
+                            "AtomStereoCount": 0,
+                            "BondStereoCount": 0,
                         },
                     ]
                 },
@@ -166,6 +177,11 @@ def _fake_execute_fetch(url: str) -> _Resp:
                 "InformationList": {"Information": [{"Synonym": ["alias1", "alias2"]}]}
             }
         )
+    # Structure PNG endpoint used by draw_compound
+    if url.endswith("/PNG"):
+        return _Resp(
+            status=200, ctype="image/png", content=b"\x89PNG_FAKE_DATA"
+        )
     # Default: 503 to exercise retry path
     return _Resp(status=503, from_cache=True)
 
@@ -179,20 +195,24 @@ def _wire_net(monkeypatch):
 
 @pytest.fixture
 def mock_plotting_libs(monkeypatch):
-    """Mocks plotting libraries to avoid actual I/O or GUI windows."""
-    fake_requests = types.SimpleNamespace(
-        get=lambda *a, **k: types.SimpleNamespace(content=b"\x89PNG_FAKE_DATA")
-    )
-    monkeypatch.setitem(sys.modules, "requests", fake_requests)
+    """Mocks plotting libraries to avoid actual I/O or GUI windows.
+
+    draw_compound() now goes through ``api_helpers.get_session().get(...)`` for
+    the PNG endpoint, so the existing session-level patch in ``_wire_net``
+    already covers the HTTP call. Only the plotting-layer modules need to be
+    faked here.
+    """
     fake_image_module = types.SimpleNamespace(open=lambda *a, **k: "FAKE_IMAGE")
     fake_pil_module = types.ModuleType("PIL")
     fake_pil_module.Image = fake_image_module
     monkeypatch.setitem(sys.modules, "PIL", fake_pil_module)
     monkeypatch.setitem(sys.modules, "PIL.Image", fake_image_module)
     fake_pyplot = types.SimpleNamespace(
+        figure=lambda *a, **k: None,
         imshow=lambda *a, **k: None,
         axis=lambda *a, **k: None,
         title=lambda *a, **k: None,
+        tight_layout=lambda *a, **k: None,
         show=lambda *a, **k: None,
     )
     monkeypatch.setitem(sys.modules, "matplotlib", types.ModuleType("matplotlib"))
@@ -282,6 +302,23 @@ def test_convenience_functions():
     assert ci.get_cas("caffeine") is None
 
 
+def test_convenience_functions_preserve_zero_values():
+    """Regression (#1): _fetch_scalar previously used ``or`` as a fallback,
+    which silently turned legitimate ``0`` / ``0.0`` values into ``None``.
+    For neutral molecules, achiral compounds, single-component compounds
+    this would misreport real data as missing."""
+    # Neutral molecule -> formal charge must be 0, not None.
+    assert ci.get_charge("aspirin") == 0
+    assert isinstance(ci.get_charge("aspirin"), int)
+
+    # Achiral -> stereo counts must be 0, not None.
+    assert ci.get_atom_stereo_count("aspirin") == 0
+    assert ci.get_bond_stereo_count("aspirin") == 0
+
+    # Sanity: non-zero ints still work.
+    assert ci.get_covalent_unit_count("aspirin") == 1
+
+
 def test_convenience_functions_return_none_on_not_found():
     """Tests that convenience functions return None when compound is not found."""
     assert ci.get_weight("nonexistent") is None
@@ -324,9 +361,9 @@ def test_get_compound_and_compounds():
     assert cmpd.cid == 2244
     assert cmpd.molecular_weight == 180.16
     assert cmpd.pubchem_url.endswith("2244")
-
-    with pytest.raises(RuntimeError):
-        ci.get_compound("nonexistent")
+    # get_compound() must preserve the original user-facing identifier rather
+    # than silently replacing it with the resolved CID string.
+    assert cmpd.input_identifier == "aspirin"
 
     compounds = ci.get_compounds(["aspirin", "caffeine"])
     assert len(compounds) == 2
@@ -334,20 +371,34 @@ def test_get_compound_and_compounds():
     assert compounds[1].cid == 2519
 
 
-def test_draw_compound_paths(mock_plotting_libs, monkeypatch, capsys):
-    """Tests the different execution paths of the draw_compound function."""
-    # Success path
-    ci.draw_compound("aspirin")
-    captured = capsys.readouterr()
-    assert "Failed" not in captured.err
-    assert "missing" not in captured.err
+def test_get_compound_typed_exceptions_bubble_up():
+    """Regression (#3): typed resolution errors must propagate, not be flattened
+    into a RuntimeError. The convenience-layer contract and the docstring both
+    advertise NotFoundError / AmbiguousIdentifierError."""
+    with pytest.raises(models.NotFoundError):
+        ci.get_compound("nonexistent")
+    with pytest.raises(models.AmbiguousIdentifierError):
+        ci.get_compound("ambiguous")
 
-    # Identifier not found path
+    # get_compounds() delegates per-identifier and must propagate the same way.
+    with pytest.raises(models.NotFoundError):
+        ci.get_compounds(["aspirin", "nonexistent"])
+
+
+def test_draw_compound_paths(mock_plotting_libs, monkeypatch):
+    """Tests the different execution paths of the draw_compound function."""
+    # Success path: no exception, no error messages.
+    ci.draw_compound("aspirin")
+
+    # Identifier not found path still raises NotFoundError.
     with pytest.raises(models.NotFoundError):
         ci.draw_compound("nonexistent")
 
-    # Missing dependency path
+
+def test_draw_compound_missing_dependency_raises(monkeypatch):
+    """Regression (#4): a missing plotting dependency must raise ImportError
+    (so the chemdraw CLI can exit non-zero), not silently print and return."""
+    # Force the matplotlib import inside draw_compound to fail.
     monkeypatch.setitem(sys.modules, "matplotlib.pyplot", None)
-    ci.draw_compound("aspirin")
-    captured = capsys.readouterr()
-    assert "Cannot render structure: missing dependency" in captured.err
+    with pytest.raises(ImportError, match="missing dependency"):
+        ci.draw_compound("aspirin")

@@ -1,0 +1,423 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caching Guide &mdash; ChemInformant 2.4.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=720ed60b" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e3526950" />
+      <link rel="stylesheet" type="text/css" href="_static/syntax_highlighting.css?v=d29a27db" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=20623aea"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=7a06b15b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Interactive Tutorial" href="tutorials.html" />
+    <link rel="prev" title="Command-Line Interface (CLI)" href="cli.html" />
+     
+    
+    <!-- Schema.org JSON-LD for SoftwareSourceCode -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareSourceCode",
+      "name": "ChemInformant",
+      "description": "A robust and high-throughput Python client for the PubChem API, designed for automated data retrieval and analysis",
+      "programmingLanguage": "Python",
+      "applicationCategory": "Cheminformatics",
+      "keywords": [
+        "chemistry",
+        "cheminformatics", 
+        "pubchem",
+        "api",
+        "compound",
+        "drug",
+        "cache",
+        "pydantic",
+        "batch",
+        "smiles",
+        "sql",
+        "data-science",
+        "molecular-properties",
+        "scientific-computing",
+        "api-client",
+        "chemical-data",
+        "drug-discovery",
+        "computational-chemistry"
+      ],
+      "codeRepository": "https://github.com/HzaCode/ChemInformant",
+      "license": "https://opensource.org/licenses/MIT",
+      "softwareRequirements": [
+        "Python>=3.9",
+        "requests>=2.25.0",
+        "requests-cache>=1.2.0", 
+        "pydantic>=2.0",
+        "pandas>=1.5.0",
+        "sqlalchemy>=1.4",
+        "pystow>=0.7"
+      ],
+      "author": {
+        "@type": "Person",
+        "name": "Zhiang He",
+        "email": "ang@hezhiang.com"
+      },
+      "version": "2.4.3",
+      "dateCreated": "2023",
+      "dateModified": "2025",
+      "url": "https://hezhiang.com/ChemInformant",
+      "downloadUrl": "https://pypi.org/project/ChemInformant/",
+      "runtimePlatform": "Python",
+      "operatingSystem": "OS Independent",
+      "softwareHelp": "https://hezhiang.com/ChemInformant",
+      "documentation": "https://hezhiang.com/ChemInformant",
+      "issueTracker": "https://github.com/HzaCode/ChemInformant/issues",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://hezhiang.com/ChemInformant"
+      }
+    }
+    </script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ChemInformant
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">🧭 User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Application in Real-World Scientific Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface (CLI)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Caching Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#why-caching-is-essential">1. Why Caching is Essential</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start">2. Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#core-configuration-understanding-setup-cache">3. Core Configuration: Understanding <code class="docutils literal notranslate"><span class="pre">setup_cache()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#managing-your-cache">4. Managing Your Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-usage-fine-grained-path-control-with-pystow">5. Advanced Usage: Fine-Grained Path Control with PyStow</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🎓 Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Interactive Tutorial</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🔬 API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/cheminfo_api.html">Main API Interface (<cite>cheminfo_api</cite>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/models.html">Data Models and Exceptions (<cite>models</cite>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_helpers.html">Internal API Helpers (<cite>api_helpers</cite>)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🛠️ Project Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ChemInformant</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Caching Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/caching_guide.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="caching-guide">
+<h1>Caching Guide<a class="headerlink" href="#caching-guide" title="Link to this heading"></a></h1>
+<p>This guide provides a comprehensive overview of the caching mechanism in ChemInformant. You will learn how to use the <code class="docutils literal notranslate"><span class="pre">setup_cache()</span></code> function to enable, configure, and manage the cache, significantly improving script performance and ensuring reproducible results.</p>
+<nav class="contents local" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#why-caching-is-essential" id="id5">1. Why Caching is Essential</a></p></li>
+<li><p><a class="reference internal" href="#quick-start" id="id6">2. Quick Start</a></p></li>
+<li><p><a class="reference internal" href="#core-configuration-understanding-setup-cache" id="id7">3. Core Configuration: Understanding <code class="docutils literal notranslate"><span class="pre">setup_cache()</span></code></a></p>
+<ul>
+<li><p><a class="reference internal" href="#expire-after-setting-cache-freshness" id="id8">3.1. <cite>expire_after</cite>: Setting Cache Freshness</a></p></li>
+<li><p><a class="reference internal" href="#backend-choosing-a-storage-backend" id="id9">3.2. <cite>backend</cite>: Choosing a Storage Backend</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#managing-your-cache" id="id10">4. Managing Your Cache</a></p>
+<ul>
+<li><p><a class="reference internal" href="#clearing-the-cache" id="id11">4.1. Clearing the Cache</a></p></li>
+<li><p><a class="reference internal" href="#temporarily-disabling-the-cache" id="id12">4.2. Temporarily Disabling the Cache</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#advanced-usage-fine-grained-path-control-with-pystow" id="id13">5. Advanced Usage: Fine-Grained Path Control with PyStow</a></p>
+<ul>
+<li><p><a class="reference internal" href="#understanding-how-pystow-works" id="id14">5.1. Understanding How PyStow Works</a></p></li>
+<li><p><a class="reference internal" href="#customizing-paths-via-environment-variables" id="id15">5.2. Customizing Paths via Environment Variables</a></p></li>
+<li><p><a class="reference internal" href="#configuration-priority" id="id16">5.3. Configuration Priority</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<p>—</p>
+<section id="why-caching-is-essential">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">1. Why Caching is Essential</a><a class="headerlink" href="#why-caching-is-essential" title="Link to this heading"></a></h2>
+<p>When interacting with web APIs like PubChem, you may encounter rate limits or temporary server issues (like <code class="docutils literal notranslate"><span class="pre">503</span> <span class="pre">Service</span> <span class="pre">Unavailable</span></code> errors). A persistent cache solves these problems by storing API responses on your local disk.</p>
+<ul class="simple">
+<li><p><strong>Speed</strong>: Subsequent identical requests are served instantly from the cache, reducing execution time from seconds to milliseconds.</p></li>
+<li><p><strong>Reliability</strong>: It makes your scripts robust against temporary network failures or API downtime.</p></li>
+<li><p><strong>Reproducibility</strong>: Your analysis scripts can be re-run offline, yielding the exact same data.</p></li>
+</ul>
+<p>—</p>
+</section>
+<section id="quick-start">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">2. Quick Start</a><a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
+<p>Enabling the cache is straightforward. Simply call the <code class="docutils literal notranslate"><span class="pre">setup_cache()</span></code> function once at the beginning of your script.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Enabling the default cache</span><a class="headerlink" href="#id1" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">ChemInformant</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ci</span>
+
+<span class="c1"># Call this once to enable the default 7-day cache</span>
+<span class="n">ci</span><span class="o">.</span><span class="n">setup_cache</span><span class="p">()</span>
+
+<span class="c1"># All subsequent API calls will now automatically use the cache</span>
+<span class="n">info</span> <span class="o">=</span> <span class="n">ci</span><span class="o">.</span><span class="n">get_compound</span><span class="p">(</span><span class="s2">&quot;Aspirin&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="core-configuration-understanding-setup-cache">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">3. Core Configuration: Understanding <code class="docutils literal notranslate"><span class="pre">setup_cache()</span></code></a><a class="headerlink" href="#core-configuration-understanding-setup-cache" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">setup_cache()</span></code> function provides a rich set of parameters, allowing you to fine-tune caching behavior.</p>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.api_helpers.</span></span><span class="sig-name descname"><span class="pre">setup_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cache_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'pubchem_cache'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'sqlite'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expire_after</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">604800</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/ChemInformant/api_helpers.html#setup_cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Configures and initializes the persistent cache for API requests.</p>
+<p>This function sets up a <code class="docutils literal notranslate"><span class="pre">requests_cache</span></code> session that will store API
+responses on disk, significantly speeding up repeated queries and reducing
+network traffic.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cache_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the cache file (without extension).</p></li>
+<li><p><strong>backend</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The cache backend to use (e.g., ‘sqlite’, ‘redis’).</p></li>
+<li><p><strong>expire_after</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Cache expiration time in seconds. Defaults to one week.</p></li>
+<li><p><strong>kw</strong> – Additional keyword arguments passed directly to the
+<code class="docutils literal notranslate"><span class="pre">requests_cache.CachedSession</span></code> constructor.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<section id="expire-after-setting-cache-freshness">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">3.1. <cite>expire_after</cite>: Setting Cache Freshness</a><a class="headerlink" href="#expire-after-setting-cache-freshness" title="Link to this heading"></a></h3>
+<p>This parameter controls how long cached responses remain valid. You can provide the value in several convenient formats.</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Different ways to set expiration</span><a class="headerlink" href="#id2" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">ChemInformant</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ci</span>
+
+<span class="c1"># Method 1: Use a human-readable string (&quot;d&quot; for day, &quot;h&quot; for hour)</span>
+<span class="n">ci</span><span class="o">.</span><span class="n">setup_cache</span><span class="p">(</span><span class="n">expire_after</span><span class="o">=</span><span class="s2">&quot;1d&quot;</span><span class="p">)</span>
+
+<span class="c1"># Method 2: Use seconds directly (e.g., 1 hour = 3600 seconds)</span>
+<span class="n">ci</span><span class="o">.</span><span class="n">setup_cache</span><span class="p">(</span><span class="n">expire_after</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
+
+<span class="c1"># Special values: -1 means the cache never expires, 0 disables caching</span>
+<span class="n">ci</span><span class="o">.</span><span class="n">setup_cache</span><span class="p">(</span><span class="n">expire_after</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="backend-choosing-a-storage-backend">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">3.2. <cite>backend</cite>: Choosing a Storage Backend</a><a class="headerlink" href="#backend-choosing-a-storage-backend" title="Link to this heading"></a></h3>
+<p>You can choose the most suitable storage backend for your use case.</p>
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">Available Cache Backends</span><a class="headerlink" href="#id3" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 60.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Backend</p></th>
+<th class="head"><p>Dependencies</p></th>
+<th class="head"><p>Use Case</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'sqlite'</span></code></p></td>
+<td><p>(none)</p></td>
+<td><p><strong>Default option.</strong> The most versatile file-based cache, ideal for single-machine environments.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'memory'</span></code></p></td>
+<td><p>(none)</p></td>
+<td><p>In-memory cache. The fastest option, but the cache is discarded when the script finishes.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'redis'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">redis</span></code></p></td>
+<td><p>Use when you need to share a cache across multiple processes or machines.</p></td>
+</tr>
+</tbody>
+</table>
+<p>—</p>
+</section>
+</section>
+<section id="managing-your-cache">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">4. Managing Your Cache</a><a class="headerlink" href="#managing-your-cache" title="Link to this heading"></a></h2>
+<section id="clearing-the-cache">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink">4.1. Clearing the Cache</a><a class="headerlink" href="#clearing-the-cache" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong>Manual Deletion</strong>: The most direct way is to delete the entire cache directory.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># On Linux/macOS</span>
+rm<span class="w"> </span>-rf<span class="w"> </span>~/.data/cheminformant/cache/
+</pre></div>
+</div>
+</li>
+<li><p><strong>Programmatic Clearing</strong>: Get the session object via <cite>get_session()</cite> and call its clear method.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">session</span> <span class="o">=</span> <span class="n">ci</span><span class="o">.</span><span class="n">get_session</span><span class="p">()</span>
+<span class="n">session</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> <span class="c1"># This will delete all cached entries</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="temporarily-disabling-the-cache">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink">4.2. Temporarily Disabling the Cache</a><a class="headerlink" href="#temporarily-disabling-the-cache" title="Link to this heading"></a></h3>
+<p>If you want to run a script without using the persistent cache, simply switch the backend to <code class="docutils literal notranslate"><span class="pre">'memory'</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ci</span><span class="o">.</span><span class="n">setup_cache</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="s2">&quot;memory&quot;</span><span class="p">)</span> <span class="c1"># The cache for this session will be discarded on exit</span>
+</pre></div>
+</div>
+<p>—</p>
+</section>
+</section>
+<section id="advanced-usage-fine-grained-path-control-with-pystow">
+<h2><a class="toc-backref" href="#id13" role="doc-backlink">5. Advanced Usage: Fine-Grained Path Control with PyStow</a><a class="headerlink" href="#advanced-usage-fine-grained-path-control-with-pystow" title="Link to this heading"></a></h2>
+<p>For advanced users who need precise control over data storage locations, ChemInformant leverages the powerful <strong>PyStow</strong> library for path management. This allows you to easily redirect the cache directory to other disks or adhere to specific operating system standards.</p>
+<section id="understanding-how-pystow-works">
+<h3><a class="toc-backref" href="#id14" role="doc-backlink">5.1. Understanding How PyStow Works</a><a class="headerlink" href="#understanding-how-pystow-works" title="Link to this heading"></a></h3>
+<p>PyStow’s core mission is to provide a unified, predictable, and configurable storage location for Python applications.</p>
+<ul class="simple">
+<li><p><strong>Default Behavior</strong>: It creates a <code class="docutils literal notranslate"><span class="pre">.data</span></code> directory in your user’s home folder and then organizes data in subdirectories named after the application (in this case, <cite>cheminformant</cite>).
+*   <strong>Linux/macOS Default Path</strong>: <code class="docutils literal notranslate"><span class="pre">~/.data/cheminformant/cache/</span></code>
+*   <strong>Windows Default Path</strong>: <code class="docutils literal notranslate"><span class="pre">%USERPROFILE%\.data\cheminformant\cache\</span></code></p></li>
+</ul>
+</section>
+<section id="customizing-paths-via-environment-variables">
+<h3><a class="toc-backref" href="#id15" role="doc-backlink">5.2. Customizing Paths via Environment Variables</a><a class="headerlink" href="#customizing-paths-via-environment-variables" title="Link to this heading"></a></h3>
+<p>This is the most flexible and recommended way to configure PyStow, as it requires no code changes.</p>
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-text">Core PyStow Environment Variables</span><a class="headerlink" href="#id4" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Environment Variable</p></th>
+<th class="head"><p>Description &amp; Effect</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CHEMINFORMANT_HOME</span></code></p></td>
+<td><p><strong>Recommended Usage.</strong> Sets a new base directory for ChemInformant <em>only</em>. This is the most precise and non-interfering way to configure paths.
+<strong>Example</strong>: <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">CHEMINFORMANT_HOME=/mnt/ssd/data</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PYSTOW_HOME</span></code></p></td>
+<td><p><strong>Global Configuration.</strong> Sets a new global base directory for <em>all</em> applications that use PyStow. A good choice if you want to centralize all your scientific data.
+<strong>Example</strong>: <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">PYSTOW_HOME=/data/</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PYSTOW_USE_APPDIRS</span></code></p></td>
+<td><p><strong>Follow System Standards.</strong> Setting this variable to <code class="docutils literal notranslate"><span class="pre">true</span></code> makes PyStow follow the XDG Base Directory Specification.
+- <strong>Linux/macOS</strong>: The cache will be stored in <code class="docutils literal notranslate"><span class="pre">~/.cache/cheminformant/</span></code>
+- <strong>Windows</strong>: The cache will be stored in <code class="docutils literal notranslate"><span class="pre">%LOCALAPPDATA%\ChemInformant\Cache\</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PYSTOW_NAME</span></code></p></td>
+<td><p><strong>Modify Default Directory Name.</strong> Replaces the default <code class="docutils literal notranslate"><span class="pre">.data</span></code> directory name with one you specify.
+<strong>Example</strong>: <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">PYSTOW_NAME=.my_apps_data</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="configuration-priority">
+<h3><a class="toc-backref" href="#id16" role="doc-backlink">5.3. Configuration Priority</a><a class="headerlink" href="#configuration-priority" title="Link to this heading"></a></h3>
+<p>PyStow follows a clear priority order to determine the final path:</p>
+<ol class="arabic simple">
+<li><p>The <strong>application-specific variable</strong> (<code class="docutils literal notranslate"><span class="pre">CHEMINFORMANT_HOME</span></code>) has the highest priority.</p></li>
+<li><p>If not set, the <strong>global variable</strong> (<code class="docutils literal notranslate"><span class="pre">PYSTOW_HOME</span></code>) is used.</p></li>
+<li><p>If neither is set, the <strong>default path</strong> is used (based on <code class="docutils literal notranslate"><span class="pre">~/.data</span></code> or the XDG specification).</p></li>
+</ol>
+<div class="tip admonition">
+<p class="admonition-title">Diving Deeper into PyStow</p>
+<p>This guide only covers the most common features of PyStow as used in ChemInformant. If you want to explore more advanced use cases, such as dynamic configuration via the Python API, path lookups, and more, we highly recommend reading <a class="reference external" href="https://github.com/cthoyt/pystow">PyStow’s official GitHub repository</a>.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cli.html" class="btn btn-neutral float-left" title="Command-Line Interface (CLI)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorials.html" class="btn btn-neutral float-right" title="Interactive Tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Ang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

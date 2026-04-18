@@ -1,0 +1,900 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Main API Interface (cheminfo_api) &mdash; ChemInformant 2.4.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=720ed60b" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e3526950" />
+      <link rel="stylesheet" type="text/css" href="../_static/syntax_highlighting.css?v=d29a27db" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=20623aea"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=7a06b15b"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Data Models and Exceptions (models)" href="models.html" />
+    <link rel="prev" title="Interactive Tutorial" href="../tutorials.html" />
+     
+    
+    <!-- Schema.org JSON-LD for SoftwareSourceCode -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareSourceCode",
+      "name": "ChemInformant",
+      "description": "A robust and high-throughput Python client for the PubChem API, designed for automated data retrieval and analysis",
+      "programmingLanguage": "Python",
+      "applicationCategory": "Cheminformatics",
+      "keywords": [
+        "chemistry",
+        "cheminformatics", 
+        "pubchem",
+        "api",
+        "compound",
+        "drug",
+        "cache",
+        "pydantic",
+        "batch",
+        "smiles",
+        "sql",
+        "data-science",
+        "molecular-properties",
+        "scientific-computing",
+        "api-client",
+        "chemical-data",
+        "drug-discovery",
+        "computational-chemistry"
+      ],
+      "codeRepository": "https://github.com/HzaCode/ChemInformant",
+      "license": "https://opensource.org/licenses/MIT",
+      "softwareRequirements": [
+        "Python>=3.9",
+        "requests>=2.25.0",
+        "requests-cache>=1.2.0", 
+        "pydantic>=2.0",
+        "pandas>=1.5.0",
+        "sqlalchemy>=1.4",
+        "pystow>=0.7"
+      ],
+      "author": {
+        "@type": "Person",
+        "name": "Zhiang He",
+        "email": "ang@hezhiang.com"
+      },
+      "version": "2.4.3",
+      "dateCreated": "2023",
+      "dateModified": "2025",
+      "url": "https://hezhiang.com/ChemInformant",
+      "downloadUrl": "https://pypi.org/project/ChemInformant/",
+      "runtimePlatform": "Python",
+      "operatingSystem": "OS Independent",
+      "softwareHelp": "https://hezhiang.com/ChemInformant",
+      "documentation": "https://hezhiang.com/ChemInformant",
+      "issueTracker": "https://github.com/HzaCode/ChemInformant/issues",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://hezhiang.com/ChemInformant"
+      }
+    }
+    </script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ChemInformant
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">🧭 User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_usage.html">Application in Real-World Scientific Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command-Line Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../caching_guide.html">Caching Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🎓 Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Interactive Tutorial</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🔬 API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Main API Interface (<cite>cheminfo_api</cite>)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_properties"><code class="docutils literal notranslate"><span class="pre">get_properties()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_compound"><code class="docutils literal notranslate"><span class="pre">get_compound()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_compounds"><code class="docutils literal notranslate"><span class="pre">get_compounds()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_weight"><code class="docutils literal notranslate"><span class="pre">get_weight()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_formula"><code class="docutils literal notranslate"><span class="pre">get_formula()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_cas"><code class="docutils literal notranslate"><span class="pre">get_cas()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_iupac_name"><code class="docutils literal notranslate"><span class="pre">get_iupac_name()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_canonical_smiles"><code class="docutils literal notranslate"><span class="pre">get_canonical_smiles()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_isomeric_smiles"><code class="docutils literal notranslate"><span class="pre">get_isomeric_smiles()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_inchi"><code class="docutils literal notranslate"><span class="pre">get_inchi()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_inchi_key"><code class="docutils literal notranslate"><span class="pre">get_inchi_key()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_xlogp"><code class="docutils literal notranslate"><span class="pre">get_xlogp()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_tpsa"><code class="docutils literal notranslate"><span class="pre">get_tpsa()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_complexity"><code class="docutils literal notranslate"><span class="pre">get_complexity()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_exact_mass"><code class="docutils literal notranslate"><span class="pre">get_exact_mass()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_monoisotopic_mass"><code class="docutils literal notranslate"><span class="pre">get_monoisotopic_mass()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_h_bond_donor_count"><code class="docutils literal notranslate"><span class="pre">get_h_bond_donor_count()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_h_bond_acceptor_count"><code class="docutils literal notranslate"><span class="pre">get_h_bond_acceptor_count()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_rotatable_bond_count"><code class="docutils literal notranslate"><span class="pre">get_rotatable_bond_count()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_heavy_atom_count"><code class="docutils literal notranslate"><span class="pre">get_heavy_atom_count()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_charge"><code class="docutils literal notranslate"><span class="pre">get_charge()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_atom_stereo_count"><code class="docutils literal notranslate"><span class="pre">get_atom_stereo_count()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_bond_stereo_count"><code class="docutils literal notranslate"><span class="pre">get_bond_stereo_count()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_covalent_unit_count"><code class="docutils literal notranslate"><span class="pre">get_covalent_unit_count()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.get_synonyms"><code class="docutils literal notranslate"><span class="pre">get_synonyms()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.cheminfo_api.draw_compound"><code class="docutils literal notranslate"><span class="pre">draw_compound()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Data Models and Exceptions (<cite>models</cite>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_helpers.html">Internal API Helpers (<cite>api_helpers</cite>)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🛠️ Project Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ChemInformant</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Main API Interface (<cite>cheminfo_api</cite>)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/cheminfo_api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ChemInformant.cheminfo_api">
+<span id="main-api-interface-cheminfo-api"></span><h1>Main API Interface (<cite>cheminfo_api</cite>)<a class="headerlink" href="#module-ChemInformant.cheminfo_api" title="Link to this heading"></a></h1>
+<p>This module is the main entry point for all user interactions. It is designed around two core philosophies to cater to different use cases:</p>
+<ol class="arabic simple">
+<li><p><strong>Bulk Data Retrieval (Engine):</strong> The <a class="reference internal" href="#ChemInformant.cheminfo_api.get_properties" title="ChemInformant.cheminfo_api.get_properties"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_properties()</span></code></a> function is the workhorse of this library. It achieves maximum efficiency by fetching multiple properties for multiple compounds in a single, consolidated API call. It returns a Pandas DataFrame, making it ideal for data analysis, scripting, and integration with the scientific computing ecosystem (e.g., RDKit, Scikit-learn).</p></li>
+<li><p><strong>Convenience and Object-Oriented Access (Interface):</strong> A series of <code class="docutils literal notranslate"><span class="pre">get_&lt;property&gt;()</span></code> functions provide direct access to individual data points. For scenarios requiring comprehensive, type-safe data, <a class="reference internal" href="#ChemInformant.cheminfo_api.get_compound" title="ChemInformant.cheminfo_api.get_compound"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_compound()</span></code></a> returns a fully validated Pydantic <a class="reference internal" href="models.html#ChemInformant.models.Compound" title="ChemInformant.models.Compound"><code class="xref py py-class docutils literal notranslate"><span class="pre">Compound</span></code></a> object.</p></li>
+</ol>
+<p class="rubric">Core Bulk Processing Function</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_properties">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifiers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_3d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_properties</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.3)"><span class="pre">DataFrame</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_properties" title="Link to this definition"></a></dt>
+<dd><p>Retrieve chemical properties for one or more compounds from PubChem.</p>
+<p>This function is the core interface for fetching molecular properties. It accepts
+various types of chemical identifiers and returns data in a standardized snake_case
+format with consistent column ordering and error handling.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifiers</strong> – Chemical identifier(s) to look up. Can be:
+- Single identifier: string name, CID number, or SMILES
+- List of identifiers: mixed types allowed
+Examples: “aspirin”, 2244, “CC(=O)OC1=CC=CC=C1C(=O)O”</p></li>
+<li><p><strong>properties</strong> – Specific properties to retrieve. Can be:
+- None: Returns core property set (default)
+- String: Single property name or comma-separated list
+- List: Multiple property names
+Supports both snake_case (“molecular_weight”) and CamelCase (“MolecularWeight”)</p></li>
+<li><p><strong>namespace</strong> – Input identifier namespace (currently only “cid” supported)</p></li>
+<li><p><strong>include_3d</strong> – If True and properties=None, includes 3D molecular descriptors
+in addition to core properties. Ignored when properties is specified.</p></li>
+<li><p><strong>all_properties</strong> – If True, retrieves all ~40 available properties from PubChem.
+Mutually exclusive with properties and include_3d parameters.</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments (for future compatibility)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Results with columns:</dt><dd><ul class="simple">
+<li><p>input_identifier: Original input as provided</p></li>
+<li><p>cid: PubChem Compound ID (string type)</p></li>
+<li><p>status: “OK” for success, exception name for failures</p></li>
+<li><p>[property columns]: Requested properties in snake_case format</p></li>
+</ul>
+</dd>
+</dl>
+<p>Column order preserves the original properties parameter order.
+Failed lookups return rows with status != “OK” and missing property values.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If unsupported properties are requested, or if all_properties=True
+    is used with other property selection parameters</p>
+</dd>
+</dl>
+<dl>
+<dt>Property Categories:</dt><dd><dl class="simple">
+<dt>Core properties (default): molecular_weight, molecular_formula, canonical_smiles,</dt><dd><p>isomeric_smiles, iupac_name, cas, synonyms, xlogp, tpsa, complexity,
+h_bond_donor_count, h_bond_acceptor_count, rotatable_bond_count,
+heavy_atom_count, charge, atom_stereo_count, bond_stereo_count,
+covalent_unit_count, in_ch_i, in_ch_i_key</p>
+</dd>
+</dl>
+<p>3D properties: volume_3d, feature_count_3d, conformer_count_3d, etc.</p>
+<p>Special properties: cas (CAS Registry Number), synonyms (list of names)</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get core properties for a single compound</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">get_properties</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+<span class="go">[&#39;input_identifier&#39;, &#39;cid&#39;, &#39;status&#39;, &#39;molecular_weight&#39;, ...]</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get specific properties for multiple compounds</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">get_properties</span><span class="p">([</span><span class="s2">&quot;aspirin&quot;</span><span class="p">,</span> <span class="s2">&quot;caffeine&quot;</span><span class="p">],</span> <span class="n">properties</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;molecular_weight&quot;</span><span class="p">,</span> <span class="s2">&quot;xlogp&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s2">&quot;input_identifier&quot;</span><span class="p">,</span> <span class="s2">&quot;molecular_weight&quot;</span><span class="p">,</span> <span class="s2">&quot;xlogp&quot;</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get all available properties</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">get_properties</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">,</span> <span class="n">all_properties</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Retrieved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2"> columns&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Include 3D descriptors with core set</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">get_properties</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">,</span> <span class="n">include_3d</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Handle mixed input types and failures</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">get_properties</span><span class="p">([</span><span class="mi">2244</span><span class="p">,</span> <span class="s2">&quot;invalid_name&quot;</span><span class="p">,</span> <span class="s2">&quot;CC(=O)O&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s2">&quot;input_identifier&quot;</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">]])</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Uses intelligent fallbacks for SMILES properties (canonical_smiles falls back
+to connectivity_smiles if canonical is unavailable)</p></li>
+<li><p>Automatically handles API pagination for large batch requests</p></li>
+<li><p>Results are cached to improve performance on repeated queries</p></li>
+<li><p>All property names in output use snake_case format for consistency</p></li>
+<li><p>CID column is returned as string type to handle large compound IDs</p></li>
+</ul>
+</dd></dl>
+
+<p class="rubric">Object-Oriented Fetchers</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_compound">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_compound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="models.html#ChemInformant.models.Compound" title="ChemInformant.models.Compound"><span class="pre">Compound</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_compound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_compound" title="Link to this definition"></a></dt>
+<dd><p>Retrieve a complete Compound object with all available properties.</p>
+<p>This function fetches all properties for a single compound and returns
+a structured Compound object with type validation and convenient access
+to all molecular data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>identifier</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Compound object with all available properties as attributes</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.14)"><strong>RuntimeError</strong></a> – If the compound cannot be found or data retrieval fails</p></li>
+<li><p><a class="reference internal" href="models.html#ChemInformant.models.NotFoundError" title="ChemInformant.models.NotFoundError"><strong>NotFoundError</strong></a> – If the identifier cannot be resolved</p></li>
+<li><p><a class="reference internal" href="models.html#ChemInformant.models.AmbiguousIdentifierError" title="ChemInformant.models.AmbiguousIdentifierError"><strong>AmbiguousIdentifierError</strong></a> – If the identifier matches multiple compounds</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">compound</span> <span class="o">=</span> <span class="n">get_compound</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">compound</span><span class="o">.</span><span class="n">MolecularWeight</span><span class="p">)</span>
+<span class="go">180.16</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">compound</span><span class="o">.</span><span class="n">CanonicalSMILES</span><span class="p">)</span>
+<span class="go">&#39;CC(=O)OC1=CC=CC=C1C(=O)O&#39;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function uses CamelCase property names to match the Compound model.
+For DataFrame output with snake_case names, use get_properties() instead.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_compounds">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_compounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifiers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable" title="(in Python v3.14)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="models.html#ChemInformant.models.Compound" title="ChemInformant.models.Compound"><span class="pre">Compound</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_compounds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_compounds" title="Link to this definition"></a></dt>
+<dd><p>Retrieve multiple Compound objects for a list of identifiers.</p>
+<p>This function processes multiple chemical identifiers and returns
+a list of Compound objects. Failed lookups will raise exceptions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>identifiers</strong> – Iterable of chemical identifiers (names, CIDs, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of Compound objects in the same order as input identifiers</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.14)"><strong>RuntimeError</strong></a> – If any compound cannot be found or data retrieval fails</p></li>
+<li><p><a class="reference internal" href="models.html#ChemInformant.models.NotFoundError" title="ChemInformant.models.NotFoundError"><strong>NotFoundError</strong></a> – If any identifier cannot be resolved</p></li>
+<li><p><a class="reference internal" href="models.html#ChemInformant.models.AmbiguousIdentifierError" title="ChemInformant.models.AmbiguousIdentifierError"><strong>AmbiguousIdentifierError</strong></a> – If any identifier matches multiple compounds</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">compounds</span> <span class="o">=</span> <span class="n">get_compounds</span><span class="p">([</span><span class="s2">&quot;aspirin&quot;</span><span class="p">,</span> <span class="s2">&quot;caffeine&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="n">compounds</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">comp</span><span class="o">.</span><span class="n">InputIdentifier</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">comp</span><span class="o">.</span><span class="n">MolecularWeight</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">aspirin: 180.16</span>
+<span class="go">caffeine: 194.19</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For batch processing with error handling, consider using get_properties()
+which returns a DataFrame with status information for failed lookups.</p>
+</div>
+</dd></dl>
+
+<p class="rubric">Convenience Lookups</p>
+<p><strong>Basic Properties</strong></p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_weight">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_weight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_weight" title="Link to this definition"></a></dt>
+<dd><p>Get the molecular weight of a compound.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Molecular weight in g/mol, or None if compound not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_weight</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="go">180.16</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_weight</span><span class="p">(</span><span class="mi">2244</span><span class="p">)</span>  <span class="c1"># Same as above using CID</span>
+<span class="go">180.16</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_formula">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_formula</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_formula"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_formula" title="Link to this definition"></a></dt>
+<dd><p>Get the molecular formula of a compound.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Molecular formula string, or None if compound not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_formula</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="go">&#39;C9H8O4&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_formula</span><span class="p">(</span><span class="s2">&quot;water&quot;</span><span class="p">)</span>
+<span class="go">&#39;H2O&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_cas">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_cas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_cas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_cas" title="Link to this definition"></a></dt>
+<dd><p>Get the CAS Registry Number of a compound.</p>
+<p>CAS (Chemical Abstracts Service) numbers are unique identifiers assigned
+to chemical substances by the American Chemical Society.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>CAS Registry Number as string, or None if not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_cas</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="go">&#39;50-78-2&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_cas</span><span class="p">(</span><span class="s2">&quot;water&quot;</span><span class="p">)</span>
+<span class="go">&#39;7732-18-5&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_iupac_name">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_iupac_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_iupac_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_iupac_name" title="Link to this definition"></a></dt>
+<dd><p>Get the IUPAC (systematic) name of a compound.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>IUPAC name string, or None if compound not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_iupac_name</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="go">&#39;2-acetyloxybenzoic acid&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_iupac_name</span><span class="p">(</span><span class="s2">&quot;water&quot;</span><span class="p">)</span>
+<span class="go">&#39;oxidane&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p><strong>SMILES and Identifiers</strong></p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_canonical_smiles">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_canonical_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_canonical_smiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_canonical_smiles" title="Link to this definition"></a></dt>
+<dd><p>Get the canonical SMILES representation of a compound.</p>
+<p>Canonical SMILES provide a unique string representation of molecular structure
+with consistent atom ordering and standardized conventions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Canonical SMILES string, or None if compound not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_canonical_smiles</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="go">&#39;CC(=O)OC1=CC=CC=C1C(=O)O&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_canonical_smiles</span><span class="p">(</span><span class="mi">2244</span><span class="p">)</span>
+<span class="go">&#39;CC(=O)OC1=CC=CC=C1C(=O)O&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_isomeric_smiles">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_isomeric_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_isomeric_smiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_isomeric_smiles" title="Link to this definition"></a></dt>
+<dd><p>Get the isomeric SMILES representation of a compound.</p>
+<p>Isomeric SMILES include stereochemical information and isotope specifications,
+providing more detailed structural information than canonical SMILES.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Isomeric SMILES string, or None if compound not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_isomeric_smiles</span><span class="p">(</span><span class="s2">&quot;glucose&quot;</span><span class="p">)</span>
+<span class="go">&#39;C([C@@H]1[C@H]([C@@H]([C@H]([C@H](O1)O)O)O)O)O&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_inchi">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_inchi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_inchi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_inchi" title="Link to this definition"></a></dt>
+<dd><p>Get the InChI (International Chemical Identifier) of a compound.</p>
+<p>InChI is a standardized string representation developed by IUPAC
+for uniquely identifying chemical substances across databases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>InChI string, or None if compound not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_inchi</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="go">&#39;InChI=1S/C9H8O4/c1-6(10)13-8-5-3-2-4-7(8)9(11)12/h2-5H,1H3,(H,11,12)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_inchi_key">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_inchi_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_inchi_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_inchi_key" title="Link to this definition"></a></dt>
+<dd><p>Get the InChI Key (hashed version of InChI) of a compound.</p>
+<p>InChI Key is a fixed-length (27 character) hash of the InChI,
+designed for database searching and web queries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>InChI Key string, or None if compound not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_inchi_key</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="go">&#39;BSYNRYMUTXBXSQ-UHFFFAOYSA-N&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p><strong>Molecular Descriptors</strong></p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_xlogp">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_xlogp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_xlogp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_xlogp" title="Link to this definition"></a></dt>
+<dd><p>Get the XLogP value (octanol-water partition coefficient) of a compound.</p>
+<p>XLogP is a key descriptor for drug discovery, indicating lipophilicity and
+membrane permeability. Values typically range from -3 to +10.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>XLogP value (log units), or None if compound not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_xlogp</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="go">1.2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_xlogp</span><span class="p">(</span><span class="s2">&quot;water&quot;</span><span class="p">)</span>
+<span class="go">-0.7</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_tpsa">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_tpsa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_tpsa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_tpsa" title="Link to this definition"></a></dt>
+<dd><p>Get the Topological Polar Surface Area (TPSA) of a compound.</p>
+<p>TPSA is a key descriptor for drug discovery, predicting membrane
+permeability and blood-brain barrier penetration. Values &lt; 90 Ų
+suggest good oral bioavailability.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>TPSA value in Ų (square Angstroms), or None if compound not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_tpsa</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="go">63.6</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_complexity">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_complexity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_complexity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_complexity" title="Link to this definition"></a></dt>
+<dd><p>Get the molecular complexity score of a compound.</p>
+<p>Complexity is a measure of structural intricacy based on symmetry,
+branching, and ring systems. Higher values indicate more complex structures.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Complexity score (unitless), or None if compound not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_complexity</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="go">212</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p><strong>Mass Properties</strong></p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_exact_mass">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_exact_mass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_exact_mass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_exact_mass" title="Link to this definition"></a></dt>
+<dd><p>Get the exact mass of a compound.</p>
+<p>Exact mass is the sum of atomic masses using the most abundant isotopes.
+Used in mass spectrometry for precise compound identification.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Exact mass in Da (atomic mass units), or None if compound not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_exact_mass</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="go">180.04225873</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_monoisotopic_mass">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_monoisotopic_mass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_monoisotopic_mass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_monoisotopic_mass" title="Link to this definition"></a></dt>
+<dd><p>Get the monoisotopic mass of a compound.</p>
+<p>Monoisotopic mass is calculated using the most abundant isotope of each element.
+Important for mass spectrometry and structural analysis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Monoisotopic mass in Da, or None if compound not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_monoisotopic_mass</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="go">180.04225873</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p><strong>Molecular Counts</strong></p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_h_bond_donor_count">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_h_bond_donor_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_h_bond_donor_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_h_bond_donor_count" title="Link to this definition"></a></dt>
+<dd><p>Get the number of hydrogen bond donors in a compound.</p>
+<p>Counts atoms that can donate hydrogen bonds (typically N, O with H).
+Important for drug design and predicting molecular interactions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of H-bond donors, or None if compound not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_h_bond_donor_count</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_h_bond_acceptor_count">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_h_bond_acceptor_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_h_bond_acceptor_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_h_bond_acceptor_count" title="Link to this definition"></a></dt>
+<dd><p>Get the number of hydrogen bond acceptors in a compound.</p>
+<p>Counts atoms that can accept hydrogen bonds (typically N, O).
+Key descriptor for drug-like properties and solubility prediction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of H-bond acceptors, or None if compound not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_h_bond_acceptor_count</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_rotatable_bond_count">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_rotatable_bond_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_rotatable_bond_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_rotatable_bond_count" title="Link to this definition"></a></dt>
+<dd><p>Get the number of rotatable bonds in a compound.</p>
+<p>Rotatable bonds are acyclic single bonds between non-terminal heavy atoms.
+Indicates molecular flexibility, important for drug binding and bioavailability.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of rotatable bonds, or None if compound not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_rotatable_bond_count</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_heavy_atom_count">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_heavy_atom_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_heavy_atom_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_heavy_atom_count" title="Link to this definition"></a></dt>
+<dd><p>Get the number of heavy atoms (non-hydrogen atoms) in a compound.</p>
+<p>Heavy atoms include all atoms except hydrogen. This is a basic
+measure of molecular size and complexity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of heavy atoms, or None if compound not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_heavy_atom_count</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="go">13</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_charge">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_charge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_charge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_charge" title="Link to this definition"></a></dt>
+<dd><p>Get the formal charge of a compound.</p>
+<p>The total formal charge of the molecule, indicating whether it’s
+neutral (0), positively charged (+), or negatively charged (-).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Formal charge (integer), or None if compound not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_charge</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p><strong>Stereochemistry</strong></p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_atom_stereo_count">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_atom_stereo_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_atom_stereo_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_atom_stereo_count" title="Link to this definition"></a></dt>
+<dd><p>Get the number of stereocenters (chiral centers) in a compound.</p>
+<p>Counts atoms with defined stereochemistry, important for understanding
+the three-dimensional structure and potential biological activity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of stereocenters, or None if compound not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_atom_stereo_count</span><span class="p">(</span><span class="s2">&quot;glucose&quot;</span><span class="p">)</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_bond_stereo_count">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_bond_stereo_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_bond_stereo_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_bond_stereo_count" title="Link to this definition"></a></dt>
+<dd><p>Get the number of stereo bonds (E/Z double bonds) in a compound.</p>
+<p>Counts double bonds with defined stereochemistry (cis/trans or E/Z).
+Important for understanding molecular geometry and reactivity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of stereo bonds, or None if compound not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_bond_stereo_count</span><span class="p">(</span><span class="s2">&quot;retinol&quot;</span><span class="p">)</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_covalent_unit_count">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_covalent_unit_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_covalent_unit_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_covalent_unit_count" title="Link to this definition"></a></dt>
+<dd><p>Get the number of covalently bonded units in a compound.</p>
+<p>For most organic molecules this is 1. Higher values indicate
+multiple separate molecular components or fragments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of covalent units, or None if compound not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_covalent_unit_count</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p><strong>Synonyms and Names</strong></p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.get_synonyms">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">get_synonyms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#get_synonyms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.get_synonyms" title="Link to this definition"></a></dt>
+<dd><p>Get all known synonyms (alternative names) for a compound.</p>
+<p>Returns a comprehensive list of names including common names, brand names,
+systematic names, and other identifiers used for the compound.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – Chemical identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of synonym strings, empty list if compound not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">synonyms</span> <span class="o">=</span> <span class="n">get_synonyms</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">synonyms</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>  <span class="c1"># First few names</span>
+<span class="go">[&#39;aspirin&#39;, &#39;acetylsalicylic acid&#39;, &#39;2-acetyloxybenzoic acid&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p class="rubric">Visualization Functions</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.cheminfo_api.draw_compound">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.cheminfo_api.</span></span><span class="sig-name descname"><span class="pre">draw_compound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/cheminfo_api.html#draw_compound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.cheminfo_api.draw_compound" title="Link to this definition"></a></dt>
+<dd><p>Draw the 2D chemical structure of a compound.</p>
+<p>This function fetches the chemical structure image from PubChem and displays it
+using matplotlib. Requires matplotlib and PIL to be installed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>identifier</strong> – A compound identifier (name, CID, or SMILES)</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="models.html#ChemInformant.models.NotFoundError" title="ChemInformant.models.NotFoundError"><strong>NotFoundError</strong></a> – If the identifier cannot be resolved to a valid compound</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ImportError" title="(in Python v3.14)"><strong>ImportError</strong></a> – If required dependencies (matplotlib, PIL) are not installed</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../tutorials.html" class="btn btn-neutral float-left" title="Interactive Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="models.html" class="btn btn-neutral float-right" title="Data Models and Exceptions (models)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Ang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

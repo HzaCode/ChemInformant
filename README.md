@@ -87,7 +87,7 @@ Integration: CLI tools, Jupyter notebooks, machine learning pipelines
 
 ### ✨ Key Features
 
-*   **Analysis-Ready Pandas/SQL Output:** The core API (`get_properties`) returns either a clean Pandas DataFrame or a direct SQL output, eliminating data wrangling boilerplate and enabling immediate integration with both the Python data science ecosystem and modern database workflows.
+*   **Analysis-Ready Pandas Output with SQL Export:** The core API (`get_properties`) returns a clean Pandas DataFrame, and a dedicated `df_to_sql()` helper (plus the `chemfetch --format sql` CLI mode) persists results directly into SQLite / PostgreSQL / any SQLAlchemy backend — so you can move from query to database in two lines without hand-writing wrangling code.
 
 *   **Automated Network Reliability:** Ensures your workflows run flawlessly with built-in persistent caching, smart rate-limiting, and automatic retries. It also transparently handles API pagination (`ListKey`) for large-scale queries, delivering complete result sets without any manual intervention.
 
@@ -214,11 +214,11 @@ Error handling: status checking, invalid input handling, network retry logic
 | `get_isomeric_smiles(id)`  | Isomeric SMILES with Isomeric→SMILES fallback *(str)*         |
 | `get_xlogp(id)`            | XLogP (calculated hydrophobicity) *(float)*                   |
 | `get_synonyms(id)`         | List of synonyms *(List\[str])*                               |
-| `get_compound(id)`         | Full, validated **`Compound`** object (Pydantic v2 model)     |
+| `get_compound(id)`         | Validated **`Compound`** object (Pydantic v2 model)           |
 
 *Note: This table shows key convenience functions for demonstration. ChemInformant provides **22 convenience functions** in total, covering molecular descriptors, mass properties, stereochemistry, and more.*
 
-*All functions accept a **CID, name, or SMILES** and return `None`/`[]` on failure.*
+*All scalar `get_<property>()` functions accept a **CID, name, or SMILES** and return `None`/`[]` on failure. `get_compound()` / `get_compounds()` instead raise `NotFoundError` or `AmbiguousIdentifierError` so you can handle resolution failures explicitly.*
 
 </details>
 

@@ -88,6 +88,14 @@ where = ["src"]
 source = ["ChemInformant"]
 
 # ---------------------------
+#  Pytest configuration
+# ---------------------------
+[tool.pytest.ini_options]
+markers = [
+    "integration: marks tests that hit live PubChem endpoints (deselect with '-m \"not integration\"')",
+]
+
+# ---------------------------
 #  Ruff configuration
 # ---------------------------
 [tool.ruff]

@@ -339,6 +339,7 @@ class TestGetCompounds:
 
 class TestDrawCompound:
     def test_draw_compound_success(self):
+        """Test successful draw_compound using shared session."""
         with mock.patch.object(
             cheminfo_api, "_resolve_to_single_cid", return_value=2519
         ):
@@ -347,11 +348,15 @@ class TestDrawCompound:
                 "get_synonyms_for_cid",
                 return_value=["Caffeine"],
             ):
-                with mock.patch("requests.get") as mock_get:
+                with mock.patch.object(
+                    cheminfo_api.api_helpers, "get_session"
+                ) as mock_session_get:
+                    mock_session = mock.Mock()
                     mock_response = mock.Mock()
                     mock_response.status_code = 200
                     mock_response.content = b"fake_png_data"
-                    mock_get.return_value = mock_response
+                    mock_session.get.return_value = mock_response
+                    mock_session_get.return_value = mock_session
 
                     with mock.patch("io.BytesIO") as mock_bytesio:
                         mock_bytesio.return_value = mock.Mock()
@@ -374,6 +379,7 @@ class TestDrawCompound:
                                                     mock_show.assert_called_once()
 
     def test_draw_compound_image_request_fails(self):
+        """Test that draw_compound raises RuntimeError when image request fails."""
         with mock.patch.object(
             cheminfo_api, "_resolve_to_single_cid", return_value=2519
         ):
@@ -382,16 +388,18 @@ class TestDrawCompound:
                 "get_synonyms_for_cid",
                 return_value=["Caffeine"],
             ):
-                with mock.patch("requests.get") as mock_get:
+                with mock.patch.object(
+                    cheminfo_api.api_helpers, "get_session"
+                ) as mock_session_get:
+                    mock_session = mock.Mock()
                     mock_response = mock.Mock()
                     mock_response.status_code = 404
                     mock_response.content = b"not found"
-                    mock_get.return_value = mock_response
+                    mock_session.get.return_value = mock_response
+                    mock_session_get.return_value = mock_session
 
-                    with mock.patch("builtins.print") as mock_print:
-                        result = cheminfo_api.draw_compound("caffeine")
-                        assert result is None
-                        mock_print.assert_called()
+                    with pytest.raises(RuntimeError):
+                        cheminfo_api.draw_compound("caffeine")
 
 
 class TestFetchScalar:

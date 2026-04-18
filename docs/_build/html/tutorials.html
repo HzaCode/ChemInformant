@@ -1,0 +1,235 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Tutorial &mdash; ChemInformant 2.4.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=720ed60b" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e3526950" />
+      <link rel="stylesheet" type="text/css" href="_static/syntax_highlighting.css?v=d29a27db" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=20623aea"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=7a06b15b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Main API Interface (cheminfo_api)" href="api/cheminfo_api.html" />
+    <link rel="prev" title="Caching Guide" href="caching_guide.html" />
+     
+    
+    <!-- Schema.org JSON-LD for SoftwareSourceCode -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareSourceCode",
+      "name": "ChemInformant",
+      "description": "A robust and high-throughput Python client for the PubChem API, designed for automated data retrieval and analysis",
+      "programmingLanguage": "Python",
+      "applicationCategory": "Cheminformatics",
+      "keywords": [
+        "chemistry",
+        "cheminformatics", 
+        "pubchem",
+        "api",
+        "compound",
+        "drug",
+        "cache",
+        "pydantic",
+        "batch",
+        "smiles",
+        "sql",
+        "data-science",
+        "molecular-properties",
+        "scientific-computing",
+        "api-client",
+        "chemical-data",
+        "drug-discovery",
+        "computational-chemistry"
+      ],
+      "codeRepository": "https://github.com/HzaCode/ChemInformant",
+      "license": "https://opensource.org/licenses/MIT",
+      "softwareRequirements": [
+        "Python>=3.9",
+        "requests>=2.25.0",
+        "requests-cache>=1.2.0", 
+        "pydantic>=2.0",
+        "pandas>=1.5.0",
+        "sqlalchemy>=1.4",
+        "pystow>=0.7"
+      ],
+      "author": {
+        "@type": "Person",
+        "name": "Zhiang He",
+        "email": "ang@hezhiang.com"
+      },
+      "version": "2.4.3",
+      "dateCreated": "2023",
+      "dateModified": "2025",
+      "url": "https://hezhiang.com/ChemInformant",
+      "downloadUrl": "https://pypi.org/project/ChemInformant/",
+      "runtimePlatform": "Python",
+      "operatingSystem": "OS Independent",
+      "softwareHelp": "https://hezhiang.com/ChemInformant",
+      "documentation": "https://hezhiang.com/ChemInformant",
+      "issueTracker": "https://github.com/HzaCode/ChemInformant/issues",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://hezhiang.com/ChemInformant"
+      }
+    }
+    </script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ChemInformant
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">🧭 User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Application in Real-World Scientific Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="caching_guide.html">Caching Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🎓 Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Interactive Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start-guide"><strong>Quick Start Guide</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-you-will-learn"><strong>What You Will Learn</strong></a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🔬 API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/cheminfo_api.html">Main API Interface (<cite>cheminfo_api</cite>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/models.html">Data Models and Exceptions (<cite>models</cite>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_helpers.html">Internal API Helpers (<cite>api_helpers</cite>)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🛠️ Project Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ChemInformant</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Interactive Tutorial</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tutorials.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="interactive-tutorial">
+<h1>Interactive Tutorial<a class="headerlink" href="#interactive-tutorial" title="Link to this heading"></a></h1>
+<p>To truly master <code class="docutils literal notranslate"><span class="pre">ChemInformant</span></code>, we highly recommend using the interactive user manual. It’s a live Jupyter Notebook environment hosted on Google Colab, designed to bridge the gap between theory and practice.</p>
+<p><strong>Click the badge below to launch the tutorial now:</strong></p>
+<a class="reference external image-reference" href="https://colab.research.google.com/github/HzaCode/ChemInformant/blob/main/examples/ChemInformant_User_Manual_v1.0.ipynb"><img alt="Open in Colab" src="https://colab.research.google.com/assets/colab-badge.svg" />
+</a>
+<section id="quick-start-guide">
+<h2><strong>Quick Start Guide</strong><a class="headerlink" href="#quick-start-guide" title="Link to this heading"></a></h2>
+<p>To ensure the best experience and to save your progress, please follow these steps:</p>
+<dl class="simple">
+<dt><strong>1. Save a Personal Copy</strong></dt><dd><p>Once the notebook opens in Colab, immediately go to the menu and click <strong>``File -&gt; Save a copy in Drive``</strong>. This creates a personal, editable copy in your own Google Drive.</p>
+</dd>
+<dt><strong>2. Execute Cells in Order</strong></dt><dd><p>The tutorial is designed to be followed sequentially. Run each code cell from top to bottom by clicking the “▶️” play button or using the shortcut <code class="docutils literal notranslate"><span class="pre">Shift</span> <span class="pre">+</span> <span class="pre">Enter</span></code>.</p>
+</dd>
+<dt><strong>3. Interact and Experiment</strong></dt><dd><p>Don’t hesitate to modify the code! Try different compound names, request other properties, and observe how the output changes. This is the best way to learn how to apply <code class="docutils literal notranslate"><span class="pre">ChemInformant</span></code> to your own work.</p>
+</dd>
+</dl>
+</section>
+<section id="what-you-will-learn">
+<h2><strong>What You Will Learn</strong><a class="headerlink" href="#what-you-will-learn" title="Link to this heading"></a></h2>
+<p>This hands-on manual covers the entire workflow, from installation to advanced data analysis. Specifically, you will learn to:</p>
+<ul class="simple">
+<li><p><strong>Setup the Environment</strong>:
+Install <code class="docutils literal notranslate"><span class="pre">ChemInformant</span></code> with all necessary extras and import required libraries in a single step.</p></li>
+<li><p><strong>Master Core Functions</strong>:
+Use the powerful <code class="docutils literal notranslate"><span class="pre">get_properties</span></code> function to retrieve data for multiple compounds and properties at once, directly into a Pandas DataFrame.</p></li>
+<li><p><strong>Leverage the Convenience API</strong>:
+Perform quick lookups for single properties like molecular weight, SMILES, or IUPAC names using simple, intuitive functions (e.g., <code class="docutils literal notranslate"><span class="pre">get_weight()</span></code>, <code class="docutils literal notranslate"><span class="pre">get_cas()</span></code>).</p></li>
+<li><p><strong>Perform Batch Data Analysis</strong>:
+Retrieve, clean, and analyze data for a list of common drugs, then visualize physicochemical properties like molecular weight distribution and lipophilicity.</p></li>
+<li><p><strong>Apply Advanced Use Cases</strong>:
+- <strong>Drug-Likeness Assessment</strong>: Implement and visualize Lipinski’s Rule of Five to assess compounds.
+- <strong>Machine Learning Clustering</strong>: Use K-Means to cluster drugs based on their properties and visualize the results.</p></li>
+<li><p><strong>Export Your Results</strong>:
+Save your analysis into common formats like CSV, multi-sheet Excel files, and SMILES files for use in other cheminformatics software.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="caching_guide.html" class="btn btn-neutral float-left" title="Caching Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api/cheminfo_api.html" class="btn btn-neutral float-right" title="Main API Interface (cheminfo_api)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Ang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

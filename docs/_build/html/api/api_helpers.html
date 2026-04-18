@@ -1,0 +1,411 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Internal API Helpers (api_helpers) &mdash; ChemInformant 2.4.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=720ed60b" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e3526950" />
+      <link rel="stylesheet" type="text/css" href="../_static/syntax_highlighting.css?v=d29a27db" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=20623aea"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=7a06b15b"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contributing Guide" href="../contributing.html" />
+    <link rel="prev" title="Data Models and Exceptions (models)" href="models.html" />
+     
+    
+    <!-- Schema.org JSON-LD for SoftwareSourceCode -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareSourceCode",
+      "name": "ChemInformant",
+      "description": "A robust and high-throughput Python client for the PubChem API, designed for automated data retrieval and analysis",
+      "programmingLanguage": "Python",
+      "applicationCategory": "Cheminformatics",
+      "keywords": [
+        "chemistry",
+        "cheminformatics", 
+        "pubchem",
+        "api",
+        "compound",
+        "drug",
+        "cache",
+        "pydantic",
+        "batch",
+        "smiles",
+        "sql",
+        "data-science",
+        "molecular-properties",
+        "scientific-computing",
+        "api-client",
+        "chemical-data",
+        "drug-discovery",
+        "computational-chemistry"
+      ],
+      "codeRepository": "https://github.com/HzaCode/ChemInformant",
+      "license": "https://opensource.org/licenses/MIT",
+      "softwareRequirements": [
+        "Python>=3.9",
+        "requests>=2.25.0",
+        "requests-cache>=1.2.0", 
+        "pydantic>=2.0",
+        "pandas>=1.5.0",
+        "sqlalchemy>=1.4",
+        "pystow>=0.7"
+      ],
+      "author": {
+        "@type": "Person",
+        "name": "Zhiang He",
+        "email": "ang@hezhiang.com"
+      },
+      "version": "2.4.3",
+      "dateCreated": "2023",
+      "dateModified": "2025",
+      "url": "https://hezhiang.com/ChemInformant",
+      "downloadUrl": "https://pypi.org/project/ChemInformant/",
+      "runtimePlatform": "Python",
+      "operatingSystem": "OS Independent",
+      "softwareHelp": "https://hezhiang.com/ChemInformant",
+      "documentation": "https://hezhiang.com/ChemInformant",
+      "issueTracker": "https://github.com/HzaCode/ChemInformant/issues",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://hezhiang.com/ChemInformant"
+      }
+    }
+    </script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ChemInformant
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">🧭 User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_usage.html">Application in Real-World Scientific Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command-Line Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../caching_guide.html">Caching Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🎓 Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Interactive Tutorial</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🔬 API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="cheminfo_api.html">Main API Interface (<cite>cheminfo_api</cite>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Data Models and Exceptions (<cite>models</cite>)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Internal API Helpers (<cite>api_helpers</cite>)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.api_helpers.setup_cache"><code class="docutils literal notranslate"><span class="pre">setup_cache()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.api_helpers.get_session"><code class="docutils literal notranslate"><span class="pre">get_session()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.api_helpers.get_cids_by_name"><code class="docutils literal notranslate"><span class="pre">get_cids_by_name()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.api_helpers.get_cids_by_smiles"><code class="docutils literal notranslate"><span class="pre">get_cids_by_smiles()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.api_helpers.get_batch_properties"><code class="docutils literal notranslate"><span class="pre">get_batch_properties()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.api_helpers.get_cas_for_cid"><code class="docutils literal notranslate"><span class="pre">get_cas_for_cid()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ChemInformant.api_helpers.get_synonyms_for_cid"><code class="docutils literal notranslate"><span class="pre">get_synonyms_for_cid()</span></code></a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🛠️ Project Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ChemInformant</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Internal API Helpers (<cite>api_helpers</cite>)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/api_helpers.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ChemInformant.api_helpers">
+<span id="internal-api-helpers-api-helpers"></span><h1>Internal API Helpers (<cite>api_helpers</cite>)<a class="headerlink" href="#module-ChemInformant.api_helpers" title="Link to this heading"></a></h1>
+<p>This module serves as the low-level networking foundation for the ChemInformant library. It is responsible for handling direct communication with the PubChem API, encapsulating complexities such as HTTP session management, persistent caching, request rate limiting, and robust retry logic against network or server failures.</p>
+<p>Functions within this module are considered internal implementation details and <strong>are not recommended for direct invocation by end-users</strong>. Users should interact with this library through the high-level functions defined in <a class="reference internal" href="cheminfo_api.html#module-ChemInformant.cheminfo_api" title="ChemInformant.cheminfo_api"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cheminfo_api</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Private functions within this module (those starting with an underscore, like <code class="docutils literal notranslate"><span class="pre">_fetch_with_ratelimit_and_retry</span></code>) are not documented here as they represent internal implementation details.</p>
+</div>
+<p>—</p>
+<p class="rubric">Session and Cache Management</p>
+<p>Functions for setting up and managing the cached HTTP session.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.api_helpers.setup_cache">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.api_helpers.</span></span><span class="sig-name descname"><span class="pre">setup_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cache_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'pubchem_cache'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'sqlite'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expire_after</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">604800</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/api_helpers.html#setup_cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.api_helpers.setup_cache" title="Link to this definition"></a></dt>
+<dd><p>Configures and initializes the persistent cache for API requests.</p>
+<p>This function sets up a <code class="docutils literal notranslate"><span class="pre">requests_cache</span></code> session that will store API
+responses on disk, significantly speeding up repeated queries and reducing
+network traffic.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cache_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the cache file (without extension).</p></li>
+<li><p><strong>backend</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The cache backend to use (e.g., ‘sqlite’, ‘redis’).</p></li>
+<li><p><strong>expire_after</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Cache expiration time in seconds. Defaults to one week.</p></li>
+<li><p><strong>kw</strong> – Additional keyword arguments passed directly to the
+<code class="docutils literal notranslate"><span class="pre">requests_cache.CachedSession</span></code> constructor.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.api_helpers.get_session">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.api_helpers.</span></span><span class="sig-name descname"><span class="pre">get_session</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">CachedSession</span></span></span><a class="reference internal" href="../_modules/ChemInformant/api_helpers.html#get_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.api_helpers.get_session" title="Link to this definition"></a></dt>
+<dd><p>Gets the current cached session, initializing it with defaults if necessary.</p>
+<p>This ensures a single, consistent session is used for all API calls.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The active <code class="docutils literal notranslate"><span class="pre">requests_cache.CachedSession</span></code> instance.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>requests_cache.CachedSession</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>—</p>
+<p class="rubric">Data Fetching Functions</p>
+<p>These functions wrap specific PubChem API endpoints to retrieve data.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.api_helpers.get_cids_by_name">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.api_helpers.</span></span><span class="sig-name descname"><span class="pre">get_cids_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/api_helpers.html#get_cids_by_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.api_helpers.get_cids_by_name" title="Link to this definition"></a></dt>
+<dd><p>Fetches PubChem Compound IDs (CIDs) for a given chemical name.</p>
+<p>This function searches PubChem’s database for compounds matching the provided
+chemical name. It can return multiple CIDs if the name matches multiple compounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> – The chemical name to search for (e.g., “aspirin”, “acetylsalicylic acid”)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of integer CIDs matching the name, or None if not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_cids_by_name</span><span class="p">(</span><span class="s2">&quot;aspirin&quot;</span><span class="p">)</span>
+<span class="go">[2244]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_cids_by_name</span><span class="p">(</span><span class="s2">&quot;glucose&quot;</span><span class="p">)</span>
+<span class="go">[5793, 64689, ...]  # Multiple isomers/forms</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used internally by get_properties() for name-to-CID resolution.
+End users should typically use get_properties() instead.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.api_helpers.get_cids_by_smiles">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.api_helpers.</span></span><span class="sig-name descname"><span class="pre">get_cids_by_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/api_helpers.html#get_cids_by_smiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.api_helpers.get_cids_by_smiles" title="Link to this definition"></a></dt>
+<dd><p>Fetches PubChem Compound IDs (CIDs) for a given SMILES string.</p>
+<p>This function searches PubChem for compounds with structures matching the
+provided SMILES representation. May return multiple CIDs for stereoisomers
+or different representations of the same molecule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>smiles</strong> – The SMILES string representing the molecule
+(e.g., “CC(=O)OC1=CC=CC=C1C(=O)O” for aspirin)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of integer CIDs matching the SMILES, or None if not found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_cids_by_smiles</span><span class="p">(</span><span class="s2">&quot;CC(=O)OC1=CC=CC=C1C(=O)O&quot;</span><span class="p">)</span>
+<span class="go">[2244]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_cids_by_smiles</span><span class="p">(</span><span class="s2">&quot;CCO&quot;</span><span class="p">)</span>  <span class="c1"># Ethanol</span>
+<span class="go">[702]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used internally by get_properties() for SMILES-to-CID resolution.
+End users should typically use get_properties() instead.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.api_helpers.get_batch_properties">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.api_helpers.</span></span><span class="sig-name descname"><span class="pre">get_batch_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">props</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ChemInformant/api_helpers.html#get_batch_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.api_helpers.get_batch_properties" title="Link to this definition"></a></dt>
+<dd><p>Fetches multiple properties for a batch of CIDs in a single request,
+handling API pagination automatically.</p>
+<p>This is the core function for efficient bulk property retrieval from PubChem.
+It automatically handles API pagination when dealing with large batches and
+includes rate limiting and retry logic for reliable data fetching.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cids</strong> – List of compound IDs to query</p></li>
+<li><p><strong>props</strong> – List of property names in CamelCase format
+(e.g., [“MolecularWeight”, “XLogP”, “CanonicalSMILES”])
+Must use exact PubChem API property names</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary mapping each CID to its properties. CIDs with no data
+or failed lookups map to empty dictionaries. Properties are returned
+using the original CamelCase names from PubChem.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_batch_properties</span><span class="p">([</span><span class="mi">2244</span><span class="p">,</span> <span class="mi">702</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;MolecularWeight&quot;</span><span class="p">,</span> <span class="s2">&quot;XLogP&quot;</span><span class="p">])</span>
+<span class="go">{2244: {&quot;CID&quot;: 2244, &quot;MolecularWeight&quot;: 180.16, &quot;XLogP&quot;: 1.2},</span>
+<span class="go"> 702: {&quot;CID&quot;: 702, &quot;MolecularWeight&quot;: 46.07, &quot;XLogP&quot;: -0.31}}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>This function is used internally by get_properties()</p></li>
+<li><p>Uses PubChem’s CamelCase property names, not snake_case</p></li>
+<li><p>Automatically handles pagination for requests with &gt;1000 compounds</p></li>
+<li><p>End users should use get_properties() which provides snake_case output</p></li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.api_helpers.get_cas_for_cid">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.api_helpers.</span></span><span class="sig-name descname"><span class="pre">get_cas_for_cid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ChemInformant/api_helpers.html#get_cas_for_cid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.api_helpers.get_cas_for_cid" title="Link to this definition"></a></dt>
+<dd><p>Fetches the primary CAS Registry Number for a single CID using the PUG-View endpoint.</p>
+<p>This function accesses PubChem’s detailed compound records to extract CAS numbers,
+which are unique chemical identifiers assigned by the Chemical Abstracts Service.
+Uses the PUG-View API to parse the “Names and Identifiers” section.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cid</strong> – The PubChem compound ID to look up</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The first found CAS Registry Number as a string (e.g., “50-78-2”),
+or None if no CAS number is found</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_cas_for_cid</span><span class="p">(</span><span class="mi">2244</span><span class="p">)</span>  <span class="c1"># Aspirin</span>
+<span class="go">&#39;50-78-2&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_cas_for_cid</span><span class="p">(</span><span class="mi">702</span><span class="p">)</span>   <span class="c1"># Ethanol</span>
+<span class="go">&#39;64-17-5&#39;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used internally by get_properties() and get_cas().
+It may be slower than standard property queries as it accesses
+detailed compound records rather than the property API.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ChemInformant.api_helpers.get_synonyms_for_cid">
+<span class="sig-prename descclassname"><span class="pre">ChemInformant.api_helpers.</span></span><span class="sig-name descname"><span class="pre">get_synonyms_for_cid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ChemInformant/api_helpers.html#get_synonyms_for_cid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ChemInformant.api_helpers.get_synonyms_for_cid" title="Link to this definition"></a></dt>
+<dd><p>Fetches all known synonyms (alternative names) for a given CID.</p>
+<p>This function retrieves the comprehensive list of names associated with a compound,
+including common names, systematic names, brand names, and other identifiers
+from PubChem’s synonyms database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cid</strong> – The PubChem compound ID to look up</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of synonym strings in order of preference/frequency.
+Returns empty list if no synonyms are found.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_synonyms_for_cid</span><span class="p">(</span><span class="mi">2244</span><span class="p">)</span>  <span class="c1"># Aspirin</span>
+<span class="go">[&#39;aspirin&#39;, &#39;acetylsalicylic acid&#39;, &#39;2-acetyloxybenzoic acid&#39;, ...]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_synonyms_for_cid</span><span class="p">(</span><span class="mi">702</span><span class="p">)</span>   <span class="c1"># Ethanol</span>
+<span class="go">[&#39;ethanol&#39;, &#39;ethyl alcohol&#39;, &#39;grain alcohol&#39;, ...]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used internally by get_properties() and get_synonyms().
+The first synonym in the list is typically the preferred/most common name.</p>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="models.html" class="btn btn-neutral float-left" title="Data Models and Exceptions (models)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../contributing.html" class="btn btn-neutral float-right" title="Contributing Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Ang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,1201 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChemInformant.cheminfo_api &mdash; ChemInformant 2.4.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=720ed60b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e3526950" />
+      <link rel="stylesheet" type="text/css" href="../../_static/syntax_highlighting.css?v=d29a27db" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=20623aea"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=7a06b15b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+     
+    
+    <!-- Schema.org JSON-LD for SoftwareSourceCode -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareSourceCode",
+      "name": "ChemInformant",
+      "description": "A robust and high-throughput Python client for the PubChem API, designed for automated data retrieval and analysis",
+      "programmingLanguage": "Python",
+      "applicationCategory": "Cheminformatics",
+      "keywords": [
+        "chemistry",
+        "cheminformatics", 
+        "pubchem",
+        "api",
+        "compound",
+        "drug",
+        "cache",
+        "pydantic",
+        "batch",
+        "smiles",
+        "sql",
+        "data-science",
+        "molecular-properties",
+        "scientific-computing",
+        "api-client",
+        "chemical-data",
+        "drug-discovery",
+        "computational-chemistry"
+      ],
+      "codeRepository": "https://github.com/HzaCode/ChemInformant",
+      "license": "https://opensource.org/licenses/MIT",
+      "softwareRequirements": [
+        "Python>=3.9",
+        "requests>=2.25.0",
+        "requests-cache>=1.2.0", 
+        "pydantic>=2.0",
+        "pandas>=1.5.0",
+        "sqlalchemy>=1.4",
+        "pystow>=0.7"
+      ],
+      "author": {
+        "@type": "Person",
+        "name": "Zhiang He",
+        "email": "ang@hezhiang.com"
+      },
+      "version": "2.4.3",
+      "dateCreated": "2023",
+      "dateModified": "2025",
+      "url": "https://hezhiang.com/ChemInformant",
+      "downloadUrl": "https://pypi.org/project/ChemInformant/",
+      "runtimePlatform": "Python",
+      "operatingSystem": "OS Independent",
+      "softwareHelp": "https://hezhiang.com/ChemInformant",
+      "documentation": "https://hezhiang.com/ChemInformant",
+      "issueTracker": "https://github.com/HzaCode/ChemInformant/issues",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://hezhiang.com/ChemInformant"
+      }
+    }
+    </script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            ChemInformant
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">🧭 User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_usage.html">Application in Real-World Scientific Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">Command-Line Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching_guide.html">Caching Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🎓 Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">Interactive Tutorial</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🔬 API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/cheminfo_api.html">Main API Interface (<cite>cheminfo_api</cite>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/models.html">Data Models and Exceptions (<cite>models</cite>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_helpers.html">Internal API Helpers (<cite>api_helpers</cite>)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🛠️ Project Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ChemInformant</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ChemInformant.cheminfo_api</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ChemInformant.cheminfo_api</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module contains the high-level, user-facing API for ChemInformant.</span>
+<span class="sd">It now operates exclusively on a snake_case standard for all property names.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">api_helpers</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.constants</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ALL_PROPS</span><span class="p">,</span>
+    <span class="n">CORE_PROPS</span><span class="p">,</span>
+    <span class="n">PROPERTY_ALIASES</span><span class="p">,</span>
+    <span class="n">SNAKE_TO_CAMEL</span><span class="p">,</span>
+    <span class="n">THREED_PROPS</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">AmbiguousIdentifierError</span><span class="p">,</span> <span class="n">Compound</span><span class="p">,</span> <span class="n">NotFoundError</span>
+
+<span class="n">_SMILES_TOKENS</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[=#\[\]\(\)]|\d|Br|Cl|Si&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
+<span class="n">_SPECIAL_PROPS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cas&quot;</span><span class="p">,</span> <span class="s2">&quot;synonyms&quot;</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_looks_like_smiles</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">_SMILES_TOKENS</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_resolve_to_single_cid</span><span class="p">(</span><span class="n">identifier</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="c1"># This function remains robust as is.</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">identifier</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">identifier</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">identifier</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid CID: </span><span class="si">{</span><span class="n">identifier</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">identifier</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">identifier</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">identifier</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">identifier</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">cids</span> <span class="o">=</span> <span class="n">api_helpers</span><span class="o">.</span><span class="n">get_cids_by_name</span><span class="p">(</span><span class="n">identifier</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cids</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">cids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">raise</span> <span class="n">AmbiguousIdentifierError</span><span class="p">(</span><span class="n">identifier</span><span class="p">,</span> <span class="n">cids</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">identifier</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">_looks_like_smiles</span><span class="p">(</span><span class="n">identifier</span><span class="p">):</span>
+        <span class="n">cids</span> <span class="o">=</span> <span class="n">api_helpers</span><span class="o">.</span><span class="n">get_cids_by_smiles</span><span class="p">(</span><span class="n">identifier</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cids</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">cids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">raise</span> <span class="n">AmbiguousIdentifierError</span><span class="p">(</span><span class="n">identifier</span><span class="p">,</span> <span class="n">cids</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="n">NotFoundError</span><span class="p">(</span><span class="n">identifier</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_properties">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_properties">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_properties</span><span class="p">(</span>
+    <span class="n">identifiers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">properties</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cid&quot;</span><span class="p">,</span>
+    <span class="n">include_3d</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">all_properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieve chemical properties for one or more compounds from PubChem.</span>
+
+<span class="sd">    This function is the core interface for fetching molecular properties. It accepts</span>
+<span class="sd">    various types of chemical identifiers and returns data in a standardized snake_case</span>
+<span class="sd">    format with consistent column ordering and error handling.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        identifiers: Chemical identifier(s) to look up. Can be:</span>
+<span class="sd">            - Single identifier: string name, CID number, or SMILES</span>
+<span class="sd">            - List of identifiers: mixed types allowed</span>
+<span class="sd">            Examples: &quot;aspirin&quot;, 2244, &quot;CC(=O)OC1=CC=CC=C1C(=O)O&quot;</span>
+
+<span class="sd">        properties: Specific properties to retrieve. Can be:</span>
+<span class="sd">            - None: Returns core property set (default)</span>
+<span class="sd">            - String: Single property name or comma-separated list</span>
+<span class="sd">            - List: Multiple property names</span>
+<span class="sd">            Supports both snake_case (&quot;molecular_weight&quot;) and CamelCase (&quot;MolecularWeight&quot;)</span>
+
+<span class="sd">        namespace: Input identifier namespace (currently only &quot;cid&quot; supported)</span>
+
+<span class="sd">        include_3d: If True and properties=None, includes 3D molecular descriptors</span>
+<span class="sd">            in addition to core properties. Ignored when properties is specified.</span>
+
+<span class="sd">        all_properties: If True, retrieves all ~40 available properties from PubChem.</span>
+<span class="sd">            Mutually exclusive with properties and include_3d parameters.</span>
+
+<span class="sd">        **kwargs: Additional keyword arguments (for future compatibility)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame: Results with columns:</span>
+<span class="sd">            - input_identifier: Original input as provided</span>
+<span class="sd">            - cid: PubChem Compound ID (string type)</span>
+<span class="sd">            - status: &quot;OK&quot; for success, exception name for failures</span>
+<span class="sd">            - [property columns]: Requested properties in snake_case format</span>
+
+<span class="sd">        Column order preserves the original properties parameter order.</span>
+<span class="sd">        Failed lookups return rows with status != &quot;OK&quot; and missing property values.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If unsupported properties are requested, or if all_properties=True</span>
+<span class="sd">            is used with other property selection parameters</span>
+
+<span class="sd">    Property Categories:</span>
+<span class="sd">        Core properties (default): molecular_weight, molecular_formula, canonical_smiles,</span>
+<span class="sd">            isomeric_smiles, iupac_name, cas, synonyms, xlogp, tpsa, complexity,</span>
+<span class="sd">            h_bond_donor_count, h_bond_acceptor_count, rotatable_bond_count,</span>
+<span class="sd">            heavy_atom_count, charge, atom_stereo_count, bond_stereo_count,</span>
+<span class="sd">            covalent_unit_count, in_ch_i, in_ch_i_key</span>
+
+<span class="sd">        3D properties: volume_3d, feature_count_3d, conformer_count_3d, etc.</span>
+
+<span class="sd">        Special properties: cas (CAS Registry Number), synonyms (list of names)</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; # Get core properties for a single compound</span>
+<span class="sd">        &gt;&gt;&gt; df = get_properties(&quot;aspirin&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; print(df.columns.tolist())</span>
+<span class="sd">        [&#39;input_identifier&#39;, &#39;cid&#39;, &#39;status&#39;, &#39;molecular_weight&#39;, ...]</span>
+
+<span class="sd">        &gt;&gt;&gt; # Get specific properties for multiple compounds</span>
+<span class="sd">        &gt;&gt;&gt; df = get_properties([&quot;aspirin&quot;, &quot;caffeine&quot;], properties=[&quot;molecular_weight&quot;, &quot;xlogp&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; print(df[[&quot;input_identifier&quot;, &quot;molecular_weight&quot;, &quot;xlogp&quot;]])</span>
+
+<span class="sd">        &gt;&gt;&gt; # Get all available properties</span>
+<span class="sd">        &gt;&gt;&gt; df = get_properties(&quot;aspirin&quot;, all_properties=True)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Retrieved {len(df.columns)} columns&quot;)</span>
+
+<span class="sd">        &gt;&gt;&gt; # Include 3D descriptors with core set</span>
+<span class="sd">        &gt;&gt;&gt; df = get_properties(&quot;aspirin&quot;, include_3d=True)</span>
+
+<span class="sd">        &gt;&gt;&gt; # Handle mixed input types and failures</span>
+<span class="sd">        &gt;&gt;&gt; df = get_properties([2244, &quot;invalid_name&quot;, &quot;CC(=O)O&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; print(df[[&quot;input_identifier&quot;, &quot;status&quot;]])</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        - Uses intelligent fallbacks for SMILES properties (canonical_smiles falls back</span>
+<span class="sd">          to connectivity_smiles if canonical is unavailable)</span>
+<span class="sd">        - Automatically handles API pagination for large batch requests</span>
+<span class="sd">        - Results are cached to improve performance on repeated queries</span>
+<span class="sd">        - All property names in output use snake_case format for consistency</span>
+<span class="sd">        - CID column is returned as string type to handle large compound IDs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># --- Parameter validation ---</span>
+    <span class="k">if</span> <span class="n">all_properties</span> <span class="ow">and</span> <span class="p">(</span><span class="n">properties</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">include_3d</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;`all_properties=True` is mutually exclusive with `properties` and `include_3d`.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">properties</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">include_3d</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;When `properties` is specified, `include_3d` is ignored.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># --- Step 1: Resolve all requested properties to a consistent snake_case list ---</span>
+    <span class="n">resolved_props</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">original_props_order</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">all_properties</span><span class="p">:</span>
+        <span class="n">resolved_props</span> <span class="o">=</span> <span class="n">ALL_PROPS</span><span class="p">[:]</span>  <span class="c1"># Get truly ALL properties including special ones</span>
+        <span class="n">original_props_order</span> <span class="o">=</span> <span class="n">resolved_props</span>
+    <span class="k">elif</span> <span class="n">properties</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">properties</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">properties</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">properties</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)]</span>
+        <span class="n">original_props_order</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span>
+        <span class="n">resolved_props</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">unsupported_props</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">properties</span><span class="p">:</span>
+            <span class="n">resolved</span> <span class="o">=</span> <span class="n">PROPERTY_ALIASES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="n">PROPERTY_ALIASES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">lower</span><span class="p">()))</span>
+            <span class="k">if</span> <span class="n">resolved</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">unsupported_props</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">resolved</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">resolved_props</span><span class="p">:</span>
+                <span class="n">resolved_props</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">resolved</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">unsupported_props</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported properties: </span><span class="si">{</span><span class="n">unsupported_props</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># Default behavior when properties is None</span>
+        <span class="n">resolved_props</span> <span class="o">=</span> <span class="n">CORE_PROPS</span><span class="p">[:]</span>
+        <span class="k">if</span> <span class="n">include_3d</span><span class="p">:</span>
+            <span class="n">resolved_props</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">THREED_PROPS</span><span class="p">)</span>
+        <span class="n">original_props_order</span> <span class="o">=</span> <span class="n">resolved_props</span>
+
+    <span class="c1"># Handle empty properties list - should return empty DataFrame</span>
+    <span class="k">if</span> <span class="n">properties</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">resolved_props</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+
+    <span class="n">identifiers_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">identifiers</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">identifiers_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">identifiers</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">identifiers_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">identifiers</span><span class="p">)</span>  <span class="c1"># Type-safe conversion</span>
+
+    <span class="c1"># --- Step 2: Create base DataFrame with resolved CIDs ---</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">ident</span> <span class="ow">in</span> <span class="n">identifiers_list</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cid</span> <span class="o">=</span> <span class="n">_resolve_to_single_cid</span><span class="p">(</span><span class="n">ident</span><span class="p">)</span>
+            <span class="n">meta</span><span class="p">[</span><span class="n">ident</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;OK&quot;</span><span class="p">,</span> <span class="s2">&quot;cid&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">cid</span><span class="p">)}</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="n">meta</span><span class="p">[</span><span class="n">ident</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;cid&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">}</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="p">[{</span><span class="s2">&quot;input_identifier&quot;</span><span class="p">:</span> <span class="n">ident</span><span class="p">,</span> <span class="o">**</span><span class="n">meta</span><span class="p">[</span><span class="n">ident</span><span class="p">]}</span> <span class="k">for</span> <span class="n">ident</span> <span class="ow">in</span> <span class="n">identifiers_list</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="c1"># --- Early return for empty inputs ---</span>
+    <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="c1"># --- Step 3: Fetch standard properties ---</span>
+    <span class="n">standard_props_snake</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">resolved_props</span> <span class="k">if</span> <span class="n">p</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_SPECIAL_PROPS</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">standard_props_snake</span><span class="p">:</span>
+        <span class="c1"># Define internal fallback mappings (these are not exposed as separate properties)</span>
+        <span class="n">fallback_map_snake</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;canonical_smiles&quot;</span><span class="p">:</span> <span class="s2">&quot;connectivity_smiles&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;isomeric_smiles&quot;</span><span class="p">:</span> <span class="s2">&quot;fallback_smiles&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">internal_fallback_to_camel</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;connectivity_smiles&quot;</span><span class="p">:</span> <span class="s2">&quot;ConnectivitySMILES&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fallback_smiles&quot;</span><span class="p">:</span> <span class="s2">&quot;SMILES&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">api_tags_camel</span> <span class="o">=</span> <span class="p">{</span><span class="n">SNAKE_TO_CAMEL</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">standard_props_snake</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">prop_snake</span> <span class="ow">in</span> <span class="n">standard_props_snake</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">prop_snake</span> <span class="ow">in</span> <span class="n">fallback_map_snake</span><span class="p">:</span>
+                <span class="n">fallback_prop</span> <span class="o">=</span> <span class="n">fallback_map_snake</span><span class="p">[</span><span class="n">prop_snake</span><span class="p">]</span>
+                <span class="n">api_tags_camel</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">internal_fallback_to_camel</span><span class="p">[</span><span class="n">fallback_prop</span><span class="p">])</span>
+
+        <span class="n">cids_needed</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">cid</span><span class="p">)</span> <span class="k">for</span> <span class="n">cid</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;cid&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">notna</span><span class="p">(</span><span class="n">cid</span><span class="p">)]</span>
+        <span class="n">fetched_data</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">api_helpers</span><span class="o">.</span><span class="n">get_batch_properties</span><span class="p">(</span><span class="n">cids_needed</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">api_tags_camel</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">cids_needed</span>
+            <span class="k">else</span> <span class="p">{}</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">prop_snake</span> <span class="ow">in</span> <span class="n">standard_props_snake</span><span class="p">:</span>
+            <span class="n">prop_camel</span> <span class="o">=</span> <span class="n">SNAKE_TO_CAMEL</span><span class="p">[</span><span class="n">prop_snake</span><span class="p">]</span>
+            <span class="n">values</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                <span class="n">cid_val</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;cid&quot;</span><span class="p">]</span>
+                <span class="n">cid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">cid_val</span><span class="p">)</span> <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">notna</span><span class="p">(</span><span class="n">cid_val</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;OK&quot;</span> <span class="ow">and</span> <span class="n">cid</span><span class="p">:</span>
+                    <span class="n">api_row</span> <span class="o">=</span> <span class="n">fetched_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cid</span><span class="p">,</span> <span class="p">{})</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">api_row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">prop_camel</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">val</span> <span class="ow">and</span> <span class="n">prop_snake</span> <span class="ow">in</span> <span class="n">fallback_map_snake</span><span class="p">:</span>
+                        <span class="n">fallback_prop</span> <span class="o">=</span> <span class="n">fallback_map_snake</span><span class="p">[</span><span class="n">prop_snake</span><span class="p">]</span>
+                        <span class="n">fallback_camel</span> <span class="o">=</span> <span class="n">internal_fallback_to_camel</span><span class="p">[</span><span class="n">fallback_prop</span><span class="p">]</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="n">api_row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fallback_camel</span><span class="p">)</span>
+                <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">prop_snake</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span>
+
+    <span class="c1"># --- Step 4: Fetch special properties ---</span>
+    <span class="n">special_props_snake</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">resolved_props</span> <span class="k">if</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">_SPECIAL_PROPS</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">special_props_snake</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">prop_snake</span> <span class="ow">in</span> <span class="n">special_props_snake</span><span class="p">:</span>
+            <span class="n">fetch_func</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">api_helpers</span><span class="o">.</span><span class="n">get_cas_for_cid</span>
+                <span class="k">if</span> <span class="n">prop_snake</span> <span class="o">==</span> <span class="s2">&quot;cas&quot;</span>
+                <span class="k">else</span> <span class="n">api_helpers</span><span class="o">.</span><span class="n">get_synonyms_for_cid</span>
+            <span class="p">)</span>
+            <span class="n">fail_value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">prop_snake</span> <span class="o">==</span> <span class="s2">&quot;cas&quot;</span> <span class="k">else</span> <span class="p">[]</span>
+            <span class="n">prop_data</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">fetch_func</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">cid</span><span class="p">))</span> <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">notna</span><span class="p">(</span><span class="n">cid</span><span class="p">)</span> <span class="ow">and</span> <span class="n">status</span> <span class="o">==</span> <span class="s2">&quot;OK&quot;</span> <span class="k">else</span> <span class="n">fail_value</span>
+                <span class="k">for</span> <span class="n">cid</span><span class="p">,</span> <span class="n">status</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;cid&quot;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">])</span>
+            <span class="p">]</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">prop_snake</span><span class="p">]</span> <span class="o">=</span> <span class="n">prop_data</span>
+
+    <span class="c1"># --- Step 5: Finalize and order DataFrame ---</span>
+    <span class="k">if</span> <span class="s2">&quot;cid&quot;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">astype</span><span class="p">({</span><span class="s2">&quot;cid&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">})</span>
+    <span class="n">final_col_order</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;input_identifier&quot;</span><span class="p">,</span> <span class="s2">&quot;cid&quot;</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">original_props_order</span><span class="p">:</span>
+        <span class="n">resolved_snake</span> <span class="o">=</span> <span class="n">PROPERTY_ALIASES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="n">prop</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">resolved_snake</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="n">resolved_snake</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">final_col_order</span><span class="p">:</span>
+            <span class="n">final_col_order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">resolved_snake</span><span class="p">)</span>
+
+    <span class="c1"># Add any remaining columns not yet included</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">final_col_order</span><span class="p">:</span>
+            <span class="n">final_col_order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="n">final_col_order</span><span class="p">]</span></div>
+
+
+
+<span class="c1"># --- Convenience Functions (now simple and consistent) ---</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_fetch_scalar</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">,</span> <span class="n">prop_snake</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Internal helper for single-value convenience functions.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">cid</span> <span class="o">=</span> <span class="n">_resolve_to_single_cid</span><span class="p">(</span><span class="n">id_</span><span class="p">)</span>
+        <span class="n">prop_camel</span> <span class="o">=</span> <span class="n">SNAKE_TO_CAMEL</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">prop_snake</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">prop_camel</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown property: </span><span class="si">{</span><span class="n">prop_snake</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Define internal fallback mappings for convenience functions</span>
+        <span class="n">fallback_map</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;canonical_smiles&quot;</span><span class="p">:</span> <span class="s2">&quot;connectivity_smiles&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;isomeric_smiles&quot;</span><span class="p">:</span> <span class="s2">&quot;fallback_smiles&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">internal_fallback_to_camel</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;connectivity_smiles&quot;</span><span class="p">:</span> <span class="s2">&quot;ConnectivitySMILES&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fallback_smiles&quot;</span><span class="p">:</span> <span class="s2">&quot;SMILES&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">fallback_snake</span> <span class="o">=</span> <span class="n">fallback_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">prop_snake</span><span class="p">)</span>
+        <span class="n">fallback_camel</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">internal_fallback_to_camel</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fallback_snake</span><span class="p">)</span> <span class="k">if</span> <span class="n">fallback_snake</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="p">)</span>
+
+        <span class="n">props_to_fetch</span> <span class="o">=</span> <span class="p">[</span><span class="n">prop_camel</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">fallback_camel</span><span class="p">:</span>
+            <span class="n">props_to_fetch</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fallback_camel</span><span class="p">)</span>
+
+        <span class="n">props</span> <span class="o">=</span> <span class="n">api_helpers</span><span class="o">.</span><span class="n">get_batch_properties</span><span class="p">([</span><span class="n">cid</span><span class="p">],</span> <span class="n">props_to_fetch</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">props</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cid</span><span class="p">,</span> <span class="p">{})</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">prop_camel</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fallback_camel</span><span class="p">)</span> <span class="k">if</span> <span class="n">fallback_camel</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="p">)</span>
+        <span class="c1"># Ensure we return the correct type</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">NotFoundError</span><span class="p">,</span> <span class="n">AmbiguousIdentifierError</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="get_weight">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_weight">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_weight</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the molecular weight of a compound.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Molecular weight in g/mol, or None if compound not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_weight(&quot;aspirin&quot;)</span>
+<span class="sd">        180.16</span>
+<span class="sd">        &gt;&gt;&gt; get_weight(2244)  # Same as above using CID</span>
+<span class="sd">        180.16</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_fetch_scalar</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;molecular_weight&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_formula">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_formula">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_formula</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the molecular formula of a compound.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Molecular formula string, or None if compound not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_formula(&quot;aspirin&quot;)</span>
+<span class="sd">        &#39;C9H8O4&#39;</span>
+<span class="sd">        &gt;&gt;&gt; get_formula(&quot;water&quot;)</span>
+<span class="sd">        &#39;H2O&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_fetch_scalar</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;molecular_formula&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_canonical_smiles">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_canonical_smiles">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_canonical_smiles</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the canonical SMILES representation of a compound.</span>
+
+<span class="sd">    Canonical SMILES provide a unique string representation of molecular structure</span>
+<span class="sd">    with consistent atom ordering and standardized conventions.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Canonical SMILES string, or None if compound not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_canonical_smiles(&quot;aspirin&quot;)</span>
+<span class="sd">        &#39;CC(=O)OC1=CC=CC=C1C(=O)O&#39;</span>
+<span class="sd">        &gt;&gt;&gt; get_canonical_smiles(2244)</span>
+<span class="sd">        &#39;CC(=O)OC1=CC=CC=C1C(=O)O&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_fetch_scalar</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;canonical_smiles&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_isomeric_smiles">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_isomeric_smiles">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_isomeric_smiles</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the isomeric SMILES representation of a compound.</span>
+
+<span class="sd">    Isomeric SMILES include stereochemical information and isotope specifications,</span>
+<span class="sd">    providing more detailed structural information than canonical SMILES.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Isomeric SMILES string, or None if compound not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_isomeric_smiles(&quot;glucose&quot;)</span>
+<span class="sd">        &#39;C([C@@H]1[C@H]([C@@H]([C@H]([C@H](O1)O)O)O)O)O&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_fetch_scalar</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;isomeric_smiles&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_iupac_name">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_iupac_name">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_iupac_name</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the IUPAC (systematic) name of a compound.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        IUPAC name string, or None if compound not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_iupac_name(&quot;aspirin&quot;)</span>
+<span class="sd">        &#39;2-acetyloxybenzoic acid&#39;</span>
+<span class="sd">        &gt;&gt;&gt; get_iupac_name(&quot;water&quot;)</span>
+<span class="sd">        &#39;oxidane&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_fetch_scalar</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;iupac_name&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_xlogp">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_xlogp">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_xlogp</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the XLogP value (octanol-water partition coefficient) of a compound.</span>
+
+<span class="sd">    XLogP is a key descriptor for drug discovery, indicating lipophilicity and</span>
+<span class="sd">    membrane permeability. Values typically range from -3 to +10.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        XLogP value (log units), or None if compound not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_xlogp(&quot;aspirin&quot;)</span>
+<span class="sd">        1.2</span>
+<span class="sd">        &gt;&gt;&gt; get_xlogp(&quot;water&quot;)</span>
+<span class="sd">        -0.7</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_fetch_scalar</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;xlogp&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_cas">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_cas">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_cas</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the CAS Registry Number of a compound.</span>
+
+<span class="sd">    CAS (Chemical Abstracts Service) numbers are unique identifiers assigned</span>
+<span class="sd">    to chemical substances by the American Chemical Society.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        CAS Registry Number as string, or None if not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_cas(&quot;aspirin&quot;)</span>
+<span class="sd">        &#39;50-78-2&#39;</span>
+<span class="sd">        &gt;&gt;&gt; get_cas(&quot;water&quot;)</span>
+<span class="sd">        &#39;7732-18-5&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">cid</span> <span class="o">=</span> <span class="n">_resolve_to_single_cid</span><span class="p">(</span><span class="n">id_</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">api_helpers</span><span class="o">.</span><span class="n">get_cas_for_cid</span><span class="p">(</span><span class="n">cid</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">NotFoundError</span><span class="p">,</span> <span class="n">AmbiguousIdentifierError</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_synonyms">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_synonyms">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_synonyms</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get all known synonyms (alternative names) for a compound.</span>
+
+<span class="sd">    Returns a comprehensive list of names including common names, brand names,</span>
+<span class="sd">    systematic names, and other identifiers used for the compound.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of synonym strings, empty list if compound not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; synonyms = get_synonyms(&quot;aspirin&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; print(synonyms[:3])  # First few names</span>
+<span class="sd">        [&#39;aspirin&#39;, &#39;acetylsalicylic acid&#39;, &#39;2-acetyloxybenzoic acid&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">cid</span> <span class="o">=</span> <span class="n">_resolve_to_single_cid</span><span class="p">(</span><span class="n">id_</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">api_helpers</span><span class="o">.</span><span class="n">get_synonyms_for_cid</span><span class="p">(</span><span class="n">cid</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">NotFoundError</span><span class="p">,</span> <span class="n">AmbiguousIdentifierError</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+
+
+<div class="viewcode-block" id="get_exact_mass">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_exact_mass">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_exact_mass</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the exact mass of a compound.</span>
+
+<span class="sd">    Exact mass is the sum of atomic masses using the most abundant isotopes.</span>
+<span class="sd">    Used in mass spectrometry for precise compound identification.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Exact mass in Da (atomic mass units), or None if compound not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_exact_mass(&quot;aspirin&quot;)</span>
+<span class="sd">        180.04225873</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_fetch_scalar</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;exact_mass&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_monoisotopic_mass">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_monoisotopic_mass">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_monoisotopic_mass</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the monoisotopic mass of a compound.</span>
+
+<span class="sd">    Monoisotopic mass is calculated using the most abundant isotope of each element.</span>
+<span class="sd">    Important for mass spectrometry and structural analysis.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Monoisotopic mass in Da, or None if compound not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_monoisotopic_mass(&quot;aspirin&quot;)</span>
+<span class="sd">        180.04225873</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_fetch_scalar</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;monoisotopic_mass&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_tpsa">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_tpsa">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_tpsa</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the Topological Polar Surface Area (TPSA) of a compound.</span>
+
+<span class="sd">    TPSA is a key descriptor for drug discovery, predicting membrane</span>
+<span class="sd">    permeability and blood-brain barrier penetration. Values &lt; 90 Ų</span>
+<span class="sd">    suggest good oral bioavailability.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        TPSA value in Ų (square Angstroms), or None if compound not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_tpsa(&quot;aspirin&quot;)</span>
+<span class="sd">        63.6</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_fetch_scalar</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;tpsa&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_complexity">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_complexity">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_complexity</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the molecular complexity score of a compound.</span>
+
+<span class="sd">    Complexity is a measure of structural intricacy based on symmetry,</span>
+<span class="sd">    branching, and ring systems. Higher values indicate more complex structures.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Complexity score (unitless), or None if compound not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_complexity(&quot;aspirin&quot;)</span>
+<span class="sd">        212</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_fetch_scalar</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;complexity&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_h_bond_donor_count">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_h_bond_donor_count">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_h_bond_donor_count</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the number of hydrogen bond donors in a compound.</span>
+
+<span class="sd">    Counts atoms that can donate hydrogen bonds (typically N, O with H).</span>
+<span class="sd">    Important for drug design and predicting molecular interactions.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Number of H-bond donors, or None if compound not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_h_bond_donor_count(&quot;aspirin&quot;)</span>
+<span class="sd">        1</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_fetch_scalar</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;h_bond_donor_count&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_h_bond_acceptor_count">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_h_bond_acceptor_count">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_h_bond_acceptor_count</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the number of hydrogen bond acceptors in a compound.</span>
+
+<span class="sd">    Counts atoms that can accept hydrogen bonds (typically N, O).</span>
+<span class="sd">    Key descriptor for drug-like properties and solubility prediction.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Number of H-bond acceptors, or None if compound not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_h_bond_acceptor_count(&quot;aspirin&quot;)</span>
+<span class="sd">        4</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_fetch_scalar</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;h_bond_acceptor_count&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_rotatable_bond_count">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_rotatable_bond_count">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_rotatable_bond_count</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the number of rotatable bonds in a compound.</span>
+
+<span class="sd">    Rotatable bonds are acyclic single bonds between non-terminal heavy atoms.</span>
+<span class="sd">    Indicates molecular flexibility, important for drug binding and bioavailability.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Number of rotatable bonds, or None if compound not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_rotatable_bond_count(&quot;aspirin&quot;)</span>
+<span class="sd">        3</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_fetch_scalar</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;rotatable_bond_count&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_heavy_atom_count">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_heavy_atom_count">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_heavy_atom_count</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the number of heavy atoms (non-hydrogen atoms) in a compound.</span>
+
+<span class="sd">    Heavy atoms include all atoms except hydrogen. This is a basic</span>
+<span class="sd">    measure of molecular size and complexity.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Number of heavy atoms, or None if compound not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_heavy_atom_count(&quot;aspirin&quot;)</span>
+<span class="sd">        13</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_fetch_scalar</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;heavy_atom_count&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_charge">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_charge">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_charge</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the formal charge of a compound.</span>
+
+<span class="sd">    The total formal charge of the molecule, indicating whether it&#39;s</span>
+<span class="sd">    neutral (0), positively charged (+), or negatively charged (-).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Formal charge (integer), or None if compound not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_charge(&quot;aspirin&quot;)</span>
+<span class="sd">        0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_fetch_scalar</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;charge&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_atom_stereo_count">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_atom_stereo_count">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_atom_stereo_count</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the number of stereocenters (chiral centers) in a compound.</span>
+
+<span class="sd">    Counts atoms with defined stereochemistry, important for understanding</span>
+<span class="sd">    the three-dimensional structure and potential biological activity.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Number of stereocenters, or None if compound not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_atom_stereo_count(&quot;glucose&quot;)</span>
+<span class="sd">        4</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_fetch_scalar</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;atom_stereo_count&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_bond_stereo_count">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_bond_stereo_count">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_bond_stereo_count</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the number of stereo bonds (E/Z double bonds) in a compound.</span>
+
+<span class="sd">    Counts double bonds with defined stereochemistry (cis/trans or E/Z).</span>
+<span class="sd">    Important for understanding molecular geometry and reactivity.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Number of stereo bonds, or None if compound not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_bond_stereo_count(&quot;retinol&quot;)</span>
+<span class="sd">        4</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_fetch_scalar</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;bond_stereo_count&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_covalent_unit_count">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_covalent_unit_count">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_covalent_unit_count</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the number of covalently bonded units in a compound.</span>
+
+<span class="sd">    For most organic molecules this is 1. Higher values indicate</span>
+<span class="sd">    multiple separate molecular components or fragments.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Number of covalent units, or None if compound not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_covalent_unit_count(&quot;aspirin&quot;)</span>
+<span class="sd">        1</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_fetch_scalar</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;covalent_unit_count&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_inchi">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_inchi">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_inchi</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the InChI (International Chemical Identifier) of a compound.</span>
+
+<span class="sd">    InChI is a standardized string representation developed by IUPAC</span>
+<span class="sd">    for uniquely identifying chemical substances across databases.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        InChI string, or None if compound not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_inchi(&quot;aspirin&quot;)</span>
+<span class="sd">        &#39;InChI=1S/C9H8O4/c1-6(10)13-8-5-3-2-4-7(8)9(11)12/h2-5H,1H3,(H,11,12)&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_fetch_scalar</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;in_ch_i&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_inchi_key">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_inchi_key">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_inchi_key</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the InChI Key (hashed version of InChI) of a compound.</span>
+
+<span class="sd">    InChI Key is a fixed-length (27 character) hash of the InChI,</span>
+<span class="sd">    designed for database searching and web queries.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        id_: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        InChI Key string, or None if compound not found</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; get_inchi_key(&quot;aspirin&quot;)</span>
+<span class="sd">        &#39;BSYNRYMUTXBXSQ-UHFFFAOYSA-N&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_fetch_scalar</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;in_ch_i_key&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_compound">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_compound">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_compound</span><span class="p">(</span><span class="n">identifier</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Compound</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieve a complete Compound object with all available properties.</span>
+
+<span class="sd">    This function fetches all properties for a single compound and returns</span>
+<span class="sd">    a structured Compound object with type validation and convenient access</span>
+<span class="sd">    to all molecular data.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        identifier: Chemical identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Compound object with all available properties as attributes</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        RuntimeError: If the compound cannot be found or data retrieval fails</span>
+<span class="sd">        NotFoundError: If the identifier cannot be resolved</span>
+<span class="sd">        AmbiguousIdentifierError: If the identifier matches multiple compounds</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; compound = get_compound(&quot;aspirin&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; print(compound.MolecularWeight)</span>
+<span class="sd">        180.16</span>
+<span class="sd">        &gt;&gt;&gt; print(compound.CanonicalSMILES)</span>
+<span class="sd">        &#39;CC(=O)OC1=CC=CC=C1C(=O)O&#39;</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        This function uses CamelCase property names to match the Compound model.</span>
+<span class="sd">        For DataFrame output with snake_case names, use get_properties() instead.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">get_properties</span><span class="p">(</span><span class="n">identifier</span><span class="p">,</span> <span class="n">all_properties</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span> <span class="ow">or</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;OK&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to fetch compound for </span><span class="si">{</span><span class="n">identifier</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Rename snake_case columns to CamelCase for Pydantic model validation</span>
+    <span class="n">df_renamed</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">SNAKE_TO_CAMEL</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Compound</span><span class="p">(</span><span class="o">**</span><span class="n">df_renamed</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="get_compounds">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.get_compounds">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_compounds</span><span class="p">(</span><span class="n">identifiers</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Compound</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieve multiple Compound objects for a list of identifiers.</span>
+
+<span class="sd">    This function processes multiple chemical identifiers and returns</span>
+<span class="sd">    a list of Compound objects. Failed lookups will raise exceptions.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        identifiers: Iterable of chemical identifiers (names, CIDs, or SMILES)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of Compound objects in the same order as input identifiers</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        RuntimeError: If any compound cannot be found or data retrieval fails</span>
+<span class="sd">        NotFoundError: If any identifier cannot be resolved</span>
+<span class="sd">        AmbiguousIdentifierError: If any identifier matches multiple compounds</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; compounds = get_compounds([&quot;aspirin&quot;, &quot;caffeine&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; for comp in compounds:</span>
+<span class="sd">        ...     print(f&quot;{comp.InputIdentifier}: {comp.MolecularWeight}&quot;)</span>
+<span class="sd">        aspirin: 180.16</span>
+<span class="sd">        caffeine: 194.19</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        For batch processing with error handling, consider using get_properties()</span>
+<span class="sd">        which returns a DataFrame with status information for failed lookups.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">get_compound</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">identifiers</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="draw_compound">
+<a class="viewcode-back" href="../../api/cheminfo_api.html#ChemInformant.cheminfo_api.draw_compound">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">draw_compound</span><span class="p">(</span><span class="n">identifier</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Draw the 2D chemical structure of a compound.</span>
+
+<span class="sd">    This function fetches the chemical structure image from PubChem and displays it</span>
+<span class="sd">    using matplotlib. Requires matplotlib and PIL to be installed.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        identifier: A compound identifier (name, CID, or SMILES)</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        NotFoundError: If the identifier cannot be resolved to a valid compound</span>
+<span class="sd">        ImportError: If required dependencies (matplotlib, PIL) are not installed</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">io</span><span class="w"> </span><span class="kn">import</span> <span class="n">BytesIO</span>
+
+        <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+    <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">missing_lib</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;&#39;&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Cannot render structure: missing dependency &#39;</span><span class="si">{</span><span class="n">missing_lib</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">,</span>
+            <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Please install with: pip install ChemInformant[plot]&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Resolve identifier to CID</span>
+        <span class="n">cid</span> <span class="o">=</span> <span class="n">_resolve_to_single_cid</span><span class="p">(</span><span class="n">identifier</span><span class="p">)</span>
+
+        <span class="c1"># Get compound name for title</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">synonyms</span> <span class="o">=</span> <span class="n">api_helpers</span><span class="o">.</span><span class="n">get_synonyms_for_cid</span><span class="p">(</span><span class="n">cid</span><span class="p">)</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="n">synonyms</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">synonyms</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;CID </span><span class="si">{</span><span class="n">cid</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;CID </span><span class="si">{</span><span class="n">cid</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="c1"># Fetch structure image from PubChem</span>
+        <span class="n">image_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/</span><span class="si">{</span><span class="n">cid</span><span class="si">}</span><span class="s2">/PNG&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">image_url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to fetch structure image for CID </span><span class="si">{</span><span class="n">cid</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Open and display the image</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">))</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="k">except</span> <span class="p">(</span><span class="n">NotFoundError</span><span class="p">,</span> <span class="n">AmbiguousIdentifierError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">e</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error drawing compound: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Ang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

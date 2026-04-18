@@ -1,0 +1,307 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChemInformant Documentation &mdash; ChemInformant 2.4.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=720ed60b" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e3526950" />
+      <link rel="stylesheet" type="text/css" href="_static/syntax_highlighting.css?v=d29a27db" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=20623aea"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=7a06b15b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation.html" />
+     
+    
+    <!-- Schema.org JSON-LD for SoftwareSourceCode -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareSourceCode",
+      "name": "ChemInformant",
+      "description": "A robust and high-throughput Python client for the PubChem API, designed for automated data retrieval and analysis",
+      "programmingLanguage": "Python",
+      "applicationCategory": "Cheminformatics",
+      "keywords": [
+        "chemistry",
+        "cheminformatics", 
+        "pubchem",
+        "api",
+        "compound",
+        "drug",
+        "cache",
+        "pydantic",
+        "batch",
+        "smiles",
+        "sql",
+        "data-science",
+        "molecular-properties",
+        "scientific-computing",
+        "api-client",
+        "chemical-data",
+        "drug-discovery",
+        "computational-chemistry"
+      ],
+      "codeRepository": "https://github.com/HzaCode/ChemInformant",
+      "license": "https://opensource.org/licenses/MIT",
+      "softwareRequirements": [
+        "Python>=3.9",
+        "requests>=2.25.0",
+        "requests-cache>=1.2.0", 
+        "pydantic>=2.0",
+        "pandas>=1.5.0",
+        "sqlalchemy>=1.4",
+        "pystow>=0.7"
+      ],
+      "author": {
+        "@type": "Person",
+        "name": "Zhiang He",
+        "email": "ang@hezhiang.com"
+      },
+      "version": "2.4.3",
+      "dateCreated": "2023",
+      "dateModified": "2025",
+      "url": "https://hezhiang.com/ChemInformant",
+      "downloadUrl": "https://pypi.org/project/ChemInformant/",
+      "runtimePlatform": "Python",
+      "operatingSystem": "OS Independent",
+      "softwareHelp": "https://hezhiang.com/ChemInformant",
+      "documentation": "https://hezhiang.com/ChemInformant",
+      "issueTracker": "https://github.com/HzaCode/ChemInformant/issues",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://hezhiang.com/ChemInformant"
+      }
+    }
+    </script>
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            ChemInformant
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">🧭 User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Application in Real-World Scientific Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="caching_guide.html">Caching Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🎓 Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Interactive Tutorial</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🔬 API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/cheminfo_api.html">Main API Interface (<cite>cheminfo_api</cite>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/models.html">Data Models and Exceptions (<cite>models</cite>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_helpers.html">Internal API Helpers (<cite>api_helpers</cite>)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">🛠️ Project Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">ChemInformant</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ChemInformant Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cheminformant-documentation">
+<h1>ChemInformant Documentation<a class="headerlink" href="#cheminformant-documentation" title="Link to this heading"></a></h1>
+<p>Welcome to the official documentation for <strong>ChemInformant</strong> - a robust data acquisition engine for the PubChem database, engineered for the modern scientific workflow.</p>
+<p><strong>Key Features:</strong></p>
+<ul class="simple">
+<li><p>📊 <strong>Analysis-Ready Pandas/SQL Output</strong> - Clean DataFrames and direct SQL export, eliminating data wrangling boilerplate</p></li>
+<li><p>🔄 <strong>Automated Network Reliability</strong> - Built-in persistent caching, smart rate-limiting, and automatic retries</p></li>
+<li><p>🎯 <strong>Flexible &amp; Fault-Tolerant Input</strong> - Mixed identifiers (names, CIDs, SMILES) with intelligent error handling</p></li>
+<li><p>⚡ <strong>Efficient Batch Processing</strong> - Retrieve multiple compounds and properties in single API calls with automatic pagination</p></li>
+<li><p>🔧 <strong>22 Convenience Functions</strong> - Quick access to individual properties like <code class="docutils literal notranslate"><span class="pre">get_weight()</span></code>, <code class="docutils literal notranslate"><span class="pre">get_formula()</span></code>, <code class="docutils literal notranslate"><span class="pre">get_cas()</span></code></p></li>
+<li><p>⚡ <strong>Dual API for Simplicity and Power</strong> - Convenience layer backed by powerful <code class="docutils literal notranslate"><span class="pre">get_properties</span></code> batch engine</p></li>
+<li><p>🛡️ <strong>Guaranteed Data Integrity</strong> - Pydantic v2 models for rigorous runtime data validation</p></li>
+<li><p>💻 <strong>Terminal-Ready CLI Tools</strong> - <code class="docutils literal notranslate"><span class="pre">chemfetch</span></code> and <code class="docutils literal notranslate"><span class="pre">chemdraw</span></code> for rapid data retrieval and visualization</p></li>
+<li><p>🆕 <strong>Modern and Actively Maintained</strong> - Contemporary tech stack for long-term reliability</p></li>
+</ul>
+<p>This page serves as the central entry point for all feature modules, guides, and API references.</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">🧭 User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installation-via-pypi-recommended">Installation via PyPI (Recommended)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installation-from-source-for-developers">Installation from Source (For Developers)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#core-functionality-bulk-fetching-of-multiple-properties">Core Functionality: Bulk Fetching of Multiple Properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#getting-all-properties-or-including-3d-descriptors">Getting All Properties or Including 3D Descriptors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#getting-complete-information-for-a-single-compound">Getting Complete Information for a Single Compound</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#convenient-shortcut-functions">Convenient Shortcut Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#visualizing-compound-structures">Visualizing Compound Structures</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Application in Real-World Scientific Workflows</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="advanced_usage.html#example-1-batch-preprocessing-and-analysis-with-rdkit">Example 1: Batch Preprocessing and Analysis with RDKit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advanced_usage.html#example-2-multi-class-classification-with-scikit-learn">Example 2: Multi-Class Classification with Scikit-learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advanced_usage.html#example-3-similarity-networking-and-community-detection-with-networkx">Example 3: Similarity Networking and Community Detection with NetworkX</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command-Line Interface (CLI)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#chemfetch"><cite>chemfetch</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#chemdraw"><cite>chemdraw</cite></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="caching_guide.html">Caching Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="caching_guide.html#why-caching-is-essential">1. Why Caching is Essential</a></li>
+<li class="toctree-l2"><a class="reference internal" href="caching_guide.html#quick-start">2. Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="caching_guide.html#core-configuration-understanding-setup-cache">3. Core Configuration: Understanding <code class="docutils literal notranslate"><span class="pre">setup_cache()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="caching_guide.html#managing-your-cache">4. Managing Your Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="caching_guide.html#advanced-usage-fine-grained-path-control-with-pystow">5. Advanced Usage: Fine-Grained Path Control with PyStow</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">🎓 Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Interactive Tutorial</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">🔬 API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/cheminfo_api.html">Main API Interface (<cite>cheminfo_api</cite>)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_properties"><code class="docutils literal notranslate"><span class="pre">get_properties()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_compound"><code class="docutils literal notranslate"><span class="pre">get_compound()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_compounds"><code class="docutils literal notranslate"><span class="pre">get_compounds()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_weight"><code class="docutils literal notranslate"><span class="pre">get_weight()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_formula"><code class="docutils literal notranslate"><span class="pre">get_formula()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_cas"><code class="docutils literal notranslate"><span class="pre">get_cas()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_iupac_name"><code class="docutils literal notranslate"><span class="pre">get_iupac_name()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_canonical_smiles"><code class="docutils literal notranslate"><span class="pre">get_canonical_smiles()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_isomeric_smiles"><code class="docutils literal notranslate"><span class="pre">get_isomeric_smiles()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_inchi"><code class="docutils literal notranslate"><span class="pre">get_inchi()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_inchi_key"><code class="docutils literal notranslate"><span class="pre">get_inchi_key()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_xlogp"><code class="docutils literal notranslate"><span class="pre">get_xlogp()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_tpsa"><code class="docutils literal notranslate"><span class="pre">get_tpsa()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_complexity"><code class="docutils literal notranslate"><span class="pre">get_complexity()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_exact_mass"><code class="docutils literal notranslate"><span class="pre">get_exact_mass()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_monoisotopic_mass"><code class="docutils literal notranslate"><span class="pre">get_monoisotopic_mass()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_h_bond_donor_count"><code class="docutils literal notranslate"><span class="pre">get_h_bond_donor_count()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_h_bond_acceptor_count"><code class="docutils literal notranslate"><span class="pre">get_h_bond_acceptor_count()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_rotatable_bond_count"><code class="docutils literal notranslate"><span class="pre">get_rotatable_bond_count()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_heavy_atom_count"><code class="docutils literal notranslate"><span class="pre">get_heavy_atom_count()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_charge"><code class="docutils literal notranslate"><span class="pre">get_charge()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_atom_stereo_count"><code class="docutils literal notranslate"><span class="pre">get_atom_stereo_count()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_bond_stereo_count"><code class="docutils literal notranslate"><span class="pre">get_bond_stereo_count()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_covalent_unit_count"><code class="docutils literal notranslate"><span class="pre">get_covalent_unit_count()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.get_synonyms"><code class="docutils literal notranslate"><span class="pre">get_synonyms()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/cheminfo_api.html#ChemInformant.cheminfo_api.draw_compound"><code class="docutils literal notranslate"><span class="pre">draw_compound()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/models.html">Data Models and Exceptions (<cite>models</cite>)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#ChemInformant.models.Compound"><code class="docutils literal notranslate"><span class="pre">Compound</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#ChemInformant.models.NotFoundError"><code class="docutils literal notranslate"><span class="pre">NotFoundError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/models.html#ChemInformant.models.AmbiguousIdentifierError"><code class="docutils literal notranslate"><span class="pre">AmbiguousIdentifierError</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_helpers.html">Internal API Helpers (<cite>api_helpers</cite>)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/api_helpers.html#ChemInformant.api_helpers.setup_cache"><code class="docutils literal notranslate"><span class="pre">setup_cache()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_helpers.html#ChemInformant.api_helpers.get_session"><code class="docutils literal notranslate"><span class="pre">get_session()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_helpers.html#ChemInformant.api_helpers.get_cids_by_name"><code class="docutils literal notranslate"><span class="pre">get_cids_by_name()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_helpers.html#ChemInformant.api_helpers.get_cids_by_smiles"><code class="docutils literal notranslate"><span class="pre">get_cids_by_smiles()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_helpers.html#ChemInformant.api_helpers.get_batch_properties"><code class="docutils literal notranslate"><span class="pre">get_batch_properties()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_helpers.html#ChemInformant.api_helpers.get_cas_for_cid"><code class="docutils literal notranslate"><span class="pre">get_cas_for_cid()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_helpers.html#ChemInformant.api_helpers.get_synonyms_for_cid"><code class="docutils literal notranslate"><span class="pre">get_synonyms_for_cid()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">🛠️ Project Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing Guide</a></li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Ang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
