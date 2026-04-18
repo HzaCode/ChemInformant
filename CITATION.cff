@@ -5,8 +5,8 @@ authors:
     given-names: "Zhiang"
     orcid: "https://orcid.org/0009-0009-0171-4578"
 title: "ChemInformant"
-version: 2.4.3
-date-released: 2025
+version: 2.5.0
+date-released: 2026-04-18
 url: "https://github.com/HzaCode/ChemInformant"
 license: MIT
 keywords:

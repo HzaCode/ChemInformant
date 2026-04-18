@@ -85,11 +85,11 @@ Development Environment Setup
        python -m venv .venv
        source .venv/bin/activate  # On Windows, use `.venv\Scripts\activate`
 
-4.  **Install dependencies:** Install the package in editable mode along with its development dependencies (like ``pytest``, ``black``).
+4.  **Install dependencies:** Install the package in editable mode along with development dependencies (Ruff, MyPy, pytest).
 
     .. code-block:: bash
 
-       pip install -e .[dev]
+       pip install -e ".[dev,plot]"
 
 5.  **Create a branch:** Create a new branch for your changes.
 
@@ -101,11 +101,13 @@ Code Style
 ~~~~~~~~~~~~
 
 *   ChemInformant follows the **PEP 8** style guide.
-*   We use **Black** for automatic code formatting. Before committing your changes, please run Black to format your code:
+*   We use **Ruff** for linting and code formatting. Before committing your changes, please run Ruff to check and format your code:
 
     .. code-block:: bash
 
-       black .
+       ruff check src/ tests/
+       ruff format src/ tests/
+       mypy src/ChemInformant
 
 Running Tests
 ~~~~~~~~~~~~~~~
@@ -116,12 +118,12 @@ Running Tests
 
     .. code-block:: bash
 
-       pytest tests/
+       pytest -m "not integration" tests/
 
 Submitting a Pull Request
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Make your code changes, write tests, and format your code with Black.
+1.  Make your code changes, write tests, and format your code with Ruff.
 2.  Commit your changes with a clear and descriptive commit message.
 3.  Push your branch to your fork on GitHub:
 

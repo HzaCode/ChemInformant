@@ -10,7 +10,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Required for deploying badge to gh-pages
+      contents: read  # Minimal permissions for running tests
     strategy:
       fail-fast: false
       matrix:
@@ -59,8 +59,30 @@ jobs:
         if: matrix.python-version == '3.11'
         run: coverage-badge -o coverage.svg -f
 
-      - name: Deploy badge to gh-pages
+      - name: Upload coverage badge artifact
         if: matrix.python-version == '3.11'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-badge
+          path: coverage.svg
+          retention-days: 1
+
+  deploy-badge:
+    runs-on: ubuntu-latest
+    needs: test
+    permissions:
+      contents: write  # Required for deploying to gh-pages
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Download coverage badge artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-badge
+
+      - name: Deploy badge to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

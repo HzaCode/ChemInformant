@@ -8,7 +8,7 @@ This module is the main entry point for all user interactions. It is designed ar
 
 1.  **Bulk Data Retrieval (Engine):** The :py:func:`get_properties` function is the workhorse of this library. It achieves maximum efficiency by fetching multiple properties for multiple compounds in a single, consolidated API call. It returns a Pandas DataFrame, making it ideal for data analysis, scripting, and integration with the scientific computing ecosystem (e.g., RDKit, Scikit-learn).
 
-2.  **Convenience and Object-Oriented Access (Interface):** A series of ``get_<property>()`` functions provide direct access to individual data points. For scenarios requiring comprehensive, type-safe data, :py:func:`get_compound` returns a fully validated Pydantic :py:class:`~ChemInformant.models.Compound` object.
+2.  **Convenience and Object-Oriented Access (Interface):** A series of ``get_<property>()`` functions provide direct access to individual data points. For scenarios requiring a curated, type-safe view of common compound fields, :py:func:`get_compound` returns a validated Pydantic :py:class:`~ChemInformant.models.Compound` object.
 
 .. rubric:: Core Bulk Processing Function
 

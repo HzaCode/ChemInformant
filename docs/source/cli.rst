@@ -85,7 +85,12 @@ ChemInformant provides a suite of command-line interface (CLI) tools, designed t
 
 .. option:: -o, --output <file_path>
 
-   Specifies the path for the output file. Required for ``--format sql`` and ignored otherwise.
+   Specifies the output file path.
+
+   For ``table``, ``csv``, and ``json``, ChemInformant writes the formatted
+   output to this file instead of standard output.
+
+   For ``sql``, this option is required and specifies the SQLite database file.
 
 **Basic Examples**
 

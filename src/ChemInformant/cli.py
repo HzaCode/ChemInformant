@@ -87,7 +87,10 @@ def main_fetch() -> None:
     parser.add_argument(
         "-o",
         "--output",
-        help="Output file path. Required when format is 'sql'.",
+        help=(
+            "Output file path. For table/csv/json, writes output to this file; "
+            "required when format is 'sql'."
+        ),
     )
 
     args = parser.parse_args()
