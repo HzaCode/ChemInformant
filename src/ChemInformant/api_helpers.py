@@ -176,6 +176,69 @@ def _fetch_with_ratelimit_and_retry(
     return None
 
 
+def fetch_binary_with_ratelimit_and_retry(url: str) -> bytes | None:
+    """
+    Performs a GET request for binary data with rate-limiting and retry logic.
+
+    Similar to _fetch_with_ratelimit_and_retry, but returns raw bytes instead
+    of parsed JSON/text. Used for fetching compound structure images.
+
+    :param url: The URL to fetch binary data from.
+    :return: The binary content (bytes) or ``None`` if the request fails
+             after all retries or if a 404 Not Found is received.
+    """
+    global last_api_call_time
+
+    # Enforce rate limit
+    elapsed = time.time() - last_api_call_time
+    if elapsed < MIN_REQUEST_INTERVAL:
+        time.sleep(MIN_REQUEST_INTERVAL - elapsed)
+    last_api_call_time = time.time()
+
+    retries = 0
+    backoff = float(INITIAL_BACKOFF)
+    while retries < MAX_RETRIES:
+        try:
+            resp = _execute_fetch(url)
+
+            # Bust cache for stale 503 errors
+            if getattr(resp, "from_cache", False) and resp.status_code == 503:
+                session = get_session()
+                key = session.cache.create_key(resp.request)
+                session.cache.delete(key)
+                resp = session.get(url, timeout=REQUEST_TIMEOUT)
+
+            if resp.status_code == 200:
+                return resp.content
+
+            if resp.status_code == 404:
+                return None
+
+            if resp.status_code == 503:
+                print(
+                    f"[ChemInformant] 503 Server Busy -> retry in {backoff:.1f}s",
+                    file=sys.stderr,
+                )
+            else:
+                resp.raise_for_status()
+
+        except requests.exceptions.RequestException as e:
+            print(
+                f"[ChemInformant] Network error {e} -> retry in {backoff:.1f}s",
+                file=sys.stderr,
+            )
+
+        time.sleep(backoff)
+        backoff = min(MAX_BACKOFF, backoff * 2) + random.uniform(0.0, 1.0)
+        retries += 1
+
+    print(
+        f"[ChemInformant] Giving up after {MAX_RETRIES} retries for URL: {url}",
+        file=sys.stderr,
+    )
+    return None
+
+
 # --- Public-Facing Helper Functions ---
 
 

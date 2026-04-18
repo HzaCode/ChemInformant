@@ -6,12 +6,11 @@ on:
   pull_request:
     branches: [main]
 
-permissions:
-  contents: write
-
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required for deploying badge to gh-pages
     strategy:
       fail-fast: false
       matrix:
@@ -79,6 +78,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     continue-on-error: true
+    permissions:
+      contents: read  # Integration tests only need read access
     steps:
       - uses: actions/checkout@v4
         with:

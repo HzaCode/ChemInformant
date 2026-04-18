@@ -284,6 +284,7 @@ class TestGetProperties:
 
 class TestGetCompound:
     def test_get_compound_success(self):
+        """Test successful get_compound with mocked resolve and get_properties."""
         mock_df = pd.DataFrame(
             {
                 "input_identifier": ["caffeine"],
@@ -294,32 +295,38 @@ class TestGetCompound:
             }
         )
 
-        with mock.patch.object(cheminfo_api, "get_properties", return_value=mock_df):
-            result = cheminfo_api.get_compound("caffeine")
+        with mock.patch.object(
+            cheminfo_api, "_resolve_to_single_cid", return_value=2519
+        ):
+            with mock.patch.object(
+                cheminfo_api, "get_properties", return_value=mock_df
+            ):
+                result = cheminfo_api.get_compound("caffeine")
 
-            assert isinstance(result, Compound)
-            assert result.input_identifier == "caffeine"
-            assert result.cid == 2519
+                assert isinstance(result, Compound)
+                assert result.input_identifier == "caffeine"
+                assert result.cid == 2519
 
     def test_get_compound_failure_raises_error(self):
-        mock_df = pd.DataFrame(
-            {
-                "input_identifier": ["unknown"],
-                "cid": [pd.NA],
-                "status": ["NotFoundError"],
-            }
-        )
-
-        with mock.patch.object(cheminfo_api, "get_properties", return_value=mock_df):
-            with pytest.raises(RuntimeError, match="Failed to fetch compound"):
+        """Test that NotFoundError from _resolve_to_single_cid bubbles up."""
+        with mock.patch.object(
+            cheminfo_api,
+            "_resolve_to_single_cid",
+            side_effect=NotFoundError("Compound not found"),
+        ):
+            with pytest.raises(NotFoundError):
                 cheminfo_api.get_compound("unknown")
 
     def test_get_compound_empty_dataframe_raises_error(self):
-        mock_df = pd.DataFrame()
-
-        with mock.patch.object(cheminfo_api, "get_properties", return_value=mock_df):
-            with pytest.raises(RuntimeError, match="Failed to fetch compound"):
-                cheminfo_api.get_compound("unknown")
+        """Test that empty DataFrame raises RuntimeError after successful resolve."""
+        with mock.patch.object(
+            cheminfo_api, "_resolve_to_single_cid", return_value=2519
+        ):
+            with mock.patch.object(
+                cheminfo_api, "get_properties", return_value=pd.DataFrame()
+            ):
+                with pytest.raises(RuntimeError, match="Failed to fetch compound"):
+                    cheminfo_api.get_compound("unknown")
 
 
 class TestGetCompounds:
