@@ -76,6 +76,7 @@ BENCHMARK_PROPERTIES = [
 ]
 
 
+@pytest.mark.integration
 class TestPerformanceBenchmarks:
     """Performance benchmarks for ChemInformant core functionality."""
 
@@ -192,6 +193,7 @@ class TestPerformanceBenchmarks:
         assert len(result) <= len(invalid_compounds)
 
 
+@pytest.mark.integration
 @pytest.mark.benchmark(group="comparison")
 class TestComparisonBenchmarks:
     """Benchmarks comparing different approaches."""
@@ -257,6 +259,7 @@ PERFORMANCE_THRESHOLDS = {
 }
 
 
+@pytest.mark.integration
 def test_performance_thresholds():
     """Test that performance meets minimum thresholds."""
     # This is a simple performance regression test
