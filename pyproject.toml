@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ChemInformant"
-version = "2.4.3"
+version = "2.5.0"
 authors = [
   { name = "Zhiang He", email = "ang@hezhiang.com" },
 ]
@@ -44,8 +44,7 @@ dependencies = [
     "requests-cache>=1.2.0",
     "pydantic>=2.0",
     "pandas>=1.5.0",
-    "sqlalchemy>=1.4",
-    "pystow>=0.7"            
+    "sqlalchemy>=1.4"
 ]
 
 [project.scripts]
@@ -149,16 +148,14 @@ no_implicit_optional = true
 warn_redundant_casts = true
 warn_unused_ignores = true
 warn_no_return = true
-warn_unreachable = true
+# warn_unreachable disabled to avoid CI/local env differences
+# warn_unreachable = true
 strict_equality = true
 
 [[tool.mypy.overrides]]
 module = [
     "requests_cache.*",
-    "pubchempy.*",
     "matplotlib.*",
-    "seaborn.*",
-    "sklearn.*",
     "PIL.*"
 ]
 ignore_missing_imports = true

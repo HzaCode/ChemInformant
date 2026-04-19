@@ -880,9 +880,8 @@ def draw_compound(identifier: str | int) -> None:
     """
     Draw the 2D chemical structure of a compound.
 
-    Fetches the structure image from PubChem through the shared cached
-    session (so caching, rate-limiting and retries all apply) and displays
-    it with matplotlib.
+    Fetches the structure image from PubChem with full rate-limiting,
+    retry logic, and caching, then displays it with matplotlib.
 
     Args:
         identifier: A compound identifier (name, CID, or SMILES).
@@ -893,7 +892,7 @@ def draw_compound(identifier: str | int) -> None:
         ImportError: If the optional plotting dependencies (``matplotlib``,
             ``Pillow``) are not installed.
         RuntimeError: If the PubChem structure endpoint returns a non-success
-            status after retries.
+            status or if the request fails after all retries.
     """
     try:
         from io import BytesIO
@@ -917,19 +916,16 @@ def draw_compound(identifier: str | int) -> None:
     except Exception:
         title = f"CID {cid}"
 
-    # Fetch structure image from PubChem through the shared session so caching,
-    # rate-limiting and retry logic all apply consistently with the other calls.
+    # Fetch structure image from PubChem with full retry/rate-limit logic.
     image_url = f"{api_helpers.PUBCHEM_API_BASE}/compound/cid/{cid}/PNG"
-    response = api_helpers.get_session().get(
-        image_url, timeout=api_helpers.REQUEST_TIMEOUT
-    )
-    if response.status_code != 200:
+    image_bytes = api_helpers.fetch_binary_with_ratelimit_and_retry(image_url)
+    if image_bytes is None:
         raise RuntimeError(
             f"Failed to fetch structure image for CID {cid}: "
-            f"HTTP {response.status_code}"
+            "Not found or network error after retries"
         )
 
-    image = Image.open(BytesIO(response.content))
+    image = Image.open(BytesIO(image_bytes))
 
     plt.figure(figsize=(8, 6))
     plt.imshow(image)

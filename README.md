@@ -139,7 +139,7 @@ pip install "ChemInformant[plot]"
 <!--
 TECHNICAL_DETAILS:
 Python version: 3.9+
-Dependencies: requests, pandas, pydantic, requests-cache, pystow
+Dependencies: requests, pandas, pydantic, requests-cache, SQLAlchemy
 Output formats: Pandas DataFrame, SQLite database, JSON, CSV
 Input types: PubChem CID, compound name, SMILES string, CAS number
 API coverage: PubChem PUG REST API complete coverage

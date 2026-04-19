@@ -76,12 +76,12 @@ Ready to contribute code? Here’s how to set up `ChemInformant` for local devel
     python -m venv .venv
     source .venv/bin/activate # On Windows use `.venv\Scripts\activate`
     ```
-4.  **Install Dependencies:** Install the package in editable mode along with development dependencies (like `pytest`, `black`). Assuming a `dev` extra is defined in your `pyproject.toml`:
+4.  **Install Dependencies:** Install the package in editable mode along with development dependencies (Ruff, MyPy, pytest). Use the `dev` and `plot` extras defined in `pyproject.toml`:
     ```bash
-    pip install -e .[dev]
-    # If you don't have a [dev] extra defined yet, install manually:
+    pip install -e ".[dev,plot]"
+    # Or install manually:
     # pip install -e .
-    # pip install pytest requests-cache black
+    # pip install pytest requests-cache ruff mypy
     ```
 5.  **Create a Branch:** Create a new branch for your changes.
     ```bash
@@ -91,9 +91,11 @@ Ready to contribute code? Here’s how to set up `ChemInformant` for local devel
 ### Code Style
 
 - ChemInformant follows the **PEP 8** style guide.
-- We use **Black** for automatic code formatting. Before committing your changes, please run Black to format your code:
+- We use **Ruff** for linting and code formatting. Before committing your changes, please run Ruff to check and format your code:
   ```bash
-  black .
+  ruff check src/ tests/
+  ruff format src/ tests/
+  mypy src/ChemInformant
   ```
 
 ### Running Tests
@@ -107,7 +109,7 @@ Ready to contribute code? Here’s how to set up `ChemInformant` for local devel
 
 ### Submitting Pull Requests
 
-1.  Make your changes, write tests, and format your code with Black.
+1.  Make your changes, write tests, and format your code with Ruff.
 2.  Commit your changes with a clear and descriptive commit message.
 3.  Push your branch to your fork on GitHub:
     ```bash

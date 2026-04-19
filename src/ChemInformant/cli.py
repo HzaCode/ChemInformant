@@ -87,13 +87,13 @@ def main_fetch() -> None:
     parser.add_argument(
         "-o",
         "--output",
-        help="Output file path. Required when format is 'sql'.",
+        help=(
+            "Output file path. For table/csv/json, writes output to this file; "
+            "required when format is 'sql'."
+        ),
     )
 
     args = parser.parse_args()
-
-    if args.format == "sql" and not args.output:
-        parser.error("--output is required when using --format=sql")
 
     try:
         df = get_properties(
@@ -107,11 +107,24 @@ def main_fetch() -> None:
             print("No data returned.", file=sys.stderr)
             return
 
+        def _emit_output(text: str, output: str | None) -> None:
+            """Write output to file if specified, otherwise print to stdout."""
+            if output:
+                with open(output, "w", encoding="utf-8") as f:
+                    f.write(text)
+                    if not text.endswith("\n"):
+                        f.write("\n")
+                print(f"Output written to: {output}", file=sys.stderr)
+            else:
+                print(text)
+
         if args.format == "csv":
-            print(df.to_csv(index=False))
+            _emit_output(df.to_csv(index=False), args.output)
         elif args.format == "json":
-            print(df.to_json(orient="records", indent=2))
+            _emit_output(df.to_json(orient="records", indent=2), args.output)
         elif args.format == "sql":
+            if not args.output:
+                parser.error("--output is required when using --format=sql")
             db_uri = f"sqlite:///{args.output}"
             table_name = "results"
             print(
@@ -121,7 +134,7 @@ def main_fetch() -> None:
             df_to_sql(df, con=db_uri, table=table_name, if_exists="replace")
             print("Done.", file=sys.stderr)
         else:  # table
-            print(df.to_string(index=False))
+            _emit_output(df.to_string(index=False), args.output)
 
     except ValueError as e:
         print(f"Error: {e}", file=sys.stderr)
