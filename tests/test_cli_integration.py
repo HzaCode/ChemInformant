@@ -1,4 +1,14 @@
-# tests/test_cli.py
+# tests/test_cli_integration.py
+#
+# Live CLI integration tests. These tests invoke the real chemfetch / chemdraw
+# entry points against the live PubChem API and are therefore marked as
+# `integration`. They are excluded from the default unit-test matrix:
+#
+#   pytest -m "not integration" tests/
+#
+# and only run in the dedicated integration job:
+#
+#   pytest -m integration tests/
 
 import os
 import sqlite3
@@ -10,14 +20,12 @@ import pandas as pd
 import pytest
 import requests
 
-# --- Path Correction ---
-# Add the project root directory (which contains the 'src' folder) to the Python path
-# This ensures that the test runner can find the source modules.
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-# Now we can import the modules we need to mock and test
 from ChemInformant import api_helpers
 from ChemInformant import cli as chem_cli
+
+pytestmark = pytest.mark.integration
 
 
 def run_command(
@@ -29,8 +37,13 @@ def run_command(
     )
 
 
-def is_pubchem_available():
-    """Check if PubChem API is available."""
+def is_pubchem_available() -> bool:
+    """Check if PubChem API is available.
+
+    Called only from the session-scoped autouse fixture below, so the network
+    request happens at test *execution* time (after -m filtering), not at
+    collection/import time.
+    """
     try:
         response = requests.get(
             "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/water/cids/JSON",
@@ -41,29 +54,31 @@ def is_pubchem_available():
         return False
 
 
+@pytest.fixture(scope="session", autouse=True)
+def _require_pubchem_available() -> None:
+    """Skip live CLI integration tests if PubChem is unavailable.
+
+    This fixture runs only when the `integration` marker is selected; default
+    unit runs deselect the whole module before the fixture ever executes.
+    """
+    if not is_pubchem_available():
+        pytest.skip("PubChem API is under maintenance or unavailable")
+
+
 # --- chemfetch Command Tests ---
 
 
-@pytest.mark.skipif(
-    not is_pubchem_available(), reason="PubChem API is under maintenance or unavailable"
-)
-def test_chemfetch_success_table_format():
+def test_chemfetch_success_table_format() -> None:
     """Tests that chemfetch successfully retrieves data using a live API call."""
-    # To avoid network fluctuations, we use a very stable query here.
-    # FIX 1: Changed property from 'cid' (unsupported) to 'cas' (supported).
     proc = run_command("chemfetch", "water", "--props", "cas,molecular_formula")
     assert proc.returncode == 0, f"Command failed with stderr: {proc.stderr}"
     output = proc.stdout
-    # Verify the output content is as expected.
     assert "water" in output
     assert "7732-18-5" in output  # CAS for water
     assert "H2O" in output  # Formula for water
 
 
-@pytest.mark.skipif(
-    not is_pubchem_available(), reason="PubChem API is under maintenance or unavailable"
-)
-def test_chemfetch_handles_partial_failure_gracefully():
+def test_chemfetch_handles_partial_failure_gracefully() -> None:
     """
     Verifies that chemfetch handles a mix of valid and invalid identifiers
     by returning a table with appropriate statuses using a live API call.
@@ -77,14 +92,12 @@ def test_chemfetch_handles_partial_failure_gracefully():
     assert "NotARealCompound12345" in output and "NotFoundError" in output
 
 
-@pytest.mark.skipif(
-    not is_pubchem_available(), reason="PubChem API is under maintenance or unavailable"
-)
-def test_chemfetch_reports_ambiguous_identifier_in_status(monkeypatch, capsys):
+def test_chemfetch_reports_ambiguous_identifier_in_status(monkeypatch, capsys) -> None:
     """
     Verifies that for an ambiguous identifier, chemfetch correctly reports the
     'AmbiguousIdentifierError' status by mocking the network-facing function.
-    This test does not make a live network call.
+    This particular assertion does not make a live network call, but lives in
+    the integration module because it exercises the real CLI entry point.
     """
     monkeypatch.setattr(api_helpers, "get_cids_by_name", lambda name: [123, 456])
     monkeypatch.setattr(
@@ -98,10 +111,7 @@ def test_chemfetch_reports_ambiguous_identifier_in_status(monkeypatch, capsys):
     assert "OK" not in output
 
 
-@pytest.mark.skipif(
-    not is_pubchem_available(), reason="PubChem API is under maintenance or unavailable"
-)
-def test_chemfetch_fails_on_invalid_property():
+def test_chemfetch_fails_on_invalid_property() -> None:
     """Tests that chemfetch exits with a non-zero code for an unsupported property."""
     proc = run_command("chemfetch", "water", "--props", "boiling_point")
     assert proc.returncode != 0, (
@@ -111,13 +121,10 @@ def test_chemfetch_fails_on_invalid_property():
     assert "Unsupported properties" in proc.stderr
 
 
-# --- [NEW] TESTS FOR SQL FUNCTIONALITY ---
+# --- SQL output tests ---
 
 
-@pytest.mark.skipif(
-    not is_pubchem_available(), reason="PubChem API is under maintenance or unavailable"
-)
-def test_chemfetch_sql_output_success(tmp_path):
+def test_chemfetch_sql_output_success(tmp_path) -> None:
     """
     Verifies that `chemfetch --format sql` successfully creates a database
     file with the correct data.
@@ -149,15 +156,11 @@ def test_chemfetch_sql_output_success(tmp_path):
     assert df.shape[0] == 1
     assert "cas" in df.columns
     assert "molecular_weight" in df.columns
-    # FIX 2: The column is named 'input_identifier', not 'identifier'.
     assert df.loc[0, "input_identifier"] == "caffeine"
     assert df.loc[0, "cas"] == "58-08-2"
 
 
-@pytest.mark.skipif(
-    not is_pubchem_available(), reason="PubChem API is under maintenance or unavailable"
-)
-def test_chemfetch_sql_fails_without_output_path():
+def test_chemfetch_sql_fails_without_output_path() -> None:
     """
     Verifies that `chemfetch --format sql` fails with a clear error
     message if the --output/-o argument is not provided.
@@ -174,10 +177,7 @@ def test_chemfetch_sql_fails_without_output_path():
 # --- chemdraw Command Tests ---
 
 
-@pytest.mark.skipif(
-    not is_pubchem_available(), reason="PubChem API is under maintenance or unavailable"
-)
-def test_chemdraw_runs_successfully():
+def test_chemdraw_runs_successfully() -> None:
     """Tests that the chemdraw command can be invoked without crashing."""
     if os.environ.get("CI"):
         pytest.skip("Skipping GUI-based test in CI environment")
@@ -189,10 +189,7 @@ def test_chemdraw_runs_successfully():
         pytest.skip("chemdraw command timed out, likely waiting for user interaction")
 
 
-@pytest.mark.skipif(
-    not is_pubchem_available(), reason="PubChem API is under maintenance or unavailable"
-)
-def test_chemdraw_fails_gracefully_on_not_found():
+def test_chemdraw_fails_gracefully_on_not_found() -> None:
     """
     Verifies that chemdraw exits with a non-zero code and a clear error message
     when an identifier is not found.

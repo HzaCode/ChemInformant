@@ -147,6 +147,76 @@ class TestMainFetch:
                     cli.main_fetch()
                     mock_print.assert_called()
 
+    def test_main_fetch_csv_writes_output_file(self, tmp_path):
+        """Regression: --format csv -o <path> must write CSV text to the file."""
+        test_data = pd.DataFrame(
+            {
+                "input_identifier": ["caffeine"],
+                "cid": ["2519"],
+                "status": ["OK"],
+                "cas": ["58-08-2"],
+            }
+        )
+        out = tmp_path / "out.csv"
+
+        with mock.patch(
+            "sys.argv",
+            ["chemfetch", "caffeine", "--format", "csv", "-o", str(out)],
+        ):
+            with mock.patch("ChemInformant.cli.get_properties", return_value=test_data):
+                cli.main_fetch()
+
+        assert out.exists()
+        text = out.read_text(encoding="utf-8")
+        assert "caffeine" in text
+        assert "58-08-2" in text
+
+    def test_main_fetch_json_writes_output_file(self, tmp_path):
+        """Regression: --format json -o <path> must write JSON text to the file."""
+        test_data = pd.DataFrame(
+            {
+                "input_identifier": ["caffeine"],
+                "cid": ["2519"],
+                "status": ["OK"],
+            }
+        )
+        out = tmp_path / "out.json"
+
+        with mock.patch(
+            "sys.argv",
+            ["chemfetch", "caffeine", "--format", "json", "-o", str(out)],
+        ):
+            with mock.patch("ChemInformant.cli.get_properties", return_value=test_data):
+                cli.main_fetch()
+
+        assert out.exists()
+        text = out.read_text(encoding="utf-8")
+        assert "caffeine" in text
+
+    def test_main_fetch_table_writes_output_file(self, tmp_path):
+        """Regression: default --format table with -o <path> must write the table."""
+        test_data = pd.DataFrame(
+            {
+                "input_identifier": ["caffeine"],
+                "cid": ["2519"],
+                "status": ["OK"],
+                "cas": ["58-08-2"],
+            }
+        )
+        out = tmp_path / "out.txt"
+
+        with mock.patch(
+            "sys.argv",
+            ["chemfetch", "caffeine", "-o", str(out)],
+        ):
+            with mock.patch("ChemInformant.cli.get_properties", return_value=test_data):
+                cli.main_fetch()
+
+        assert out.exists()
+        text = out.read_text(encoding="utf-8")
+        assert "caffeine" in text
+        assert "58-08-2" in text
+
 
 class TestMainDraw:
     def test_main_draw_basic(self):
