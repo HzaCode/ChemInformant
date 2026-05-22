@@ -95,11 +95,12 @@ jobs:
   integration:
     # Live PubChem tests run separately from the main matrix so a PubChem
     # hiccup doesn't red a PR. They still run on push/PR so regressions
-    # in live behavior are caught, but they are manually re-runnable and
-    # their failure is informational until marked required.
+    # in live behavior are caught. Performance benchmarks remain manually
+    # runnable and are excluded here because live API timing is noisy.
     runs-on: ubuntu-latest
     needs: test
     continue-on-error: true
+    timeout-minutes: 15
     permissions:
       contents: read  # Integration tests only need read access
     steps:
@@ -120,4 +121,4 @@ jobs:
       - name: Run integration tests against live PubChem
         env:
           PYTHONPATH: ${{ github.workspace }}/src
-        run: pytest -v -m integration tests/
+        run: pytest -v -m "integration and not benchmark" tests/

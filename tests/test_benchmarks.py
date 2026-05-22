@@ -12,6 +12,8 @@ import pytest
 
 import ChemInformant as ci
 
+pytestmark = [pytest.mark.integration, pytest.mark.benchmark]
+
 # Sample drug names for benchmarking
 SAMPLE_DRUGS = [
     "aspirin",
