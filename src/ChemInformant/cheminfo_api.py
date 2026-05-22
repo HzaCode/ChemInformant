@@ -275,7 +275,8 @@ def get_properties(
     for col in df.columns:
         if col not in final_col_order:
             final_col_order.append(col)
-    return df[final_col_order]
+    ordered_df = pd.DataFrame(df.reindex(columns=final_col_order))
+    return ordered_df
 
 
 # --- Convenience Functions (now simple and consistent) ---
