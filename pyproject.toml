@@ -94,6 +94,7 @@ source = ["ChemInformant"]
 [tool.pytest.ini_options]
 markers = [
     "integration: marks tests that hit live PubChem endpoints (deselect with '-m \"not integration\"')",
+    "benchmark: marks performance benchmarks that are excluded from default CI integration runs",
 ]
 
 # ---------------------------
