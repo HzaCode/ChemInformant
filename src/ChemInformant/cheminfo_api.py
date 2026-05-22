@@ -37,7 +37,10 @@ def _resolve_to_single_cid(identifier: str | int) -> int:
             return identifier
         raise ValueError(f"Invalid CID: {identifier}")
     if isinstance(identifier, str) and identifier.isdigit():
-        return int(identifier)
+        cid = int(identifier)
+        if cid > 0:
+            return cid
+        raise ValueError(f"Invalid CID: {identifier}")
     if isinstance(identifier, str):
         cids = api_helpers.get_cids_by_name(identifier)
         if cids:
@@ -231,10 +234,10 @@ def get_properties(
             values: list[Any] = []
             for _, row in df.iterrows():
                 cid_val = row["cid"]
-                cid = int(cid_val) if pd.notna(cid_val) else None
+                cid_key = int(cid_val) if pd.notna(cid_val) else None
                 val = None
-                if row["status"] == "OK" and cid:
-                    api_row = fetched_data.get(cid, {})
+                if row["status"] == "OK" and cid_key:
+                    api_row = fetched_data.get(cid_key, {})
                     val = api_row.get(prop_camel)
                     if not val and prop_snake in fallback_map_snake:
                         fallback_prop = fallback_map_snake[prop_snake]
@@ -272,7 +275,8 @@ def get_properties(
     for col in df.columns:
         if col not in final_col_order:
             final_col_order.append(col)
-    return df[final_col_order]
+    ordered_df = pd.DataFrame(df.reindex(columns=final_col_order))
+    return ordered_df
 
 
 # --- Convenience Functions (now simple and consistent) ---
@@ -326,7 +330,7 @@ def _fetch_scalar(id_: str | int, prop_snake: str) -> float | int | str | None:
         if result is not None and not isinstance(result, (int, float, str)):
             return None
         return result
-    except (NotFoundError, AmbiguousIdentifierError):
+    except (ValueError, NotFoundError, AmbiguousIdentifierError):
         return None
 
 
@@ -479,7 +483,7 @@ def get_cas(id_: str | int) -> str | None:
     try:
         cid = _resolve_to_single_cid(id_)
         return api_helpers.get_cas_for_cid(cid)
-    except (NotFoundError, AmbiguousIdentifierError):
+    except (ValueError, NotFoundError, AmbiguousIdentifierError):
         return None
 
 
@@ -504,7 +508,7 @@ def get_synonyms(id_: str | int) -> list[str]:
     try:
         cid = _resolve_to_single_cid(id_)
         return api_helpers.get_synonyms_for_cid(cid)
-    except (NotFoundError, AmbiguousIdentifierError):
+    except (ValueError, NotFoundError, AmbiguousIdentifierError):
         return []
 
 

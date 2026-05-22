@@ -11,7 +11,7 @@ from __future__ import annotations
 import random
 import sys
 import time
-from typing import Any
+from typing import Any, Union, cast
 from urllib.parse import quote
 
 import requests
@@ -143,7 +143,11 @@ def _fetch_with_ratelimit_and_retry(
 
             if resp.status_code == 200:
                 ctype = resp.headers.get("Content-Type", "").lower()
-                return resp.json() if "application/json" in ctype else resp.text
+                if "application/json" in ctype:
+                    return cast(
+                        Union[dict[str, Any], list[Any], str, None], resp.json()
+                    )
+                return resp.text
 
             if resp.status_code == 404:
                 return None  # Resource not found is a valid, final state.
@@ -209,7 +213,7 @@ def fetch_binary_with_ratelimit_and_retry(url: str) -> bytes | None:
                 resp = session.get(url, timeout=REQUEST_TIMEOUT)
 
             if resp.status_code == 200:
-                return resp.content
+                return cast(bytes, resp.content)
 
             if resp.status_code == 404:
                 return None

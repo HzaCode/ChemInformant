@@ -4,7 +4,13 @@ import pandas as pd
 import pytest
 
 from ChemInformant import cheminfo_api
-from ChemInformant.constants import ALL_PROPS, CORE_PROPS, THREED_PROPS
+from ChemInformant.constants import (
+    ALL_PROPS,
+    CORE_PROPS,
+    PROPERTY_ALIASES,
+    SNAKE_TO_CAMEL,
+    THREED_PROPS,
+)
 from ChemInformant.models import AmbiguousIdentifierError, Compound, NotFoundError
 
 
@@ -16,6 +22,10 @@ class TestResolveCid:
     def test_resolve_string_digit_cid(self):
         result = cheminfo_api._resolve_to_single_cid("2519")
         assert result == 2519
+
+    def test_resolve_zero_string_cid_raises_error(self):
+        with pytest.raises(ValueError):
+            cheminfo_api._resolve_to_single_cid("0")
 
     def test_resolve_negative_cid_raises_error(self):
         with pytest.raises(ValueError):
@@ -107,6 +117,27 @@ class TestLooksLikeSmiles:
 
 
 class TestGetProperties:
+    def test_public_property_invariants(self):
+        expected_3d_props = {
+            "volume_3d",
+            "feature_count_3d",
+            "feature_acceptor_count_3d",
+            "feature_donor_count_3d",
+            "feature_anion_count_3d",
+            "feature_cation_count_3d",
+            "feature_ring_count_3d",
+            "feature_hydrophobe_count_3d",
+            "conformer_count_3d",
+        }
+
+        assert expected_3d_props.issubset(set(THREED_PROPS))
+        assert "xlogp" in ALL_PROPS
+        assert "x_log_p" not in ALL_PROPS
+        assert ALL_PROPS.count("xlogp") == 1
+        assert SNAKE_TO_CAMEL["xlogp"] == "XLogP"
+        assert PROPERTY_ALIASES["XLogP"] == "xlogp"
+        assert PROPERTY_ALIASES["x_log_p"] == "xlogp"
+
     def test_get_properties_empty_inputs(self):
         result = cheminfo_api.get_properties([], [])
         assert result.empty
@@ -202,6 +233,11 @@ class TestGetProperties:
 
     def test_get_properties_include_3d(self):
         """Verify: `include_3d=True` adds 3D properties."""
+        assert THREED_PROPS
+        assert "volume_3d" in THREED_PROPS
+        assert "feature_count_3d" in THREED_PROPS
+        assert "conformer_count_3d" in THREED_PROPS
+
         all_props_data = {prop: f"value_{prop}" for prop in CORE_PROPS + THREED_PROPS}
         mock_batch_data = {2244: all_props_data}
 
@@ -422,8 +458,27 @@ class TestFetchScalar:
                 result = cheminfo_api._fetch_scalar(2519, "molecular_weight")
                 assert result is None
 
+    def test_zero_string_cid_returns_none(self):
+        """Test that scalar convenience functions treat invalid CIDs as missing."""
+        assert cheminfo_api.get_weight("0") is None
+
+    @pytest.mark.parametrize("id_", [0, -1])
+    def test_non_positive_integer_cid_returns_none(self, id_):
+        """Test that non-positive integer CIDs do not leak ValueError."""
+        assert cheminfo_api.get_weight(id_) is None
+
+
+class TestGetCas:
+    def test_zero_string_cid_returns_none(self):
+        """Test that get_cas treats invalid CIDs as missing."""
+        assert cheminfo_api.get_cas("0") is None
+
 
 class TestGetSynonyms:
+    def test_zero_string_cid_returns_empty_list(self):
+        """Test that get_synonyms treats invalid CIDs as missing."""
+        assert cheminfo_api.get_synonyms("0") == []
+
     def test_get_synonyms_returns_empty_list_on_not_found(self):
         """Test that get_synonyms returns empty list when compound not found."""
         result = cheminfo_api.get_synonyms("nonexistent")
