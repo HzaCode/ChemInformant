@@ -76,7 +76,9 @@ dev = [
     "pytest-mock>=3.5",
     "pytest-cov>=2.12",
     "pytest-benchmark>=4.0",
+    "pandas-stubs>=2.2.2.240807",
     "ruff",
+    "types-requests",
     "mypy"
 ]
 

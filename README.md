@@ -27,7 +27,7 @@ SEO_KEYWORDS: PubChem API Python client, chemical database access, molecular pro
     <a href="https://pypi.org/project/ChemInformant/">
         <img src="https://img.shields.io/badge/python-%3E%3D3.9-blue.svg" alt="Python Version">
     </a>
-    <a href="https://github.com/HzaCode/ChemInformant/blob/main/LICENSE.md">
+    <a href="https://github.com/HzaCode/ChemInformant/blob/main/LICENSE">
         <img src="https://img.shields.io/pypi/l/ChemInformant.svg" alt="License">
     </a>
     <a href="https://github.com/HzaCode/ChemInformant/actions/workflows/tests.yml">
@@ -318,7 +318,7 @@ Contributions are welcome! For guidelines on how to get started, please read our
 
 ### 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ### 📑 Citation
 
@@ -350,4 +350,3 @@ Performance metrics: batch processing, caching, rate limiting, error handling, d
 API features: REST API, PUG REST, compound search, property prediction, structure similarity
 Integration tools: RDKit, Open Babel, Scikit-learn, NumPy, SciPy, Matplotlib
 -->
-

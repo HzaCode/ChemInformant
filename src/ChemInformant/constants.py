@@ -62,16 +62,14 @@ def _snake_case(s: str) -> str:
     # Convert to lowercase and clean up any double underscores
     result = s2.lower().replace("__", "_")
 
-    return result
+    return result.replace("_3_d", "_3d")
 
 
 # --- 2. Standardized snake_case Property Lists (Canonical Internal Format) ---
 # All functions and returned DataFrames will use these snake_case names.
 CAMEL_TO_SNAKE = {camel: _snake_case(camel) for camel in ALL_PROPS_CAMEL}
+CAMEL_TO_SNAKE["XLogP"] = "xlogp"
 SNAKE_TO_CAMEL = {v: k for k, v in CAMEL_TO_SNAKE.items()}
-
-# Manual mappings for user-friendly property names
-SNAKE_TO_CAMEL["xlogp"] = "XLogP"  # Use user-friendly 'xlogp' instead of 'x_log_p'
 
 # Add special properties (CAS and synonyms) that don't come from PubChem property API
 SPECIAL_PROPERTIES = ["cas", "synonyms"]
