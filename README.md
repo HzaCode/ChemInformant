@@ -17,12 +17,15 @@ SEO_KEYWORDS: PubChem API Python client, chemical database access, molecular pro
 <a href="https://doi.org/10.21105/joss.08341">
     <img src="https://joss.theoj.org/papers/10.21105/joss.08341/status.svg" alt="JOSS Journal Publication DOI 10.21105/joss.08341">
 </a>
-<a href="https://github.com/pyOpenSci/software-review/issues/254">
+<a href="https://github.com/pyOpenSci/software-submission/issues/254">
     <img src="https://pyopensci.org/badges/peer-reviewed.svg" alt="pyOpenSci Peer-Reviewed">
 </a>
 <p>
     <a href="https://pypi.org/project/ChemInformant/">
         <img src="https://img.shields.io/pypi/v/ChemInformant.svg" alt="PyPI version">
+    </a>
+    <a href="https://anaconda.org/conda-forge/cheminformant">
+        <img src="https://img.shields.io/conda/vn/conda-forge/cheminformant.svg" alt="conda-forge version">
     </a>
     <a href="https://pypi.org/project/ChemInformant/">
         <img src="https://img.shields.io/badge/python-%3E%3D3.9-blue.svg" alt="Python Version">
@@ -73,6 +76,21 @@ Related Libraries: PubChemPy, ChEMBL API, RDKit, Open Babel, chembl_webresource_
 -->
 
 **ChemInformant** is a robust data acquisition engine for the [PubChem](https://pubchem.ncbi.nlm.nih.gov/) database, engineered for the modern scientific workflow. It intelligently manages network requests, performs rigorous runtime data validation, and delivers analysis-ready results, providing a dependable foundation for any computational chemistry project in Python.
+
+---
+
+### Release, Review, and Citation Status
+
+ChemInformant is released under the MIT license, published in the [Journal of Open Source Software](https://doi.org/10.21105/joss.08341), and accepted into the [pyOpenSci ecosystem](https://www.pyopensci.org/python-packages.html) through open software peer review.
+
+Published package artifacts are tracked on [PyPI](https://pypi.org/project/ChemInformant/), [conda-forge](https://anaconda.org/conda-forge/cheminformant), and [GitHub Releases](https://github.com/HzaCode/ChemInformant/releases). If repository documentation or source metadata is ahead of PyPI, treat the PyPI page as the install source of truth for `pip install ChemInformant`.
+
+Additional project records:
+
+* [pyOpenSci review issue](https://github.com/pyOpenSci/software-submission/issues/254)
+* [JOSS paper DOI](https://doi.org/10.21105/joss.08341)
+* [JOSS/Zenodo archive](https://zenodo.org/doi/10.5281/zenodo.16623785)
+* [PyPI download statistics](https://pepy.tech/project/cheminformant)
 
 ---
 
@@ -128,6 +146,14 @@ Install the library from PyPI:
 
 ```bash
 pip install ChemInformant
+```
+
+The PyPI project page shows the latest published release available through `pip`.
+
+If you manage environments with `conda` or `mamba`, install from conda-forge instead:
+
+```bash
+conda install -c conda-forge cheminformant
 ```
 
 To include plotting capabilities for use with the tutorial, install the `[plot]` extra:
@@ -285,6 +311,7 @@ For a deep dive, please see our detailed guides:
 *   **➡️ Online Documentation:** The **[official documentation site](https://hezhiang.com/ChemInformant)** contains complete API references, guides, and usage examples. **This is the most comprehensive resource.**
 *   **➡️ Interactive User Manual:** Our [**Jupyter Notebook Tutorial**](examples/ChemInformant_User_Manual_v1.0.ipynb) provides a complete, end-to-end walkthrough. This is the best place to start for a hands-on experience.
 *   **➡️ Performance Benchmarks:** Run integrated benchmarks with `pytest tests/test_benchmarks.py --benchmark-only` to see the performance advantages of batching and caching.
+*   **➡️ Release Notes:** See the [release notes](https://hezhiang.com/ChemInformant/release_notes.html) for package changes and release-readiness checks.
 
 #### 📖 Additional Resources & Use Cases
 
