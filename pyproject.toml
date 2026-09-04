@@ -157,8 +157,15 @@ strict_equality = true
 
 [[tool.mypy.overrides]]
 module = [
-    "requests_cache.*",
+    "requests_cache.*"
+]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = [
     "matplotlib.*",
     "PIL.*"
 ]
 ignore_missing_imports = true
+# matplotlib >=3.11 uses match statements; don't parse its sources with our 3.9 target
+follow_imports = "skip"
